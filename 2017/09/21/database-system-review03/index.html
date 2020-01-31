@@ -1,0 +1,942 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="database,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="Introduction to database storage.">
+<meta name="keywords" content="database">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Database System Review 03">
+<meta property="og:url" content="https://annashuo.github.io/2017/09/21/database-system-review03/index.html">
+<meta property="og:site_name" content="Anna&#39;s Blog">
+<meta property="og:description" content="Introduction to database storage.">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://github.com/Annashuo/hello-world/blob/master/linked-list.png?raw=true">
+<meta property="og:image" content="https://github.com/Annashuo/hello-world/blob/master/page-directory.png?raw=true">
+<meta property="og:image" content="https://github.com/Annashuo/hello-world/blob/master/log-structured.png?raw=true">
+<meta property="og:image" content="https://github.com/Annashuo/hello-world/blob/master/slotted-page.png?raw=true">
+<meta property="og:image" content="https://github.com/Annashuo/hello-world/blob/master/buffer-pool.png?raw=true">
+<meta property="og:updated_time" content="2020-01-30T14:14:21.101Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Database System Review 03">
+<meta name="twitter:description" content="Introduction to database storage.">
+<meta name="twitter:image" content="https://github.com/Annashuo/hello-world/blob/master/linked-list.png?raw=true">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://annashuo.github.io/2017/09/21/database-system-review03/">
+
+
+
+
+
+  <title> Database System Review 03 | Anna's Blog </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '',
+      xfbml      : true,
+      version    : 'v2.6'
+    });
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-105321506-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?6f5ab2ef1e021070500f7228c830f3c6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Anna's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">My heart is in the work...</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="https://annashuo.github.io/2017/09/21/database-system-review03/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Anna">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Anna's Blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Anna's Blog" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Database System Review 03
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-09-21T11:08:34+08:00">
+                2017-09-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/STUDY/" itemprop="url" rel="index">
+                    <span itemprop="name">STUDY</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/09/21/database-system-review03/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count fb-comments-count" data-href="https://annashuo.github.io/2017/09/21/database-system-review03/" itemprop="commentCount">0</span> comments
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Introduction to database storage.</p>
+<a id="more"></a>
+<h3 id="Why-not-use-OS"><a href="#Why-not-use-OS" class="headerlink" title="Why not use OS?"></a>Why not use OS?</h3><p>If you rely on the operating system, then you have less hcoise in your design space inside the database system.</p>
+<p>If using the operating system, when the process hit a page fault and it need to hold loks to some tuples or other latches to other data structures. It will be blocking for a long time and all other threads that are running other queries and other transactions could not be doing useful work but they can because all the locks.</p>
+<h3 id="What-DBMS-can-do-for-storage"><a href="#What-DBMS-can-do-for-storage" class="headerlink" title="What DBMS can do for storage?"></a>What DBMS can do for storage?</h3><ul>
+<li>Specialized prefetching</li>
+<li>Buffer replacement policy</li>
+<li>Thread/process scheduling</li>
+<li>Flushing data to disk</li>
+</ul>
+<h3 id="File-Storage-how-pages-stored-in-file"><a href="#File-Storage-how-pages-stored-in-file" class="headerlink" title="File Storage(how pages stored in file)"></a>File Storage(how pages stored in file)</h3><p>Storage manager organized the files as a collection of pages.</p>
+<ul>
+<li>Tracks data read/written to pages</li>
+<li>Tracks the available space</li>
+</ul>
+<h4 id="Four-types-of-page-storage-architecture"><a href="#Four-types-of-page-storage-architecture" class="headerlink" title="Four types of page storage architecture"></a>Four types of page storage architecture</h4><p><strong>Different DBMS manage pages in files on disk in different ways</strong></p>
+<ul>
+<li>Heap File Organization</li>
+<li>Sequential/ Sorted File Organization</li>
+<li>Hashing File Organization</li>
+<li>Log-Structured File Organization</li>
+</ul>
+<h4 id="HEAP-file-Organization"><a href="#HEAP-file-Organization" class="headerlink" title="HEAP file Organization"></a>HEAP file Organization</h4><p>A heap file is an unordered collection of pages where tuples that are stored in random order.</p>
+<p>Two ways to represent a heap file:</p>
+<ul>
+<li>Linked list</li>
+<li>Page directory</li>
+</ul>
+<h5 id="Linked-list"><a href="#Linked-list" class="headerlink" title="Linked list"></a>Linked list</h5><p>Maintain a <u>header page</u> at the beginning of the file that stores two pointers:</p>
+<ul>
+<li>Head of the <u> free gage list</u></li>
+<li>Head of the <u> data page list</u></li>
+</ul>
+<p><img src="https://github.com/Annashuo/hello-world/blob/master/linked-list.png?raw=true" alt></p>
+<h5 id="Page-directory"><a href="#Page-directory" class="headerlink" title="Page directory"></a>Page directory</h5><p>Maintain special pages that tracks the location of the data pages in the database files. The directory also records the number of free slot per page.</p>
+<p>The DBMS has to make sure that the directory pages are in sync with the daya pages.</p>
+<p><img src="https://github.com/Annashuo/hello-world/blob/master/page-directory.png?raw=true" alt></p>
+<h4 id="Log-Structured-file-organization"><a href="#Log-Structured-file-organization" class="headerlink" title="Log-Structured file organization"></a>Log-Structured file organization</h4><p>The DBMS only stores log recoreds instead of tuples in pages.</p>
+<p>The system appends log records to the file of how the database was modified:</p>
+<ul>
+<li>Inserts store the entire tuple</li>
+<li>Deletes mark the tuple as deleted</li>
+<li>Updates contain the delta of just the attributes that were modified</li>
+</ul>
+<p>To read a record, the DBMS scans the log backwards and “recreates” the tuple.</p>
+<p>Build indexes to allow it to jump to locations in the log.</p>
+<p>Periodically compact the log.</p>
+<p><img src="https://github.com/Annashuo/hello-world/blob/master/log-structured.png?raw=true" alt></p>
+<h3 id="Page-Layout-how-tuples-stored-in-page"><a href="#Page-Layout-how-tuples-stored-in-page" class="headerlink" title="Page Layout(how tuples stored in page)"></a>Page Layout(how tuples stored in page)</h3><p>A <font color="red">page</font> is a fixed-size block of data</p>
+<ul>
+<li>It can contain tuples, meta-data, indexes, log records(database page can be 1KB~16KB, but hardware page and OS page are always 4KB)</li>
+<li>Most systems do not mix page types</li>
+<li>Some systems require a page to be self-contained.</li>
+</ul>
+<p>Each page is given a unique identifier. The DBMS uses an indirection layer to map page ids to pysical locations.</p>
+<h4 id="Page-header"><a href="#Page-header" class="headerlink" title="Page header"></a>Page header</h4><p>Each page contains a <u>header</u> that records meta-data about the page’s contents.</p>
+<ul>
+<li>Page size</li>
+<li>Checksum</li>
+<li>DBMS Version</li>
+<li>Transaction Visibility</li>
+</ul>
+<h4 id="Slotted-Pages-most-common-layout"><a href="#Slotted-Pages-most-common-layout" class="headerlink" title="Slotted Pages(most common layout)"></a>Slotted Pages(most common layout)</h4><p>The page maps “slots” to offsets. The length of tuples can be fixed or variable.</p>
+<p>The header keeps track of:</p>
+<ul>
+<li>The # of used slots</li>
+<li>The offset of the starting location of the last slot used</li>
+</ul>
+<p><img src="https://github.com/Annashuo/hello-world/blob/master/slotted-page.png?raw=true" alt></p>
+<h3 id="Tuple-Layout"><a href="#Tuple-Layout" class="headerlink" title="Tuple Layout"></a>Tuple Layout</h3><p>A tuple is essentially a sequence of bytes. DBMS interpret those bytes into attribute type and values.</p>
+<p>Each tuple is assigned a unique record identifier</p>
+<ul>
+<li>Most common: $page_id + offset/slot$</li>
+<li>Can also contain file location info</li>
+</ul>
+<h4 id="Tuple-header"><a href="#Tuple-header" class="headerlink" title="Tuple header"></a>Tuple header</h4><p>Header of each tuple contains meta-data:</p>
+<ul>
+<li>visibility(concurrency control)</li>
+<li>Bit map for NULL values</li>
+</ul>
+<h4 id="Data-representation"><a href="#Data-representation" class="headerlink" title="Data representation"></a>Data representation</h4><ul>
+<li>INTEGER/BIGINT/SMALLINT/TINYINT: C/C++ representation</li>
+<li>FLOAT/REAL vs. NUMERIC/DECIMAL: IEEE-754 Standard/ Fixed-point Decimals</li>
+<li>VARCHAR/VARBINARY/TEXT/BLOB: Header with length, followed by data bytes</li>
+<li>TIME/DATA/TIMESTAMP: 32/64-bit integer of seconds</li>
+</ul>
+<h3 id="Locks-vs-Latches"><a href="#Locks-vs-Latches" class="headerlink" title="Locks vs. Latches"></a>Locks vs. Latches</h3><h4 id="Locks"><a href="#Locks" class="headerlink" title="Locks"></a>Locks</h4><ul>
+<li>Protects the database’s logical contents from other transactions</li>
+<li>Held for transaction duration</li>
+<li>Need to be able to rollback changes</li>
+</ul>
+<h4 id="Latches"><a href="#Latches" class="headerlink" title="Latches:"></a>Latches:</h4><ul>
+<li>Protects the critical sections of the DBMS’s internal data structure from other threads</li>
+<li>Held for operation duration</li>
+<li>Do not need to be able to rollback changes</li>
+</ul>
+<h3 id="Buffer-Pool"><a href="#Buffer-Pool" class="headerlink" title="Buffer Pool"></a>Buffer Pool</h3><p>The <u>buffer pool</u> is an in-memory cache of pages read from disk.</p>
+<h4 id="Buffer-pool-organization"><a href="#Buffer-pool-organization" class="headerlink" title="Buffer pool organization"></a>Buffer pool organization</h4><p>Memory region organized as an array of fixed-size pages.</p>
+<p>An array entry is called a <font color="red">frame</font></p>
+<p>When DBMS requests a page, an exact copy is placed into one of these frames.</p>
+<h4 id="Buffer-pool-page-table"><a href="#Buffer-pool-page-table" class="headerlink" title="Buffer pool page table"></a>Buffer pool page table</h4><p>The page table keeps track of pages that are currently in memory and also maintains additional meta-data per page.</p>
+<p>meta-data:</p>
+<ul>
+<li>dirty flag</li>
+<li>pin counter</li>
+</ul>
+<p><u>Pin counter</u> do not equals to the <u>latches</u>. If DBMS want to modify a page, it should put a latch on that page. If DBMS want to add a new entry, it needs to put a latch on the page table.</p>
+<p><img src="https://github.com/Annashuo/hello-world/blob/master/buffer-pool.png?raw=true" alt></p>
+<h4 id="Multiple-Buffer-Pools"><a href="#Multiple-Buffer-Pools" class="headerlink" title="Multiple Buffer Pools"></a>Multiple Buffer Pools</h4><p>Helps reduce latch contention and improve locality.</p>
+<ul>
+<li>Multiple buffer pool instances</li>
+<li>Per-database buffer pool</li>
+<li>Per-page type buffer pool</li>
+</ul>
+<h4 id="Pre-fetching"><a href="#Pre-fetching" class="headerlink" title="Pre-fetching"></a>Pre-fetching</h4><ol>
+<li>Different query plan has different pre-fetching result.<ul>
+<li>sequential scans</li>
+<li>index scans</li>
+</ul>
+</li>
+<li>scan sharing(queries reuse data retrieved from storage or operator computations)<ul>
+<li>queries do not have to be exactly the same</li>
+<li>Can also share intermediate results.</li>
+</ul>
+</li>
+</ol>
+<h4 id="Buffer-replacement-policies"><a href="#Buffer-replacement-policies" class="headerlink" title="Buffer replacement policies"></a>Buffer replacement policies</h4><h5 id="Goals"><a href="#Goals" class="headerlink" title="Goals:"></a>Goals:</h5><ul>
+<li>correctness</li>
+<li>accuracy</li>
+<li>speed</li>
+<li>meta-data overhead</li>
+</ul>
+<h5 id="LRU"><a href="#LRU" class="headerlink" title="LRU"></a>LRU</h5><p>Maintain a timestamp of when each page was last accessed</p>
+<p>Keep the pages in sorted order to reduce the search time on eviction</p>
+<h5 id="Clock"><a href="#Clock" class="headerlink" title="Clock"></a>Clock</h5><ol>
+<li>Approximation of LRU without needing a seperate timestamp per page<ul>
+<li>Each page has a reference bit</li>
+<li>When a page is accessed, set to 1</li>
+</ul>
+</li>
+<li>Organize the pages in a circular buffer with a “clock hand”:<ul>
+<li>Upon sweeping, check if a page’s bit is set to 1</li>
+<li>If yes, set to 0. If no, then evict.</li>
+</ul>
+</li>
+</ol>
+<h4 id="Problems"><a href="#Problems" class="headerlink" title="Problems"></a>Problems</h4><p>Both LRU and CLOCK are susceptible to sequential flooding. Th most recently used page is actually the most unneeded page.</p>
+<h4 id="Better-solutions"><a href="#Better-solutions" class="headerlink" title="Better solutions"></a>Better solutions</h4><ul>
+<li>LRU-K: take into account historyof lats K references</li>
+<li>Priority Hints: allow txns to tell the buffer pool whether a page is important or not.</li>
+<li>Localization: choose pages to evict on a per txn/query basis</li>
+</ul>
+<h4 id="Allocation-policies"><a href="#Allocation-policies" class="headerlink" title="Allocation policies"></a>Allocation policies</h4><ol>
+<li>Global policies: make decisions for all active txns</li>
+<li>Local policies:<ul>
+<li>allocate frams to a specific txn without considering the behavior of concurrent txns</li>
+<li>still need to support sharing pages</li>
+</ul>
+</li>
+</ol>
+<h3 id="Other-memory-pools"><a href="#Other-memory-pools" class="headerlink" title="Other memory pools"></a>Other memory pools</h3><p>Not for just tuples and indexes, not always backed by disk</p>
+<ul>
+<li>sorting + join buffers</li>
+<li>query caches</li>
+<li>maintenance buffers</li>
+<li>log buffers</li>
+<li>dictionary caches</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/database/" rel="tag"># database</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/19/web-knowledge/" rel="next" title="web_knowledge">
+                <i class="fa fa-chevron-left"></i> web_knowledge
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/26/database-system-review04/" rel="prev" title="Database System Review 04">
+                Database System Review 04 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="fb-comments" data-href="https://annashuo.github.io/2017/09/21/database-system-review03/" data-numposts="10" data-width="100%" data-colorscheme="light">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Anna">
+          <p class="site-author-name" itemprop="name">Anna</p>
+          <p class="site-description motion-element" itemprop="description">My heart is in the work...</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Annashuo/Annashuo.github.io" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/1861044584?is_all=1" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Why-not-use-OS"><span class="nav-number">1.</span> <span class="nav-text">Why not use OS?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#What-DBMS-can-do-for-storage"><span class="nav-number">2.</span> <span class="nav-text">What DBMS can do for storage?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#File-Storage-how-pages-stored-in-file"><span class="nav-number">3.</span> <span class="nav-text">File Storage(how pages stored in file)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Four-types-of-page-storage-architecture"><span class="nav-number">3.1.</span> <span class="nav-text">Four types of page storage architecture</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HEAP-file-Organization"><span class="nav-number">3.2.</span> <span class="nav-text">HEAP file Organization</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Linked-list"><span class="nav-number">3.2.1.</span> <span class="nav-text">Linked list</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Page-directory"><span class="nav-number">3.2.2.</span> <span class="nav-text">Page directory</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Log-Structured-file-organization"><span class="nav-number">3.3.</span> <span class="nav-text">Log-Structured file organization</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Page-Layout-how-tuples-stored-in-page"><span class="nav-number">4.</span> <span class="nav-text">Page Layout(how tuples stored in page)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Page-header"><span class="nav-number">4.1.</span> <span class="nav-text">Page header</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Slotted-Pages-most-common-layout"><span class="nav-number">4.2.</span> <span class="nav-text">Slotted Pages(most common layout)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tuple-Layout"><span class="nav-number">5.</span> <span class="nav-text">Tuple Layout</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Tuple-header"><span class="nav-number">5.1.</span> <span class="nav-text">Tuple header</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Data-representation"><span class="nav-number">5.2.</span> <span class="nav-text">Data representation</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Locks-vs-Latches"><span class="nav-number">6.</span> <span class="nav-text">Locks vs. Latches</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Locks"><span class="nav-number">6.1.</span> <span class="nav-text">Locks</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Latches"><span class="nav-number">6.2.</span> <span class="nav-text">Latches:</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Buffer-Pool"><span class="nav-number">7.</span> <span class="nav-text">Buffer Pool</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Buffer-pool-organization"><span class="nav-number">7.1.</span> <span class="nav-text">Buffer pool organization</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Buffer-pool-page-table"><span class="nav-number">7.2.</span> <span class="nav-text">Buffer pool page table</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Multiple-Buffer-Pools"><span class="nav-number">7.3.</span> <span class="nav-text">Multiple Buffer Pools</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Pre-fetching"><span class="nav-number">7.4.</span> <span class="nav-text">Pre-fetching</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Buffer-replacement-policies"><span class="nav-number">7.5.</span> <span class="nav-text">Buffer replacement policies</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Goals"><span class="nav-number">7.5.1.</span> <span class="nav-text">Goals:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#LRU"><span class="nav-number">7.5.2.</span> <span class="nav-text">LRU</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Clock"><span class="nav-number">7.5.3.</span> <span class="nav-text">Clock</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Problems"><span class="nav-number">7.6.</span> <span class="nav-text">Problems</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Better-solutions"><span class="nav-number">7.7.</span> <span class="nav-text">Better solutions</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Allocation-policies"><span class="nav-number">7.8.</span> <span class="nav-text">Allocation policies</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Other-memory-pools"><span class="nav-number">8.</span> <span class="nav-text">Other memory pools</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Anna</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid="></script>
+      <!-- UY END --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

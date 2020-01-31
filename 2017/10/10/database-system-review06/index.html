@@ -1,0 +1,951 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="database,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="This post contains a couple of frequently used relational operators.">
+<meta name="keywords" content="database">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Database System Review 06">
+<meta property="og:url" content="https://annashuo.github.io/2017/10/10/database-system-review06/index.html">
+<meta property="og:site_name" content="Anna&#39;s Blog">
+<meta property="og:description" content="This post contains a couple of frequently used relational operators.">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-01-30T14:14:21.102Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Database System Review 06">
+<meta name="twitter:description" content="This post contains a couple of frequently used relational operators.">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://annashuo.github.io/2017/10/10/database-system-review06/">
+
+
+
+
+
+  <title> Database System Review 06 | Anna's Blog </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '',
+      xfbml      : true,
+      version    : 'v2.6'
+    });
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-105321506-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?6f5ab2ef1e021070500f7228c830f3c6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Anna's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">My heart is in the work...</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="https://annashuo.github.io/2017/10/10/database-system-review06/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Anna">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Anna's Blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Anna's Blog" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Database System Review 06
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-10T13:30:02+08:00">
+                2017-10-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/STUDY/" itemprop="url" rel="index">
+                    <span itemprop="name">STUDY</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/10/10/database-system-review06/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count fb-comments-count" data-href="https://annashuo.github.io/2017/10/10/database-system-review06/" itemprop="commentCount">0</span> comments
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>This post contains a couple of frequently used relational operators.</p>
+<a id="more"></a>
+<h3 id="Sorting-algorithms"><a href="#Sorting-algorithms" class="headerlink" title="Sorting algorithms"></a>Sorting algorithms</h3><h4 id="WHY"><a href="#WHY" class="headerlink" title="WHY"></a>WHY</h4><ol>
+<li>In relational model, tuple in a table have no specific order</li>
+<li><p>SELECT … ORDER BY</p>
+<ul>
+<li>Users often want to retrieve tuples in a specific order</li>
+<li>Trivial to support duplicate elimination(DISTINCT)</li>
+<li>Bulk loading sorted tuples into B+ tree index is faster</li>
+</ul>
+</li>
+<li><p>SELECT … GROUP BY -&gt; sort-merge join algorithm</p>
+</li>
+</ol>
+<h4 id="Based-on-memory"><a href="#Based-on-memory" class="headerlink" title="Based on memory"></a>Based on memory</h4><p>If data fits in memory, use standard sorting algorithm like <strong>quick sort</strong></p>
+<p>If data does not fit in memory, use <strong>external sorting</strong>, <strong>B+ TREE index</strong></p>
+<h4 id="External-merge-sort"><a href="#External-merge-sort" class="headerlink" title="External merge sort"></a>External merge sort</h4><p>Frequently used external sorting algorithm</p>
+<p>Idea: Hybird <strong>sort-marge</strong> strategy</p>
+<ul>
+<li>Sorting phase: sort small chunks of data that in main-memory, and then write back the sorted data to a file on disk</li>
+<li>Merge phase: combine sorted sub-files into a single larger file</li>
+</ul>
+<h5 id="2-way-External-Merge-Sort"><a href="#2-way-External-Merge-Sort" class="headerlink" title="2-way External Merge Sort"></a>2-way External Merge Sort</h5><p>Assuming files are broken up into <font style="color:red">N</font> pages. The DBMS has a finite number of <font style="color:red">B</font> fixed-size buffers.</p>
+<p>Pass 0: </p>
+<ul>
+<li>Reads every B pages of the tables into memory</li>
+<li>Sort them and write them back to disk</li>
+<li>Each sorted set of pages is a <font style="color:red">run</font></li>
+</ul>
+<p>Pass 1,2,3,…:</p>
+<ul>
+<li>Recursively merges pairs of runs into runs twice as long</li>
+<li>Uses three buffer pages(two for input, one for output)</li>
+</ul>
+<p>Number of passes = <font style="color:red">$1+\left \lceil log_{2}N \right \rceil$</font></p>
+<p>Total I/O cost = <font style="color:red">$2N * (#\ of\ passes)$</font></p>
+<p>This algorithm only requeries 3 buffer pages, buffer pages utilization is pretty low.</p>
+<h5 id="General-External-Merge-Sort-K-way-external-merge-sort"><a href="#General-External-Merge-Sort-K-way-external-merge-sort" class="headerlink" title="General External Merge Sort(K-way external merge sort)"></a>General External Merge Sort(K-way external merge sort)</h5><p>Pass 0: use <font style="color:red">B</font> buffer pages, produce <font style="color:red">$\left \lceil N/B \right \rceil$</font> sorted runs of size B</p>
+<p>Pass 1,2,3,…: merge <font style="color:red">B-1</font> runs(K-way merge)</p>
+<p>Number of passes = <font style="color:red">$1+\left \lceil log_{B-1}\left \lceil N/B \right \rceil \right \rceil$</font></p>
+<p>Total I/O cost = <font style="color:red">$2N * (#\ of\ passes)$</font></p>
+<h6 id="K-way-merge-algorithm"><a href="#K-way-merge-algorithm" class="headerlink" title="K-way merge algorithm"></a>K-way merge algorithm</h6><p>Input: K sorted sub-arrays </p>
+<p>Efficiently computes the <strong>minimum element</strong> of K sub-arrays</p>
+<p>Repeatedly transfers that element to output array.</p>
+<p>Internally maintains a heap to efficiently compute minimum element.</p>
+<p>Time Complexity = <font style="color:red">$O(N\ log_{2}K)$</font></p>
+<h4 id="Using-B-Tree"><a href="#Using-B-Tree" class="headerlink" title="Using B+ Tree"></a>Using B+ Tree</h4><p>If table that must be sorted already has a B+ tree index on the sorted attribute(s)</p>
+<p>Idea: Retrieve tuples in desired sorted order by simply traversing the leaf pages of the tree</p>
+<p>Cases to consider:</p>
+<ul>
+<li>Clustered B+ tree: traverse to the left-most leaf page and then retrieve tuples from all leaf pages. <strong>better than external sorting</strong></li>
+<li>Unclustered B+ tree: Chase each pointer to the page that contains the data. Generally one I/O per data record.<strong>Bad!</strong></li>
+</ul>
+<h4 id="Alternatives-to-sorting"><a href="#Alternatives-to-sorting" class="headerlink" title="Alternatives to sorting"></a>Alternatives to sorting</h4><p>GROUP BY: may no need to be sorted</p>
+<p>DISTINCT: use hashing to remove duplicates without ordering, computationally cheaper than sorting.</p>
+<h3 id="JOIN-algorithms"><a href="#JOIN-algorithms" class="headerlink" title="JOIN algorithms"></a>JOIN algorithms</h3><h4 id="WHY-1"><a href="#WHY-1" class="headerlink" title="WHY"></a>WHY</h4><ol>
+<li><p>In relational model</p>
+<ul>
+<li>unnecessary repetition of information must be avoided</li>
+<li>decompose tables using normalization theory</li>
+</ul>
+</li>
+<li><p>SELECT … JOIN</p>
+<ul>
+<li>Reconstruct original tables via joins</li>
+<li>No information loss</li>
+</ul>
+</li>
+</ol>
+<h4 id="Join-algorithms"><a href="#Join-algorithms" class="headerlink" title="Join algorithms"></a>Join algorithms</h4><ul>
+<li>Nested Loop Join<ul>
+<li>Simple Nested Loop Join</li>
+<li>Block Nested Loop Join</li>
+<li>Index Nested Loop Join</li>
+</ul>
+</li>
+<li>Sort-Merge Join</li>
+<li>Hash Join</li>
+</ul>
+<h4 id="Join-operator-output"><a href="#Join-operator-output" class="headerlink" title="Join operator output"></a>Join operator output</h4><ul>
+<li>data: copy values for the attributes in outer and inner tuples into a new output tuple. subsequent operators in the query plan never need to go back to the base tables to get more data.</li>
+<li>record id: only copy the joins keys along with the record ids of the matching tuples. Ideal for column stores because the DBMS does not copy data that is not need for the query(also called <strong>materialization</strong>)</li>
+</ul>
+<h4 id="I-O-cost-algorithm"><a href="#I-O-cost-algorithm" class="headerlink" title="I/O cost algorithm"></a>I/O cost algorithm</h4><p>Assume</p>
+<ul>
+<li><font style="color:red">M</font> pages in R, <font style="color:red">$p_{R}$</font> tuples per page, <font style="color:red">m</font> tuples total</li>
+<li><font style="color:red">N</font> pages in S, <font style="color:red">$p_{S}$</font> tuples per page, <font style="color:red">n</font> tuples total</li>
+</ul>
+<p>Ignore output cost: <font style="color:red">Cost metric = # of I/Os</font></p>
+<h4 id="Nested-Loop-Join"><a href="#Nested-Loop-Join" class="headerlink" title="Nested Loop Join"></a>Nested Loop Join</h4><h5 id="Simple-Nested-Loop-Join"><a href="#Simple-Nested-Loop-Join" class="headerlink" title="Simple Nested Loop Join"></a>Simple Nested Loop Join</h5><p>2 buffers for steaming the tables and 1 for storing output</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">foreach tuple of R(outer table)</span><br><span class="line">	foreach tuple of S(inner table)</span><br><span class="line">		output, if r and s match</span><br></pre></td></tr></table></figure>
+<font style="color:red">Cost = M + (m*N)</font>
+
+<h5 id="Block-Nested-Loop-Join"><a href="#Block-Nested-Loop-Join" class="headerlink" title="Block Nested Loop Join"></a>Block Nested Loop Join</h5><p>The small table (in terms of # of pages) should be outer.(in this example, M&lt;N)</p>
+<ul>
+<li><p>if buffer = 3(2 for input, 1 for output),</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">read block from R</span><br><span class="line">	read block from S</span><br><span class="line">		output, if pair of tuples match</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<pre><code>&lt;font style=&quot;color:red&quot;&gt;Cost = M + (M*N)&lt;/font&gt;
+</code></pre><ul>
+<li><p>if buffer B &lt; M + 2,</p>
+<p>  Use <font style="color:red">B-2</font> buffers for scaning outer table, 1 buffer to scanning inner table, 1 for storing output</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">read B-2 blocks from R</span><br><span class="line">	read block from S</span><br><span class="line">		output, if a pair of tuples match</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<pre><code>&lt;font style=&quot;color:red&quot;&gt;$Cost = M + (\left \lceil M/(B-2) \right \rceil *N)$&lt;/font&gt;
+</code></pre><ul>
+<li><p>if buffer B &gt;= M + 2</p>
+  <font style="color:red">Cost = M + N</font>
+
+</li>
+</ul>
+<h5 id="Index-Nested-Loop-Join"><a href="#Index-Nested-Loop-Join" class="headerlink" title="Index Nested Loop Join"></a>Index Nested Loop Join</h5><p>Use an index to find <strong>inner table matches</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">foreach tuple r of R</span><br><span class="line">	foreach tuple s of S, where ri = sj</span><br><span class="line">		output, if ri and sj match</span><br></pre></td></tr></table></figure>
+<font style="color:red">Cost = M + (m<em>C)</em></font> (C is index look-up cost)<br><br>##### Nested Loop Join SUMMARY<br><br>- Pick the small table as outer table<br>- Buffer as much of outer table in memory as possible<br>- Loop over the inner table or use an index<br><br>#### Sort-Merge Join<br><br>- Sort Phase: sort <strong>both</strong> tables on the join attribute<br>- Merge Phase: scan the two sorted tables in parallel and emit matching tuples.<br><br>Useful when one or both tables are already sorted or output must be sorted on join key<br><br><font style="color:red">Cost = [(2M\logM/logB) + (2N*logN/logB)] + [M+N]</font>
+
+<h4 id="Hash-Join"><a href="#Hash-Join" class="headerlink" title="Hash Join"></a>Hash Join</h4><p>Partitioning Phase:Read and Write both tables. <font style="color:red">Cost = 2(M+N)</font></p>
+<p>Probing Phase:Read tables. <font style="color:red">Cost = (M+N)</font></p>
+<p>Total: <font style="color:red">Cost = 3(M+N)</font></p>
+<h5 id="Basic-hash-join-algorithm"><a href="#Basic-hash-join-algorithm" class="headerlink" title="Basic hash join algorithm"></a>Basic hash join algorithm</h5><ul>
+<li><p>Phase #1: Build</p>
+<p>  Scan the outer relation and populate a hash table using hash function $h_{1}$ on the join attributes</p>
+</li>
+<li><p>Phase #2: Probe</p>
+<p>  Scan the inner relation and use $h_{1}$ on each tuple to jump to a location in the hash table and find a matching tuple</p>
+</li>
+</ul>
+<p>build hash table H for R<br><br>foreach tuple s of S<br><br>    output, if $H_{1}(s_{j}) \in HT(R)$ </p>
+<h5 id="Hash-table-values"><a href="#Hash-table-values" class="headerlink" title="Hash table values"></a>Hash table values</h5><ul>
+<li><p>Approach 1: Full tuple</p>
+<ul>
+<li>Avoid having to retrieve the outer relation’s tuple contents on a match</li>
+<li>Takes up more space in memory</li>
+</ul>
+</li>
+<li><p>Approach 2: Tuple identifier</p>
+<ul>
+<li>Ideal for column stores because the DBMS doesn’t fetch no need data from disk </li>
+<li>Better if join selectivity is slow</li>
+</ul>
+</li>
+</ul>
+<h5 id="Grace-Hash-Join"><a href="#Grace-Hash-Join" class="headerlink" title="Grace Hash Join"></a>Grace Hash Join</h5><p>When no enough memory to fit the entire hash table</p>
+<ul>
+<li><p>Phase #1: Build</p>
+<p>  Hash both tables on the join attribute into partitions</p>
+</li>
+<li><p>Phase #2: Probe</p>
+<p>  Compares tuples in corresponding partitions for each table</p>
+</li>
+</ul>
+<p>If buckets don’t fit in memory, use <strong>recursive partitioning</strong>, build another hash table for buckets using hash function $h_{2}$($h_{1}\not= h_{2}$)</p>
+<h4 id="JOIN-SUMMARY"><a href="#JOIN-SUMMARY" class="headerlink" title="JOIN SUMMARY"></a>JOIN SUMMARY</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">Join algorithm</th>
+<th style="text-align:center">I/O cost </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">Simple Nested Loop Join</td>
+<td style="text-align:center">M+(m*N)</td>
+</tr>
+<tr>
+<td style="text-align:center">Block Nested Loop Join</td>
+<td style="text-align:center">M+(M*N)</td>
+</tr>
+<tr>
+<td style="text-align:center">Index Nested Loop Join</td>
+<td style="text-align:center">M+(m*logN)</td>
+</tr>
+<tr>
+<td style="text-align:center">Sort Merge Join</td>
+<td style="text-align:center">M+N+(sort cost)</td>
+</tr>
+<tr>
+<td style="text-align:center">Hash Join</td>
+<td style="text-align:center">3(M+N)</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/database/" rel="tag"># database</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/10/database-system-review05/" rel="next" title="Database System Review 05">
+                <i class="fa fa-chevron-left"></i> Database System Review 05
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/06/database-system-review07/" rel="prev" title="Database System Review 07">
+                Database System Review 07 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="fb-comments" data-href="https://annashuo.github.io/2017/10/10/database-system-review06/" data-numposts="10" data-width="100%" data-colorscheme="light">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Anna">
+          <p class="site-author-name" itemprop="name">Anna</p>
+          <p class="site-description motion-element" itemprop="description">My heart is in the work...</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Annashuo/Annashuo.github.io" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/1861044584?is_all=1" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Sorting-algorithms"><span class="nav-number">1.</span> <span class="nav-text">Sorting algorithms</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#WHY"><span class="nav-number">1.1.</span> <span class="nav-text">WHY</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Based-on-memory"><span class="nav-number">1.2.</span> <span class="nav-text">Based on memory</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#External-merge-sort"><span class="nav-number">1.3.</span> <span class="nav-text">External merge sort</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-way-External-Merge-Sort"><span class="nav-number">1.3.1.</span> <span class="nav-text">2-way External Merge Sort</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#General-External-Merge-Sort-K-way-external-merge-sort"><span class="nav-number">1.3.2.</span> <span class="nav-text">General External Merge Sort(K-way external merge sort)</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#K-way-merge-algorithm"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">K-way merge algorithm</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Using-B-Tree"><span class="nav-number">1.4.</span> <span class="nav-text">Using B+ Tree</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Alternatives-to-sorting"><span class="nav-number">1.5.</span> <span class="nav-text">Alternatives to sorting</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JOIN-algorithms"><span class="nav-number">2.</span> <span class="nav-text">JOIN algorithms</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#WHY-1"><span class="nav-number">2.1.</span> <span class="nav-text">WHY</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Join-algorithms"><span class="nav-number">2.2.</span> <span class="nav-text">Join algorithms</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Join-operator-output"><span class="nav-number">2.3.</span> <span class="nav-text">Join operator output</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#I-O-cost-algorithm"><span class="nav-number">2.4.</span> <span class="nav-text">I/O cost algorithm</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Nested-Loop-Join"><span class="nav-number">2.5.</span> <span class="nav-text">Nested Loop Join</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Simple-Nested-Loop-Join"><span class="nav-number">2.5.1.</span> <span class="nav-text">Simple Nested Loop Join</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Block-Nested-Loop-Join"><span class="nav-number">2.5.2.</span> <span class="nav-text">Block Nested Loop Join</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Index-Nested-Loop-Join"><span class="nav-number">2.5.3.</span> <span class="nav-text">Index Nested Loop Join</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Hash-Join"><span class="nav-number">2.6.</span> <span class="nav-text">Hash Join</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Basic-hash-join-algorithm"><span class="nav-number">2.6.1.</span> <span class="nav-text">Basic hash join algorithm</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Hash-table-values"><span class="nav-number">2.6.2.</span> <span class="nav-text">Hash table values</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Grace-Hash-Join"><span class="nav-number">2.6.3.</span> <span class="nav-text">Grace Hash Join</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JOIN-SUMMARY"><span class="nav-number">2.7.</span> <span class="nav-text">JOIN SUMMARY</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Anna</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid="></script>
+      <!-- UY END --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

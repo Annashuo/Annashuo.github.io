@@ -1,0 +1,912 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="database,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="We are now going to talk about how to support the DBMS’s execution engine to read/write data from pages. Two types of data structures:  Hash tables Trees">
+<meta name="keywords" content="database">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Database System Review 04">
+<meta property="og:url" content="https://annashuo.github.io/2017/09/26/database-system-review04/index.html">
+<meta property="og:site_name" content="Anna&#39;s Blog">
+<meta property="og:description" content="We are now going to talk about how to support the DBMS’s execution engine to read/write data from pages. Two types of data structures:  Hash tables Trees">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://github.com/Annashuo/hello-world/blob/master/chained-hash.png?raw=true">
+<meta property="og:image" content="https://github.com/Annashuo/hello-world/blob/master/non-unique-keys.png?raw=true">
+<meta property="og:image" content="https://github.com/Annashuo/hello-world/blob/master/open-address-hash.png?raw=true">
+<meta property="og:updated_time" content="2020-01-30T14:14:21.101Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Database System Review 04">
+<meta name="twitter:description" content="We are now going to talk about how to support the DBMS’s execution engine to read/write data from pages. Two types of data structures:  Hash tables Trees">
+<meta name="twitter:image" content="https://github.com/Annashuo/hello-world/blob/master/chained-hash.png?raw=true">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://annashuo.github.io/2017/09/26/database-system-review04/">
+
+
+
+
+
+  <title> Database System Review 04 | Anna's Blog </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '',
+      xfbml      : true,
+      version    : 'v2.6'
+    });
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-105321506-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?6f5ab2ef1e021070500f7228c830f3c6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Anna's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">My heart is in the work...</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="https://annashuo.github.io/2017/09/26/database-system-review04/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Anna">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Anna's Blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Anna's Blog" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Database System Review 04
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-09-26T09:56:26+08:00">
+                2017-09-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/STUDY/" itemprop="url" rel="index">
+                    <span itemprop="name">STUDY</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/09/26/database-system-review04/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count fb-comments-count" data-href="https://annashuo.github.io/2017/09/26/database-system-review04/" itemprop="commentCount">0</span> comments
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>We are now going to talk about how to support the DBMS’s execution engine to read/write data from pages.</p>
+<p>Two types of data structures:</p>
+<ul>
+<li>Hash tables</li>
+<li>Trees</li>
+</ul>
+<a id="more"></a>
+<h3 id="Data-structures"><a href="#Data-structures" class="headerlink" title="Data structures"></a>Data structures</h3><ul>
+<li>Internal meta-data</li>
+<li>Core data storage</li>
+<li>Temporary data structures</li>
+<li>Table indexes</li>
+</ul>
+<h4 id="Table-index"><a href="#Table-index" class="headerlink" title="Table index"></a>Table index</h4><p>A <u>table index</u> is a replica of a subset of a table’s columns that are organized and/or sorted for efficient access using a subset of those columns.</p>
+<p>Trade-off on the number of indexes to create per database</p>
+<ul>
+<li>Storage Overhead</li>
+<li>Maintenance Overhead</li>
+</ul>
+<h3 id="Design-decisions"><a href="#Design-decisions" class="headerlink" title="Design decisions"></a>Design decisions</h3><ul>
+<li>Data Organization: how to layout memory and what information to store inside of the data structure to support efficient access.</li>
+<li>Concurrency: how to enable multiple threads to access the data structure at the same time without causing problems.</li>
+</ul>
+<h3 id="Hash-Tables"><a href="#Hash-Tables" class="headerlink" title="Hash Tables"></a>Hash Tables</h3><p>A <u>hash table</u> implements an associative array abstract data type that maps keys to values.</p>
+<h4 id="Static-hash-table"><a href="#Static-hash-table" class="headerlink" title="Static hash table"></a>Static hash table</h4><p>Allocate a giant array that has one slot for <u>every</u> element that you need to record.</p>
+<p>Requirement:</p>
+<ul>
+<li>know the number of elemts ahead of time</li>
+<li>each key is unique</li>
+<li>perfect hash function: $key1 \neq  key2 \Rightarrow hash(key1) \neq hash(key2)$ </li>
+</ul>
+<h5 id="Chained-hashing"><a href="#Chained-hashing" class="headerlink" title="Chained hashing"></a>Chained hashing</h5><p>Maintain a linked list of <u>buckets</u> for each slot in the hash table.</p>
+<p>Resolve collisions by placing all elements with the same hash key into the same bucket</p>
+<font style="color:red">Insertion, deletion and lookup are all hash to its bucket and scan for it, depending on the bucket size.</font>
+
+<p><img src="https://github.com/Annashuo/hello-world/blob/master/chained-hash.png?raw=true" alt></p>
+<p>The hash table can grow infinitely because you just keep adding new buckets to the linked list.</p>
+<p>When store a new entry or extend the linked list, just take a latch on the bucket.</p>
+<h6 id="Non-unique-keys"><a href="#Non-unique-keys" class="headerlink" title="Non-unique keys"></a>Non-unique keys</h6><ul>
+<li>Choice #1: <strong>Seperate Linked List</strong>, store values in seperate storage area for each key.</li>
+<li>Choice #2: <strong>Store in Bucket</strong>, store dulicate keys entries in the same bucket.</li>
+</ul>
+<p><img src="https://github.com/Annashuo/hello-world/blob/master/non-unique-keys.png?raw=true" alt></p>
+<h5 id="Open-addressing-Hashing"><a href="#Open-addressing-Hashing" class="headerlink" title="Open-addressing Hashing"></a>Open-addressing Hashing</h5><p>Single gaint table of slots.</p>
+<p>Resolve collisions by linearly searching for the next free slot in the table.</p>
+<font style="color:red">Insertion, deletion and lookup are all hash to its bucket and scan for it, depending on the bucket size. But has to store the key in the index to know when to stop scanning.</font>
+
+<p><img src="https://github.com/Annashuo/hello-world/blob/master/open-address-hash.png?raw=true" alt></p>
+<p>Always requires a hasg table with ~2x the number of slots as the number of elements in order to avoid collisions of hashed keys.</p>
+<h5 id="Cuckoo-Hashing"><a href="#Cuckoo-Hashing" class="headerlink" title="Cuckoo Hashing"></a>Cuckoo Hashing</h5><p>Use multiple hash tables with different hash functions </p>
+<font style="color:red">Deletion and lookup are always O(1) because only one location per hash table is checked<br><br>On insert, check every table and pick anyone that has a free slot. If no table has a free slot, evict the element from one of them and then re-hash it find a new location</font>
+
+<p>Make sure that we don’t get stuck in an infinite loop when moving keys.</p>
+<p>If there is a circle, rebuild the entire hash tables with new hash functions</p>
+<h4 id="Dynamic-Hash-Tables"><a href="#Dynamic-Hash-Tables" class="headerlink" title="Dynamic Hash Tables"></a>Dynamic Hash Tables</h4><h5 id="Extendible-Hashing"><a href="#Extendible-Hashing" class="headerlink" title="Extendible Hashing"></a>Extendible Hashing</h5><p>Chained hashing approach when we split buckets instead of letting the linked list grow forever.</p>
+<p>This requires reshuffling the entries on split, but the change is localized.</p>
+<h5 id="Linear-Hashing"><a href="#Linear-Hashing" class="headerlink" title="Linear Hashing"></a>Linear Hashing</h5><p>Maintain a <u>pointer</u> that tracks the next bucket to split.</p>
+<p>When <u>any</u> bucket overflows, split the bucket at the pointer location.</p>
+<h3 id="B-TREE-family"><a href="#B-TREE-family" class="headerlink" title="B-TREE family"></a>B-TREE family</h3><ul>
+<li>B-Tree</li>
+<li>B+Tree</li>
+<li>B$^{link}$-Tree</li>
+<li>B*Tree</li>
+</ul>
+<h4 id="B-Tree"><a href="#B-Tree" class="headerlink" title="B+Tree"></a>B+Tree</h4><p>A <strong>B+Tree</strong> is a self-balancing tree data structure that keeps data <font style="color: red;">sorted</font> and allows searches, sequential access, insertions and deletions in <font style="color: red;">O(log n)</font></p>
+<ul>
+<li>Generalization of a binary search tree in that a node can have more than tw children</li>
+<li>Optimized for systems that read and write large blocks of data</li>
+</ul>
+<h5 id="B-Tree-properties"><a href="#B-Tree-properties" class="headerlink" title="B+Tree properties"></a>B+Tree properties</h5><p>A B+Tree is an M-way search tree with the following properties:</p>
+<ul>
+<li>perfectly balanced(every leaf node is at the same depth)</li>
+<li>Every inner node other than the root is at least half-full(M/2-1 &lt;= #KEYS &lt; M-1)</li>
+<li>Every inner node with k keys has k+1 non-null children</li>
+</ul>
+<h5 id="B-Tree-nodes"><a href="#B-Tree-nodes" class="headerlink" title="B+Tree nodes"></a>B+Tree nodes</h5><p>Every node in the B+Tree contains an array of key/value pairs</p>
+<ul>
+<li>The keys will always be the column or columns that you built your index on</li>
+<li>The values will diff based on whether the node is classified as <u><strong>inner nodes</strong></u> or <u><strong>leaf nodes</strong></u></li>
+</ul>
+<h5 id="B-Tree-leaf-node-values"><a href="#B-Tree-leaf-node-values" class="headerlink" title="B+Tree: leaf node values"></a>B+Tree: leaf node values</h5><ul>
+<li>Approach #1 <strong>Record ids</strong>: a pointer to the location of the tuple that the index entry corresponds to.</li>
+<li>Approach #2 <strong>Tuple Data</strong>: the actual contents of the tuple is stored in the leaf node; secondary indexes have to store the record id as their values</li>
+</ul>
+<h5 id="B-Tree-vs-B-Tree"><a href="#B-Tree-vs-B-Tree" class="headerlink" title="B-Tree vs. B+Tree"></a>B-Tree vs. B+Tree</h5><p>B-Tree stored keys+values in all nodes on the tree. It’s more space efficient since each key only appears once in the tree.</p>
+<p>A B+Tree only stores values in leaf node. Inner nodes only guide the search process.</p>
+<h5 id="B-Tree-INSERT"><a href="#B-Tree-INSERT" class="headerlink" title="B+Tree: INSERT"></a>B+Tree: INSERT</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Find correct lead L</span><br><span class="line">Put data entry into L in sorted order.</span><br><span class="line">&#123;</span><br><span class="line">	If L has enough space, done!</span><br><span class="line">	Else must split L into L and a new node L2</span><br><span class="line">	&#123;	</span><br><span class="line">		Redistribute entries evenly, a copy up middle key</span><br><span class="line">		Inser index entry pointing to L2 into parent of L</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">To split inner node, redistribute entries evenly but push up middle key.</span><br></pre></td></tr></table></figure>
+<h5 id="B-Tree-DELETE"><a href="#B-Tree-DELETE" class="headerlink" title="B+Tree: DELETE"></a>B+Tree: DELETE</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Start at root, find lead L where entry belongs</span><br><span class="line">Remove the entry</span><br><span class="line">&#123;</span><br><span class="line">	If L is at least half-full, done!</span><br><span class="line">	If L has only M/2-1 entries</span><br><span class="line">	&#123;</span><br><span class="line">		Try to redistribute, borrowing from sibling(adjacent node with same parent as L)</span><br><span class="line">		If redistribute fails, merge L and sibling.</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">If merge occurred, must delete entry(pointing to L or sibling) from parent of L.</span><br></pre></td></tr></table></figure>
+<h5 id="B-Tree-design-choices"><a href="#B-Tree-design-choices" class="headerlink" title="B+Tree design choices"></a>B+Tree design choices</h5><ul>
+<li>Merge Threshold</li>
+<li>Non-unique Indexes</li>
+<li>Variable Length Keys</li>
+<li>Prefix Compression</li>
+</ul>
+<h5 id="B-Tree-Merge-threshold"><a href="#B-Tree-Merge-threshold" class="headerlink" title="B+Tree: Merge threshold"></a>B+Tree: Merge threshold</h5><p>Some DBMSs don’t always merge nodes when it is half full.</p>
+<p>Delaying a merge operation may reduce the amount of reorganization.</p>
+<h5 id="B-Tree-Non-unique-Indexes"><a href="#B-Tree-Non-unique-Indexes" class="headerlink" title="B+Tree: Non-unique Indexes"></a>B+Tree: Non-unique Indexes</h5><ul>
+<li>Approach #1 Duplicate Keys: Use the same leaf node layout but store duplicate keys multiple times</li>
+<li>Approach #2 Value Lists: Store each key only once and maintain a linked list of unique values.</li>
+</ul>
+<h5 id="B-Tree-Variable-Length-Keys"><a href="#B-Tree-Variable-Length-Keys" class="headerlink" title="B+Tree: Variable Length Keys"></a>B+Tree: Variable Length Keys</h5><ul>
+<li>Approach #1 Pointers: store the keys as pointers to the tuple’s attribute</li>
+<li>Approach #2 Variable length nodes: the size of each  node in the B+Tree can vary; requires careful memory management</li>
+<li>Approach #3 Key Map: embed an array of pointers that map to the key+value list within the node.</li>
+</ul>
+<h5 id="B-Tree-Prefix-compression"><a href="#B-Tree-Prefix-compression" class="headerlink" title="B+Tree: Prefix compression"></a>B+Tree: Prefix compression</h5><p>Since the keys in the inner nodes are only used to direct traffic, we store a minimum prefix that is needed to correctly route probes into the index other than the entire key.</p>
+<h5 id="B-Tree-Bulk-Insert"><a href="#B-Tree-Bulk-Insert" class="headerlink" title="B+Tree: Bulk Insert"></a>B+Tree: Bulk Insert</h5><p>The fastest/best way to build a B+Tree is to first sort the keys and then build the index from the bottom up.</p>
+<h3 id="Observation"><a href="#Observation" class="headerlink" title="Observation"></a>Observation</h3><p>The easiest way to implement a <strong>dynamic</strong> order-preserving index is to use a sorted linked list</p>
+<p>All operations have to linear search. Average Cost: O(N)</p>
+<h3 id="Skip-Lists"><a href="#Skip-Lists" class="headerlink" title="Skip Lists"></a>Skip Lists</h3><p>A collection of lists at different levels</p>
+<ul>
+<li>Lowest level is a sorted, singly linked list of all keys</li>
+<li>2nd level links every other key</li>
+<li>3rd level links every fourth key</li>
+<li>In general, a level has half the keys of one below it.</li>
+</ul>
+<p>To insert a new key, flip a coin to decide how many levels to add the new key into. Provides approximate <font style="color:red;">O(log n)</font> search times.</p>
+<h4 id="Advantages"><a href="#Advantages" class="headerlink" title="Advantages:"></a>Advantages:</h4><ul>
+<li>Uses less memory than a typical B+Tree id you don’t include reverse pointers</li>
+<li>Insertions and deletions do not require rebalancing</li>
+</ul>
+<h4 id="Disadvantages"><a href="#Disadvantages" class="headerlink" title="Disadvantages:"></a>Disadvantages:</h4><ul>
+<li>Not disk/cache friendly because they do not optimize locality references</li>
+<li>Invoking random number generator multiple times per insert is slow</li>
+<li>Reverse search is non-trivial</li>
+</ul>
+<h3 id="Radix-Tree"><a href="#Radix-Tree" class="headerlink" title="Radix Tree"></a>Radix Tree</h3><p>Uses digital representation of keys to examine prefixes one-by-one instead of comparing entire key</p>
+<ul>
+<li>The height of the tree depend on the length of keys</li>
+<li>Does not require rebalancing</li>
+<li>The path to a leaf node represents the key of the leaf</li>
+<li>Keys are stored implicitly and can be reconstructed from paths</li>
+</ul>
+<h4 id="Radix-Tree-Binary-comparable-keys"><a href="#Radix-Tree-Binary-comparable-keys" class="headerlink" title="Radix Tree: Binary comparable keys"></a>Radix Tree: Binary comparable keys</h4><p>not all attribute types can be decomposed into binary comparable digits for a radix tree</p>
+<ul>
+<li><strong>Unsigned integers</strong>: Byte order must be flipped for little endian machines</li>
+<li><strong>Signed Integers</strong>: Flip two’s-complement so that negative numbers are smaller than positive</li>
+<li><strong>Floats</strong>: Classify into group(neg vs. pos, normalized vs. denormalized), then store as unsigned interger</li>
+<li><strong>Compound</strong>: Transform each attribute seperately.</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/database/" rel="tag"># database</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/21/database-system-review03/" rel="next" title="Database System Review 03">
+                <i class="fa fa-chevron-left"></i> Database System Review 03
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/10/database-system-review05/" rel="prev" title="Database System Review 05">
+                Database System Review 05 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="fb-comments" data-href="https://annashuo.github.io/2017/09/26/database-system-review04/" data-numposts="10" data-width="100%" data-colorscheme="light">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Anna">
+          <p class="site-author-name" itemprop="name">Anna</p>
+          <p class="site-description motion-element" itemprop="description">My heart is in the work...</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Annashuo/Annashuo.github.io" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/1861044584?is_all=1" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Data-structures"><span class="nav-number">1.</span> <span class="nav-text">Data structures</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Table-index"><span class="nav-number">1.1.</span> <span class="nav-text">Table index</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Design-decisions"><span class="nav-number">2.</span> <span class="nav-text">Design decisions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hash-Tables"><span class="nav-number">3.</span> <span class="nav-text">Hash Tables</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Static-hash-table"><span class="nav-number">3.1.</span> <span class="nav-text">Static hash table</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Chained-hashing"><span class="nav-number">3.1.1.</span> <span class="nav-text">Chained hashing</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#Non-unique-keys"><span class="nav-number">3.1.1.1.</span> <span class="nav-text">Non-unique keys</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Open-addressing-Hashing"><span class="nav-number">3.1.2.</span> <span class="nav-text">Open-addressing Hashing</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Cuckoo-Hashing"><span class="nav-number">3.1.3.</span> <span class="nav-text">Cuckoo Hashing</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Dynamic-Hash-Tables"><span class="nav-number">3.2.</span> <span class="nav-text">Dynamic Hash Tables</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Extendible-Hashing"><span class="nav-number">3.2.1.</span> <span class="nav-text">Extendible Hashing</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Linear-Hashing"><span class="nav-number">3.2.2.</span> <span class="nav-text">Linear Hashing</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#B-TREE-family"><span class="nav-number">4.</span> <span class="nav-text">B-TREE family</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#B-Tree"><span class="nav-number">4.1.</span> <span class="nav-text">B+Tree</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#B-Tree-properties"><span class="nav-number">4.1.1.</span> <span class="nav-text">B+Tree properties</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#B-Tree-nodes"><span class="nav-number">4.1.2.</span> <span class="nav-text">B+Tree nodes</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#B-Tree-leaf-node-values"><span class="nav-number">4.1.3.</span> <span class="nav-text">B+Tree: leaf node values</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#B-Tree-vs-B-Tree"><span class="nav-number">4.1.4.</span> <span class="nav-text">B-Tree vs. B+Tree</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#B-Tree-INSERT"><span class="nav-number">4.1.5.</span> <span class="nav-text">B+Tree: INSERT</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#B-Tree-DELETE"><span class="nav-number">4.1.6.</span> <span class="nav-text">B+Tree: DELETE</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#B-Tree-design-choices"><span class="nav-number">4.1.7.</span> <span class="nav-text">B+Tree design choices</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#B-Tree-Merge-threshold"><span class="nav-number">4.1.8.</span> <span class="nav-text">B+Tree: Merge threshold</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#B-Tree-Non-unique-Indexes"><span class="nav-number">4.1.9.</span> <span class="nav-text">B+Tree: Non-unique Indexes</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#B-Tree-Variable-Length-Keys"><span class="nav-number">4.1.10.</span> <span class="nav-text">B+Tree: Variable Length Keys</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#B-Tree-Prefix-compression"><span class="nav-number">4.1.11.</span> <span class="nav-text">B+Tree: Prefix compression</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#B-Tree-Bulk-Insert"><span class="nav-number">4.1.12.</span> <span class="nav-text">B+Tree: Bulk Insert</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Observation"><span class="nav-number">5.</span> <span class="nav-text">Observation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Skip-Lists"><span class="nav-number">6.</span> <span class="nav-text">Skip Lists</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Advantages"><span class="nav-number">6.1.</span> <span class="nav-text">Advantages:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Disadvantages"><span class="nav-number">6.2.</span> <span class="nav-text">Disadvantages:</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Radix-Tree"><span class="nav-number">7.</span> <span class="nav-text">Radix Tree</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Radix-Tree-Binary-comparable-keys"><span class="nav-number">7.1.</span> <span class="nav-text">Radix Tree: Binary comparable keys</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Anna</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid="></script>
+      <!-- UY END --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

@@ -1,0 +1,849 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="database,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="Parallel Execution">
+<meta name="keywords" content="database">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Database System Review 08">
+<meta property="og:url" content="https://annashuo.github.io/2017/11/07/database-system-review08/index.html">
+<meta property="og:site_name" content="Anna&#39;s Blog">
+<meta property="og:description" content="Parallel Execution">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-01-30T14:14:21.102Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Database System Review 08">
+<meta name="twitter:description" content="Parallel Execution">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://annashuo.github.io/2017/11/07/database-system-review08/">
+
+
+
+
+
+  <title> Database System Review 08 | Anna's Blog </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '',
+      xfbml      : true,
+      version    : 'v2.6'
+    });
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-105321506-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?6f5ab2ef1e021070500f7228c830f3c6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Anna's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">My heart is in the work...</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="https://annashuo.github.io/2017/11/07/database-system-review08/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Anna">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Anna's Blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Anna's Blog" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Database System Review 08
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-07T14:17:03+08:00">
+                2017-11-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/STUDY/" itemprop="url" rel="index">
+                    <span itemprop="name">STUDY</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/11/07/database-system-review08/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count fb-comments-count" data-href="https://annashuo.github.io/2017/11/07/database-system-review08/" itemprop="commentCount">0</span> comments
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Parallel-Execution"><a href="#Parallel-Execution" class="headerlink" title=" Parallel Execution "></a><center> Parallel Execution </center></h2><a id="more"></a>
+<h3 id="Parallel-vs-Distributed"><a href="#Parallel-vs-Distributed" class="headerlink" title="Parallel vs. Distributed"></a>Parallel vs. Distributed</h3><ul>
+<li>Parallel DBMSs:<ul>
+<li>Nodes are physically close to each other.</li>
+<li>Nodes connected with high-speed LAN.</li>
+<li>Communication cost is assumed to be small</li>
+</ul>
+</li>
+<li>Distributed DBMSs:<ul>
+<li>Nodes can be far from each other</li>
+<li>Nodes connected using public network</li>
+<li>Communication cost and problems cannot be ignored.</li>
+</ul>
+</li>
+</ul>
+<h3 id="Inter-vs-Intra-Query-Parallelism"><a href="#Inter-vs-Intra-Query-Parallelism" class="headerlink" title="Inter- vs. Intra-Query Parallelism"></a>Inter- vs. Intra-Query Parallelism</h3><ul>
+<li>Inter-Query: different queries are executed concurrently. Increases throughput and reduces latency.</li>
+<li>Intra-Query: execute the operations of a single query in parallel. Decreases latency for long-running queries.</li>
+</ul>
+<h3 id="Process-Model"><a href="#Process-Model" class="headerlink" title="Process Model"></a>Process Model</h3><p>A DBMS’s <u>process model</u> defines how the system is architected to support concurrent requests from a multi-user application.</p>
+<p>A <u>worker</u> is the DBMS component that is responsible form executing tacks on behalf of the client and returning the results.</p>
+<ul>
+<li>Approach #1: Process per DBMSs worker</li>
+<li>Approach #2: Process Pool</li>
+<li>Approach #3: Thread per DBMS worker</li>
+</ul>
+<h4 id="Process-per-DBMSs-worker"><a href="#Process-per-DBMSs-worker" class="headerlink" title="Process per DBMSs worker"></a>Process per DBMSs worker</h4><p>Each worker is a seperate OS process.</p>
+<ul>
+<li>Relies on OS scheduler</li>
+<li>Use shared-memory for global data structures</li>
+<li>A process crash doesn’t take down entire system</li>
+</ul>
+<h4 id="Process-Pool"><a href="#Process-Pool" class="headerlink" title="Process Pool"></a>Process Pool</h4><p>A worker use any process that is free in a pool.</p>
+<ul>
+<li>Relies on OS scheduler</li>
+<li>Use shared-memory for global data structures</li>
+<li>Bad for CPU cache locality</li>
+</ul>
+<h4 id="Thread-per-worker"><a href="#Thread-per-worker" class="headerlink" title="Thread per worker"></a>Thread per worker</h4><p>Single process with multiple worker thread.</p>
+<ul>
+<li>DBMS has to manage its own scheduling</li>
+<li>May or may not use a dispatcher thread</li>
+<li>Thread crash (may) kill the entire system.</li>
+</ul>
+<p>Advantages:</p>
+<ul>
+<li>Less overhead per context switch</li>
+<li>Don’t have to manage shared memory</li>
+</ul>
+<p>Thread per worker process model is not equal to intra-query parallelism</p>
+<h3 id="Inter-Query-Parallelism"><a href="#Inter-Query-Parallelism" class="headerlink" title="Inter-Query Parallelism"></a>Inter-Query Parallelism</h3><p>Procide the illusion of isolation through <u>concurrency control</u> scheme.</p>
+<h3 id="Intra-Query-Parallelism"><a href="#Intra-Query-Parallelism" class="headerlink" title="Intra-Query Parallelism"></a>Intra-Query Parallelism</h3><p>Execute operators in parallel, improve performance of a single query.</p>
+<ul>
+<li><p>Approach #1: Intra-Operator: </p>
+<p>  Operators are decomposed into independent instances that perform the same function on different subsets of data.</p>
+</li>
+<li><p>Approach #2: Inter-Operator(pipeline parallelism)</p>
+<p>  Operations are overlapped in order to pipeline data from one stage to the next without materialization.</p>
+</li>
+</ul>
+<h3 id="I-O-Parallelism"><a href="#I-O-Parallelism" class="headerlink" title="I/O Parallelism"></a>I/O Parallelism</h3><p>Split the DBMS installation across multiple storage devides.</p>
+<ul>
+<li>Multiple Disks per Database</li>
+<li>One Database per Disk</li>
+<li>One Relation per Disk</li>
+<li>Split Relation across Multiple Disk</li>
+</ul>
+<h4 id="Multi-disk-parallelism"><a href="#Multi-disk-parallelism" class="headerlink" title="Multi-disk parallelism"></a>Multi-disk parallelism</h4><p>Configure OS/hardware to staore the DBMS’s files across multiple storage devices.</p>
+<ul>
+<li>Storage Appliances</li>
+<li>RAID Configuration</li>
+</ul>
+<h4 id="Database-Partitioning"><a href="#Database-Partitioning" class="headerlink" title="Database Partitioning"></a>Database Partitioning</h4><p>Some DBMSs allow you to specify the disk location of each individual database. Using buffer pool manager maps a page to a disk location.</p>
+<h4 id="Partitioning"><a href="#Partitioning" class="headerlink" title="Partitioning"></a>Partitioning</h4><p>Split single logical table into disjoint physical segments that are stored/managed separated.</p>
+<h5 id="Vertical-Partitioning"><a href="#Vertical-Partitioning" class="headerlink" title="Vertical Partitioning"></a>Vertical Partitioning</h5><p>Store a table’s attributes in a seperate location. Have to store tuple info to recontruct the original record.</p>
+<h5 id="Horizontal-Partitioning"><a href="#Horizontal-Partitioning" class="headerlink" title="Horizontal Partitioning"></a>Horizontal Partitioning</h5><p>Divide the tuples of a table up into disjoint segments based on some partitioning key.</p>
+<ul>
+<li>Hash Partitioning </li>
+<li>Range Partitioning </li>
+<li>Predicate Partitioning </li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/database/" rel="tag"># database</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/06/database-system-review07/" rel="next" title="Database System Review 07">
+                <i class="fa fa-chevron-left"></i> Database System Review 07
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/11/07/database-system-review09/" rel="prev" title="Database System Review 09">
+                Database System Review 09 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="fb-comments" data-href="https://annashuo.github.io/2017/11/07/database-system-review08/" data-numposts="10" data-width="100%" data-colorscheme="light">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Anna">
+          <p class="site-author-name" itemprop="name">Anna</p>
+          <p class="site-description motion-element" itemprop="description">My heart is in the work...</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Annashuo/Annashuo.github.io" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/1861044584?is_all=1" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Parallel-Execution"><span class="nav-number">1.</span> <span class="nav-text"> Parallel Execution </span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Parallel-vs-Distributed"><span class="nav-number">1.1.</span> <span class="nav-text">Parallel vs. Distributed</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Inter-vs-Intra-Query-Parallelism"><span class="nav-number">1.2.</span> <span class="nav-text">Inter- vs. Intra-Query Parallelism</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Process-Model"><span class="nav-number">1.3.</span> <span class="nav-text">Process Model</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Process-per-DBMSs-worker"><span class="nav-number">1.3.1.</span> <span class="nav-text">Process per DBMSs worker</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Process-Pool"><span class="nav-number">1.3.2.</span> <span class="nav-text">Process Pool</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Thread-per-worker"><span class="nav-number">1.3.3.</span> <span class="nav-text">Thread per worker</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Inter-Query-Parallelism"><span class="nav-number">1.4.</span> <span class="nav-text">Inter-Query Parallelism</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Intra-Query-Parallelism"><span class="nav-number">1.5.</span> <span class="nav-text">Intra-Query Parallelism</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#I-O-Parallelism"><span class="nav-number">1.6.</span> <span class="nav-text">I/O Parallelism</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Multi-disk-parallelism"><span class="nav-number">1.6.1.</span> <span class="nav-text">Multi-disk parallelism</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Database-Partitioning"><span class="nav-number">1.6.2.</span> <span class="nav-text">Database Partitioning</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Partitioning"><span class="nav-number">1.6.3.</span> <span class="nav-text">Partitioning</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Vertical-Partitioning"><span class="nav-number">1.6.3.1.</span> <span class="nav-text">Vertical Partitioning</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Horizontal-Partitioning"><span class="nav-number">1.6.3.2.</span> <span class="nav-text">Horizontal Partitioning</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Anna</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid="></script>
+      <!-- UY END --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

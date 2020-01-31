@@ -1,0 +1,1040 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="Some basic knowledge of web application.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="web_knowledge">
+<meta property="og:url" content="https://annashuo.github.io/2017/09/19/web-knowledge/index.html">
+<meta property="og:site_name" content="Anna&#39;s Blog">
+<meta property="og:description" content="Some basic knowledge of web application.">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-01-30T14:14:21.106Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="web_knowledge">
+<meta name="twitter:description" content="Some basic knowledge of web application.">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://annashuo.github.io/2017/09/19/web-knowledge/">
+
+
+
+
+
+  <title> web_knowledge | Anna's Blog </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '',
+      xfbml      : true,
+      version    : 'v2.6'
+    });
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-105321506-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?6f5ab2ef1e021070500f7228c830f3c6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Anna's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">My heart is in the work...</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="https://annashuo.github.io/2017/09/19/web-knowledge/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Anna">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Anna's Blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Anna's Blog" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                web_knowledge
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-09-19T23:59:07+08:00">
+                2017-09-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/09/19/web-knowledge/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count fb-comments-count" data-href="https://annashuo.github.io/2017/09/19/web-knowledge/" itemprop="commentCount">0</span> comments
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Some basic knowledge of web application.<br><a id="more"></a></p>
+<h3 id="git"><a href="#git" class="headerlink" title="git"></a>git</h3><h4 id="Version-control-system"><a href="#Version-control-system" class="headerlink" title="Version control system"></a>Version control system</h4><p>the basic idea of version control system is that as you work on a large project and you often want to commit change to your project while still being able to access and possibly to go back to older version of the project. It’s also useful for teams of programmers to coordinate their work by each of the programmer work on their static copy of their own and only commit her changes of the project possibly resolve conflict with other programmer’s work with her changes complete.</p>
+<h4 id="GIT"><a href="#GIT" class="headerlink" title="GIT"></a>GIT</h4><p>GIT is a distributed version control system because when you clone, it make a copy of a repository. You get a full complete copy of that repository. Essentially a collections of all collaborate repository.</p>
+<h4 id="Branch"><a href="#Branch" class="headerlink" title="Branch"></a>Branch</h4><p>Branch is a full copy of a version of the repository so you have multiple version of your repository.</p>
+<h3 id="HTTP-Hypertext-Transfer-Protocol"><a href="#HTTP-Hypertext-Transfer-Protocol" class="headerlink" title="HTTP: Hypertext Transfer Protocol"></a>HTTP: Hypertext Transfer Protocol</h3><p>HTTP is a protocol that is used for tranfering data on the web.</p>
+<p>If the brouser doesn’t have the address of the www….com, the browser might have to start when it initiate the connection by connecting the domain name system(DNS) server and convert the <a href="http://www.com" target="_blank" rel="noopener">www.com</a> to IP address.</p>
+<p>After the browser gets the IP address of the remote server, it may initiate a TCP/IP connection with the remote server. TCP is the transfer control protocol. It how most traffic internet work. To initiate a TCP/IP connection, the browser first send a SYN message to the web server and the server reply with a SYN-ACK package message to acknowledge the web server has receive the SYN. The browser send a ACK package to the server to acknowledge it has receive the SYN-ACK package. At this point, the browser can begin sending HTTP traffic by sending a HTTP request to the web server. The web server receive the HTTP request and send back the HTTP response.</p>
+<h4 id="Port"><a href="#Port" class="headerlink" title="Port"></a>Port</h4><p>Ports for common web services:</p>
+<ul>
+<li>Telnet(23), SMTP(25), mysql(3306)</li>
+<li>For web servers:<ul>
+<li>Deployment: HTTP(80), HTTPS(443)</li>
+<li>Development: HTTP(8000 or 8080), HTTPS(8443)</li>
+</ul>
+</li>
+</ul>
+<h4 id="Request-and-Response"><a href="#Request-and-Response" class="headerlink" title="Request and Response"></a>Request and Response</h4><p>HTTP Request(first line is the request line):</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;METHOD&gt; &lt;URI&gt; &lt;VERSION&gt;</span><br><span class="line">&lt;HEADER LINE&gt;</span><br><span class="line">&lt;HEADER LINE&gt;</span><br><span class="line">...</span><br><span class="line">&lt;HEADER LINE&gt;</span><br><span class="line">&lt;BLANK LINE&gt;</span><br><span class="line">&lt;OPTIONAL MESSAGE BODY&gt;</span><br></pre></td></tr></table></figure>
+<p>HTTP Response(first line is the resopnse line):</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;VERSION&gt; &lt;STATUS CODE&gt; &lt;STATUS MESSAGE&gt;</span><br><span class="line">&lt;HEADER LINE&gt;</span><br><span class="line">&lt;HEADER LINE&gt;</span><br><span class="line">...</span><br><span class="line">&lt;HEADER LINE&gt;</span><br><span class="line">&lt;BLANK LINE&gt;</span><br><span class="line">&lt;OPTIONAL MESSAGE BODY&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="HTTP-Request-Method"><a href="#HTTP-Request-Method" class="headerlink" title="HTTP Request Method"></a>HTTP Request Method</h4><ul>
+<li>Safe methods are not supposed to have side effect:<ul>
+<li>GET, HEAD(much like GET, but the response without message body), TRACE(the response will contain the whole request in the message body) and OPTIONS（请求http的方法）</li>
+</ul>
+</li>
+<li>Idempotent（幂等性：调用一次和调用n次结果相同） methods can have side effect<ul>
+<li>PUT（更新会指明某个资源，做多次更新和1次更新结果一样） and DELETE（删除会指明某个资源，做一次删除和多次删除结果一样）,GET, HEAD</li>
+</ul>
+</li>
+<li>Update method<ul>
+<li>POST（创建不会致命某个资源，一次调用创建一个，没有幂等性）</li>
+</ul>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">method</th>
+<th style="text-align:center">safe</th>
+<th style="text-align:center">idempotent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">GET</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">YES</td>
+</tr>
+<tr>
+<td style="text-align:center">HEAD</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">YES</td>
+</tr>
+<tr>
+<td style="text-align:center">OPTIONS</td>
+<td style="text-align:center">YES</td>
+<td style="text-align:center">YES</td>
+</tr>
+<tr>
+<td style="text-align:center">DELETE</td>
+<td style="text-align:center">NO</td>
+<td style="text-align:center">YES</td>
+</tr>
+<tr>
+<td style="text-align:center">PUT</td>
+<td style="text-align:center">NO</td>
+<td style="text-align:center">YES</td>
+</tr>
+<tr>
+<td style="text-align:center">POST</td>
+<td style="text-align:center">NO</td>
+<td style="text-align:center">NO</td>
+</tr>
+</tbody>
+</table>
+<h4 id="POST-vs-GET"><a href="#POST-vs-GET" class="headerlink" title="POST vs. GET:"></a>POST vs. GET:</h4><ul>
+<li><p>What data is contained in a typical request line? a header line? a message body?</p>
+<p>  Get: the query string in the url, like</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/test/demo_form.php?name1=value1&amp;name2=value2</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<pre><code>Post: the query string is sent in the HTTP request body
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">POST /test/demo_form.php HTTP/1.1</span><br><span class="line">Host: w3schools.com</span><br><span class="line">name1=value1&amp;name2=value2</span><br></pre></td></tr></table></figure>
+</code></pre><ul>
+<li><p>What are GET and POST typically used for?</p>
+<p>  Use GET for safe and idempotent requests</p>
+<p>  Use POST for neither safe nor idempotent requests</p>
+<p>  Use POST for destructive actions such as creation (I’m aware of the irony), editing, and deletion, because you can’t hit a POST action in the address bar of your browser. Use GET when it’s safe to allow a person to call an action.</p>
+</li>
+<li><p>How do browsers treats GET and POST request differently?</p>
+<p>  Web browsers typically treat GET and POST differently since GET is safe and POST is unsafe. It’s OK to refresh a web page retrieved by a GET request – the web browser will just re-issue the last GET request and render whatever the server sends back. However, if the page we are looking at in a browser is the response to a POST request, the browser will warn us if we try to refresh the page.</p>
+</li>
+</ul>
+<h3 id="HTML-Hypertext-Markup-Language"><a href="#HTML-Hypertext-Markup-Language" class="headerlink" title="HTML(Hypertext Markup Language)"></a>HTML(Hypertext Markup Language)</h3><h3 id="CSS-Cascading-Style-Sheets"><a href="#CSS-Cascading-Style-Sheets" class="headerlink" title="CSS(Cascading Style Sheets)"></a>CSS(Cascading Style Sheets)</h3><p>It a mean to seperate the style from the content and the structure.</p>
+<h3 id="Bootstrap"><a href="#Bootstrap" class="headerlink" title="Bootstrap"></a>Bootstrap</h3><p>Bootstrap is a popular CSS library that allows you to easily create sophisticated web page designs. You don’t need to know any less or Java script or any of the other libraries like jquery that bootstrap uses you can just download precompiled CSS and Java script bootstrap files and include them in the header of your HTML file and then use the bootstrap CSS rules as you would use any CSS.</p>
+<p>LESS is a CSS scripting language implemented in Java script.</p>
+<p>you don’t need to hand write any of the CSS or the Java script that makes that interactive, you can just use the appropriate bootstrap specific classes here and then your page will be interactive.</p>
+<h4 id="How-bootstrap-work"><a href="#How-bootstrap-work" class="headerlink" title="How bootstrap work"></a>How bootstrap work</h4><p>It ‘s a lot less style sheets better compiled to CSS and javascript and it use jquery library.</p>
+<h3 id="Hidden-Field"><a href="#Hidden-Field" class="headerlink" title="Hidden Field"></a>Hidden Field</h3><h4 id="How-to-use-hidden-field"><a href="#How-to-use-hidden-field" class="headerlink" title="How to use hidden field"></a>How to use hidden field</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;input type=&quot;hidden&quot;...&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="The-limitation-of-hidden-field"><a href="#The-limitation-of-hidden-field" class="headerlink" title="The limitation of hidden field"></a>The limitation of hidden field</h4><ul>
+<li>They aren’t secret, they just aren’t displayed.</li>
+<li>The user can control the value sent back to the server</li>
+</ul>
+<h3 id="CSRF-Cross-Site-Request-Forgery"><a href="#CSRF-Cross-Site-Request-Forgery" class="headerlink" title="CSRF(Cross Site Request Forgery)"></a>CSRF(Cross Site Request Forgery)</h3><h4 id="CSRF-basic-problem"><a href="#CSRF-basic-problem" class="headerlink" title="CSRF basic problem"></a>CSRF basic problem</h4><p>One site could potentially send authenticated requests to another site if you are simultaneously logged in in a single browser session</p>
+<h4 id="The-solution-to-CSRF"><a href="#The-solution-to-CSRF" class="headerlink" title="The solution to CSRF"></a>The solution to CSRF</h4><p>Require each request to contain some secret information that is not automatically added by the browser. One way to do that is to include a parameter in every request and have the value of that parameter be some big randomly generated secret value that only the site and possibly the user knows if they want.</p>
+<h3 id="MVC-Model-View-Controller"><a href="#MVC-Model-View-Controller" class="headerlink" title="MVC(Model View Controller)"></a>MVC(Model View Controller)</h3><h4 id="The-basic-components-of-a-typical-MVC-framework"><a href="#The-basic-components-of-a-typical-MVC-framework" class="headerlink" title="The basic components of a typical MVC framework"></a>The basic components of a typical MVC framework</h4><ul>
+<li>Web browser</li>
+<li>Web servser<ul>
+<li>Controller application: a single point of control for the common features such as authentication, and mapping urls to the model and the views managing user session data and so on.</li>
+<li>Model<ul>
+<li>Data model: store data</li>
+<li>Actions: the core logic of the application</li>
+</ul>
+</li>
+<li>Views: justifies how information is presented back to the user after authenticating a request and performing some other basic processing</li>
+</ul>
+</li>
+</ul>
+<h4 id="The-flow-of-information-in-MVC-to-process-a-request"><a href="#The-flow-of-information-in-MVC-to-process-a-request" class="headerlink" title="The flow of information in MVC to process a request"></a>The flow of information in MVC to process a request</h4><p>The controller typically determines which action in the application is responsible for processing this particular request and it forward the request to the model to be executed by the appropriate action. The action typically interacts with the data model getting and changing data as needed. When the action is done processing the request typically it forwards the request to some particular view it chooses which view is the right view for displaying the data for this request. The information from the model will help the view generate the actual response. The view itself is just responsible for formatting the data that was presented to it and generating some sort of response to the web browser</p>
+<h3 id="Django"><a href="#Django" class="headerlink" title="Django"></a>Django</h3><h4 id="Django-components-correspond-to-MVC"><a href="#Django-components-correspond-to-MVC" class="headerlink" title="Django components correspond to MVC"></a>Django components correspond to MVC</h4><table>
+<thead>
+<tr>
+<th style="text-align:center">MVC</th>
+<th style="text-align:center">Django</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">controller</td>
+<td style="text-align:center">Django framework itself with Django URL configuration</td>
+</tr>
+<tr>
+<td style="text-align:center">view</td>
+<td style="text-align:center">template</td>
+</tr>
+<tr>
+<td style="text-align:center">data model</td>
+<td style="text-align:center">model</td>
+</tr>
+<tr>
+<td style="text-align:center">actions</td>
+<td style="text-align:center">view</td>
+</tr>
+</tbody>
+</table>
+<h4 id="Standard-details-of-a-basic-Django-application"><a href="#Standard-details-of-a-basic-Django-application" class="headerlink" title="Standard details of a basic Django application"></a>Standard details of a basic Django application</h4><ul>
+<li>Project configuration in setting.py</li>
+<li>Request route configuration in urls.py</li>
+<li>Action in views.py</li>
+<li>View templates</li>
+</ul>
+<h3 id="Relational-Model"><a href="#Relational-Model" class="headerlink" title="Relational Model"></a>Relational Model</h3><h4 id="Relational-model-itself"><a href="#Relational-model-itself" class="headerlink" title="Relational model itself"></a>Relational model itself</h4><ul>
+<li>primary key: the column that can identify the record in the relation</li>
+<li>foreign key: when one table refers to another table using that table’s primary key. This is called the foreign key.</li>
+</ul>
+<h4 id="The-goals-of-the-relational-model"><a href="#The-goals-of-the-relational-model" class="headerlink" title="The goals of the relational model"></a>The goals of the relational model</h4><p>Abstract away the physical data layout. User doesn’t need to understand the physical data layout.</p>
+<h3 id="ORM-Object-Relational-Mapping-Tools"><a href="#ORM-Object-Relational-Mapping-Tools" class="headerlink" title="ORM(Object Relational Mapping Tools)"></a>ORM(Object Relational Mapping Tools)</h3><h4 id="ORM"><a href="#ORM" class="headerlink" title="ORM"></a>ORM</h4><p>ORM is to provide an additional layer of abstraction between the web application and the storage system. User the ORM to retrieve or save data in the database, the web app never needs to write an y direct database or cloud service specific code itself. Web app just plays objects and the ORM generate an execute whatever code is needed to interact with the storage system.</p>
+<h4 id="Advantage-vs-Disadvantage"><a href="#Advantage-vs-Disadvantage" class="headerlink" title="Advantage vs. Disadvantage"></a>Advantage vs. Disadvantage</h4><p>AD. This makes the web application much easier to write and it also allows you to easily change on back end store system without needing to rewrite your web app.</p>
+<p>Dis. 1. lose the full power when interact directly with the storage system. 2. The web app need features provided by the ORM but some high performance apps might need special feature that just not provided by the ORM.</p>
+<h3 id="Django’s-URL-dispatcher"><a href="#Django’s-URL-dispatcher" class="headerlink" title="Django’s URL dispatcher"></a>Django’s URL dispatcher</h3><h4 id="Basic-regular-expressions"><a href="#Basic-regular-expressions" class="headerlink" title="Basic regular expressions"></a>Basic regular expressions</h4><p>regular-expression groups is (?P<name>pattern)</name></p>
+<h3 id="Django-data-model"><a href="#Django-data-model" class="headerlink" title="Django data model"></a>Django data model</h3><h4 id="How-to-use-Django’s-ORM"><a href="#How-to-use-Django’s-ORM" class="headerlink" title="How to use Django’s ORM"></a>How to use Django’s ORM</h4><ul>
+<li>Edit configuration in settings.py</li>
+<li>Create data models in your application’s models.py</li>
+<li>Run python manage.py makemigrations and python manage.py migrate</li>
+<li>Use your data models in your actions</li>
+</ul>
+<h4 id="Basic-Django-ORM-features"><a href="#Basic-Django-ORM-features" class="headerlink" title="Basic Django ORM features"></a>Basic Django ORM features</h4><ul>
+<li>The id primary key</li>
+<li>.objects.all()</li>
+<li>.objects.get()</li>
+<li>.save()</li>
+<li>.delete()</li>
+<li>.filter()</li>
+</ul>
+<h3 id="Cookies"><a href="#Cookies" class="headerlink" title="Cookies"></a>Cookies</h3><p>Cookies is just a small piece of data provided by the web server in http response. The cookies are actually sent back to the server in the header and stored in the header. Cookies transmitted between web client and web server.</p>
+<p>when the web client sends a subsequent request it will store the cookie and then send the cookie along with every subsequent http request to the same server.</p>
+<h4 id="Limitations"><a href="#Limitations" class="headerlink" title="Limitations"></a>Limitations</h4><ul>
+<li>4KB limit enforsed by most browsers</li>
+<li>the user can see and forge cookie data</li>
+<li>the user can disable cookies</li>
+</ul>
+<h3 id="Sessions"><a href="#Sessions" class="headerlink" title="Sessions"></a>Sessions</h3><h4 id="Sessions-1"><a href="#Sessions-1" class="headerlink" title="Sessions"></a>Sessions</h4><ul>
+<li><p>HOW: When the user first access the site and the server is not yet storing data for the user, the server creates a server side session and a sign that session some id and then stores some data as session data for the session and sends the session id back to the user and response usually as a cookie. </p>
+</li>
+<li><p>WHAT(for web application): The session data is typically stored on the server as a big dictionary of name value pairs for each session so that the server of the web application can maintain arbitrary data for each user.</p>
+</li>
+</ul>
+<h4 id="Limitations-1"><a href="#Limitations-1" class="headerlink" title="Limitations"></a>Limitations</h4><ul>
+<li>Session ID must be transmitted with each subsequent request</li>
+<li>Server must maintain session data for each active user</li>
+</ul>
+<p><strong>The session id transmitted in cookie</strong></p>
+<h3 id="Django’s-built-in-authentication-module"><a href="#Django’s-built-in-authentication-module" class="headerlink" title="Django’s built-in authentication module"></a>Django’s built-in authentication module</h3><h4 id="HOW"><a href="#HOW" class="headerlink" title="HOW:"></a>HOW:</h4><ul>
+<li>configuration in settings.py</li>
+<li>URLs that route to Django’s authentication actions</li>
+<li>How to use the Django’s authentication form</li>
+<li>Automatic authentication using <code>@login_required</code></li>
+<li>Manual authentication using <code>authenticate</code> and <code>login</code></li>
+</ul>
+<h3 id="Race-condition"><a href="#Race-condition" class="headerlink" title="Race condition"></a>Race condition</h3><ul>
+<li><p>Thread: a sequence of instruction that is scheduled and executed by the operating system and shared resources such as memory and programs</p>
+</li>
+<li><p>Thread safe: Thread-safe code only manipulates shared data structures in a manner that ensures that all threads behave properly and fulfil their design specifications without unintended interaction.</p>
+</li>
+<li><p>Race condition: it was check in one thread and then check in the second thread and then act in the first thread and the action the second threat so that the action in the second thread didn’t get to see the effect of the first threats execution.</p>
+</li>
+</ul>
+<h3 id="Transaction"><a href="#Transaction" class="headerlink" title="Transaction"></a>Transaction</h3><h4 id="ACID-properties"><a href="#ACID-properties" class="headerlink" title="ACID properties"></a>ACID properties</h4><ul>
+<li>Atomicity: All or nothing</li>
+<li>Consistency: Won’t violate programmer-defined integrity constraints</li>
+<li>Isolation: Each transaction runs as if it is alone</li>
+<li>Durability: After successful commit, database won’t undo transaction</li>
+</ul>
+<h4 id="Typical-transaction-operations"><a href="#Typical-transaction-operations" class="headerlink" title="Typical transaction operations"></a>Typical transaction operations</h4><ul>
+<li><code>begin</code> or <code>start</code>: Starts a transaction</li>
+<li><code>commit</code>: Attempts to successfully complete the transaction</li>
+<li><code>rollback</code> or <code>abort</code>: Undoes the work of an uncommitted transaction</li>
+<li><code>checkpoint</code> or <code>savepoint</code>: Marks partial work of an uncommitted transaction as a version that can be rolled-back to</li>
+</ul>
+<h3 id="Reverse-URL-Resolution-in-Django"><a href="#Reverse-URL-Resolution-in-Django" class="headerlink" title="Reverse URL Resolution in Django"></a>Reverse URL Resolution in Django</h3><h4 id="Django-url-template-tag"><a href="#Django-url-template-tag" class="headerlink" title="Django url template tag"></a>Django url template tag</h4><ul>
+<li>Four routes:<ul>
+<li>hard coding with static url</li>
+<li>hard coding with django url</li>
+<li>url template tag with url action</li>
+<li>url template tag with url name</li>
+</ul>
+</li>
+</ul>
+<h3 id="Django-Form"><a href="#Django-Form" class="headerlink" title="Django Form"></a>Django Form</h3><h4 id="What-problems-Forms-are-solving"><a href="#What-problems-Forms-are-solving" class="headerlink" title="What problems Forms are solving"></a>What problems Forms are solving</h4><ul>
+<li>validates the user input and checks to make sure that all the expected parametsers are present in the request and the parameters are in the right format.</li>
+<li>execuet some core logic. This varies from application to appliction depending on the purpose of the app and once the core logic is executed the application finally renders the view.</li>
+</ul>
+<h4 id="How-to-define-a-Django-Form"><a href="#How-to-define-a-Django-Form" class="headerlink" title="How to define a Django Form"></a>How to define a Django Form</h4><ul>
+<li>Define and use basic field types</li>
+<li>How to write custom overall validation code</li>
+<li>How to write custom field-specific validation code</li>
+</ul>
+<h4 id="Using-a-Django-Form-in-your-action"><a href="#Using-a-Django-Form-in-your-action" class="headerlink" title="Using a Django Form in your action"></a>Using a Django Form in your action</h4><ul>
+<li>How to create and use an unbound Form</li>
+<li>How t create a bound Form from request parameters</li>
+<li>How to validate a bound form</li>
+<li>How to use a Form’s cleaned_data</li>
+</ul>
+<h4 id="Using-a-Django-Form-in-your-view"><a href="#Using-a-Django-Form-in-your-view" class="headerlink" title="Using a Django Form in your view"></a>Using a Django Form in your view</h4><ul>
+<li>How to use a Form’s non-field-specific errors</li>
+<li>How to use the default Form view</li>
+<li>How to use the Form’s fields individually<ul>
+<li>How to access each field</li>
+<li>How to print labels, input widget, errors</li>
+</ul>
+</li>
+</ul>
+<h4 id="MIME-Multipurpose-Internet-Mail-Extensions"><a href="#MIME-Multipurpose-Internet-Mail-Extensions" class="headerlink" title="MIME: Multipurpose Internet Mail Extensions"></a>MIME: Multipurpose Internet Mail Extensions</h4><p>MIME: describe the data format on purpose</p>
+<p>Common MIME-related header fields</p>
+<ul>
+<li>MIME-Version</li>
+<li>Content-Type: the type of content being sent</li>
+<li>Content-transfer-encoding: Encoding format for how the binary data s representing non-binary information</li>
+<li>Accept: specifies content-types a client is willing to accept </li>
+</ul>
+<h4 id="Multipart-form"><a href="#Multipart-form" class="headerlink" title="Multipart form"></a>Multipart form</h4><p>Normal <form> the content-type is “application/x-www-form-urlencoded”. It only accept text type request</form></p>
+<p>Multipart form accept both text type and binary data type</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;form enctype=&quot;multipart/form-data&quot; action=&quot;...&quot; method=&quot;post&quot;&gt;</span><br><span class="line"></span><br><span class="line">&lt;input type=&quot;file&quot;&gt;</span><br><span class="line">&lt;/form&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="Sending-email"><a href="#Sending-email" class="headerlink" title="Sending email"></a>Sending email</h4><p>SMTP: Simple Mail Transfer Protocol</p>
+<ul>
+<li>The standard, text-based protocol for sending mail on the internet<ul>
+<li>You can run your own SMTP server</li>
+<li>or you can use smtp.andrew.cmu.edu but you will need to authenticate yourself</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">from django.core.mail import send_mail</span><br><span class="line"></span><br><span class="line">send_mail(subject=&quot;Verify your email address&quot;,</span><br><span class="line">			meddage = email_body,</span><br><span class="line">			from_email=&quot;XXX@cs.cmu.edu&quot;,</span><br><span class="line">			recipient_list=[new_user,email])</span><br></pre></td></tr></table></figure>
+<h4 id="DOM-The-Document-Object-Model"><a href="#DOM-The-Document-Object-Model" class="headerlink" title="DOM: The Document Object Model"></a>DOM: The Document Object Model</h4><p>A tree of nodes that represent the HTML documents</p>
+<h4 id="Client-side-Web-Programming"><a href="#Client-side-Web-Programming" class="headerlink" title="Client-side Web Programming"></a>Client-side Web Programming</h4><p>JavaScript: A client-side scripting language that runs in the web browser</p>
+<ul>
+<li>Interpreted, dynamically typed, garbage-collected</li>
+<li>Object-oriented, C-like syntax</li>
+<li>Functions are objects</li>
+</ul>
+<h5 id="two-ways"><a href="#two-ways" class="headerlink" title="two ways:"></a>two ways:</h5><ul>
+<li>Write it drectly in HTML page:</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;script type=&quot;text/javascript&quot;&gt;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Include it from an external source file</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script src=&quot;foo.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<h5 id="Using-javascript"><a href="#Using-javascript" class="headerlink" title="Using javascript"></a>Using javascript</h5><ul>
+<li>Write javascript functions</li>
+<li><p>Respond to in-browser events:</p>
+<ul>
+<li><p>onload, onclick, onfocus, onblur,onmouseover…</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;img onclick=&quot;foo()&quot;&gt;</span><br><span class="line">&lt;bodu onload=&quot;document.forms[0].elements[0].focus()&quot;&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>Generate asynchronous HTTP requests</p>
+</li>
+<li>Navigate and update the DOM</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/14/database-system-review02/" rel="next" title="Database System Review 02">
+                <i class="fa fa-chevron-left"></i> Database System Review 02
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/21/database-system-review03/" rel="prev" title="Database System Review 03">
+                Database System Review 03 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="fb-comments" data-href="https://annashuo.github.io/2017/09/19/web-knowledge/" data-numposts="10" data-width="100%" data-colorscheme="light">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Anna">
+          <p class="site-author-name" itemprop="name">Anna</p>
+          <p class="site-description motion-element" itemprop="description">My heart is in the work...</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Annashuo/Annashuo.github.io" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/1861044584?is_all=1" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#git"><span class="nav-number">1.</span> <span class="nav-text">git</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Version-control-system"><span class="nav-number">1.1.</span> <span class="nav-text">Version control system</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#GIT"><span class="nav-number">1.2.</span> <span class="nav-text">GIT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Branch"><span class="nav-number">1.3.</span> <span class="nav-text">Branch</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP-Hypertext-Transfer-Protocol"><span class="nav-number">2.</span> <span class="nav-text">HTTP: Hypertext Transfer Protocol</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Port"><span class="nav-number">2.1.</span> <span class="nav-text">Port</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Request-and-Response"><span class="nav-number">2.2.</span> <span class="nav-text">Request and Response</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HTTP-Request-Method"><span class="nav-number">2.3.</span> <span class="nav-text">HTTP Request Method</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#POST-vs-GET"><span class="nav-number">2.4.</span> <span class="nav-text">POST vs. GET:</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTML-Hypertext-Markup-Language"><span class="nav-number">3.</span> <span class="nav-text">HTML(Hypertext Markup Language)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CSS-Cascading-Style-Sheets"><span class="nav-number">4.</span> <span class="nav-text">CSS(Cascading Style Sheets)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bootstrap"><span class="nav-number">5.</span> <span class="nav-text">Bootstrap</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#How-bootstrap-work"><span class="nav-number">5.1.</span> <span class="nav-text">How bootstrap work</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hidden-Field"><span class="nav-number">6.</span> <span class="nav-text">Hidden Field</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#How-to-use-hidden-field"><span class="nav-number">6.1.</span> <span class="nav-text">How to use hidden field</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#The-limitation-of-hidden-field"><span class="nav-number">6.2.</span> <span class="nav-text">The limitation of hidden field</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CSRF-Cross-Site-Request-Forgery"><span class="nav-number">7.</span> <span class="nav-text">CSRF(Cross Site Request Forgery)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CSRF-basic-problem"><span class="nav-number">7.1.</span> <span class="nav-text">CSRF basic problem</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#The-solution-to-CSRF"><span class="nav-number">7.2.</span> <span class="nav-text">The solution to CSRF</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MVC-Model-View-Controller"><span class="nav-number">8.</span> <span class="nav-text">MVC(Model View Controller)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#The-basic-components-of-a-typical-MVC-framework"><span class="nav-number">8.1.</span> <span class="nav-text">The basic components of a typical MVC framework</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#The-flow-of-information-in-MVC-to-process-a-request"><span class="nav-number">8.2.</span> <span class="nav-text">The flow of information in MVC to process a request</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Django"><span class="nav-number">9.</span> <span class="nav-text">Django</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Django-components-correspond-to-MVC"><span class="nav-number">9.1.</span> <span class="nav-text">Django components correspond to MVC</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Standard-details-of-a-basic-Django-application"><span class="nav-number">9.2.</span> <span class="nav-text">Standard details of a basic Django application</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Relational-Model"><span class="nav-number">10.</span> <span class="nav-text">Relational Model</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Relational-model-itself"><span class="nav-number">10.1.</span> <span class="nav-text">Relational model itself</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#The-goals-of-the-relational-model"><span class="nav-number">10.2.</span> <span class="nav-text">The goals of the relational model</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ORM-Object-Relational-Mapping-Tools"><span class="nav-number">11.</span> <span class="nav-text">ORM(Object Relational Mapping Tools)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ORM"><span class="nav-number">11.1.</span> <span class="nav-text">ORM</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Advantage-vs-Disadvantage"><span class="nav-number">11.2.</span> <span class="nav-text">Advantage vs. Disadvantage</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Django’s-URL-dispatcher"><span class="nav-number">12.</span> <span class="nav-text">Django’s URL dispatcher</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Basic-regular-expressions"><span class="nav-number">12.1.</span> <span class="nav-text">Basic regular expressions</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Django-data-model"><span class="nav-number">13.</span> <span class="nav-text">Django data model</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#How-to-use-Django’s-ORM"><span class="nav-number">13.1.</span> <span class="nav-text">How to use Django’s ORM</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Basic-Django-ORM-features"><span class="nav-number">13.2.</span> <span class="nav-text">Basic Django ORM features</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cookies"><span class="nav-number">14.</span> <span class="nav-text">Cookies</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Limitations"><span class="nav-number">14.1.</span> <span class="nav-text">Limitations</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sessions"><span class="nav-number">15.</span> <span class="nav-text">Sessions</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Sessions-1"><span class="nav-number">15.1.</span> <span class="nav-text">Sessions</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Limitations-1"><span class="nav-number">15.2.</span> <span class="nav-text">Limitations</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Django’s-built-in-authentication-module"><span class="nav-number">16.</span> <span class="nav-text">Django’s built-in authentication module</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#HOW"><span class="nav-number">16.1.</span> <span class="nav-text">HOW:</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Race-condition"><span class="nav-number">17.</span> <span class="nav-text">Race condition</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Transaction"><span class="nav-number">18.</span> <span class="nav-text">Transaction</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ACID-properties"><span class="nav-number">18.1.</span> <span class="nav-text">ACID properties</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Typical-transaction-operations"><span class="nav-number">18.2.</span> <span class="nav-text">Typical transaction operations</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reverse-URL-Resolution-in-Django"><span class="nav-number">19.</span> <span class="nav-text">Reverse URL Resolution in Django</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Django-url-template-tag"><span class="nav-number">19.1.</span> <span class="nav-text">Django url template tag</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Django-Form"><span class="nav-number">20.</span> <span class="nav-text">Django Form</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#What-problems-Forms-are-solving"><span class="nav-number">20.1.</span> <span class="nav-text">What problems Forms are solving</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#How-to-define-a-Django-Form"><span class="nav-number">20.2.</span> <span class="nav-text">How to define a Django Form</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Using-a-Django-Form-in-your-action"><span class="nav-number">20.3.</span> <span class="nav-text">Using a Django Form in your action</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Using-a-Django-Form-in-your-view"><span class="nav-number">20.4.</span> <span class="nav-text">Using a Django Form in your view</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MIME-Multipurpose-Internet-Mail-Extensions"><span class="nav-number">20.5.</span> <span class="nav-text">MIME: Multipurpose Internet Mail Extensions</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Multipart-form"><span class="nav-number">20.6.</span> <span class="nav-text">Multipart form</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Sending-email"><span class="nav-number">20.7.</span> <span class="nav-text">Sending email</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DOM-The-Document-Object-Model"><span class="nav-number">20.8.</span> <span class="nav-text">DOM: The Document Object Model</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Client-side-Web-Programming"><span class="nav-number">20.9.</span> <span class="nav-text">Client-side Web Programming</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#two-ways"><span class="nav-number">20.9.1.</span> <span class="nav-text">two ways:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Using-javascript"><span class="nav-number">20.9.2.</span> <span class="nav-text">Using javascript</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Anna</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid="></script>
+      <!-- UY END --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

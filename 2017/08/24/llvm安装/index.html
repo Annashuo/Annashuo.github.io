@@ -1,0 +1,986 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="llvm,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="mac下安装xcode自带llvm 以下为在linux系统下的安装 以下操作目录均为/data/home/llvm">
+<meta name="keywords" content="llvm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="llvm安装">
+<meta property="og:url" content="https://annashuo.github.io/2017/08/24/llvm安装/index.html">
+<meta property="og:site_name" content="Anna&#39;s Blog">
+<meta property="og:description" content="mac下安装xcode自带llvm 以下为在linux系统下的安装 以下操作目录均为/data/home/llvm">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://github.com/Annashuo/hello-world/blob/master/cmake.png?raw=true">
+<meta property="og:image" content="https://github.com/Annashuo/hello-world/blob/master/lli.png?raw=true">
+<meta property="og:image" content="https://github.com/Annashuo/hello-world/blob/master/libcpp.png?raw=true">
+<meta property="og:image" content="https://github.com/Annashuo/hello-world/blob/master/lli.png?raw=true">
+<meta property="og:updated_time" content="2020-01-30T14:14:21.104Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="llvm安装">
+<meta name="twitter:description" content="mac下安装xcode自带llvm 以下为在linux系统下的安装 以下操作目录均为/data/home/llvm">
+<meta name="twitter:image" content="https://github.com/Annashuo/hello-world/blob/master/cmake.png?raw=true">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://annashuo.github.io/2017/08/24/llvm安装/">
+
+
+
+
+
+  <title> llvm安装 | Anna's Blog </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '',
+      xfbml      : true,
+      version    : 'v2.6'
+    });
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-105321506-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?6f5ab2ef1e021070500f7228c830f3c6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Anna's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">My heart is in the work...</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="https://annashuo.github.io/2017/08/24/llvm安装/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Anna">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Anna's Blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Anna's Blog" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                llvm安装
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-24T13:48:58+08:00">
+                2017-08-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/STUDY/" itemprop="url" rel="index">
+                    <span itemprop="name">STUDY</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/08/24/llvm安装/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count fb-comments-count" data-href="https://annashuo.github.io/2017/08/24/llvm安装/" itemprop="commentCount">0</span> comments
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>mac下安装xcode自带llvm</p>
+<p>以下为在linux系统下的安装</p>
+<p>以下操作目录均为/data/home/llvm</p>
+<a id="more"></a>
+<h3 id="安装autoconf和automake"><a href="#安装autoconf和automake" class="headerlink" title="安装autoconf和automake"></a>安装autoconf和automake</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">下载autoconf-2.65.tar.bz2和automake-1.14.1.tar.gz</span><br><span class="line">tar -jxvf autoconf-2.65.tar.bz2</span><br><span class="line">tar -zxvf automake-1.14.1.tar.gz</span><br><span class="line"></span><br><span class="line">cd autoconf-2.65</span><br><span class="line">./configure; make; make install</span><br><span class="line">cd ../automake-1.14.1</span><br><span class="line">./configure; make; make install</span><br></pre></td></tr></table></figure>
+<h3 id="安装gcc4-8以上版本"><a href="#安装gcc4-8以上版本" class="headerlink" title="安装gcc4.8以上版本"></a>安装gcc4.8以上版本</h3><p>一般电脑都安装了gcc，具体安装过程不再此详述。</p>
+<h3 id="安装python2-7-5"><a href="#安装python2-7-5" class="headerlink" title="安装python2.7.5"></a>安装python2.7.5</h3><p>安装python可以直接用yum或者下载安装包进行安装，过程再此也不再详述。</p>
+<h3 id="安装cmake"><a href="#安装cmake" class="headerlink" title="安装cmake"></a>安装cmake</h3><pre><code>下载cmake-3.8.2.tar.gz
+tar -zxvf cmake-3.8.2.tar.gz  
+cd cmake-3.8.2  
+./configure --prefix=/data/home/llvm/cmake  
+make  
+make install  
+添加环境变量export PATH=/data/home/llvm/cmake/bin:$PATH
+</code></pre><h4 id="安装完成后"><a href="#安装完成后" class="headerlink" title="安装完成后"></a>安装完成后</h4><p><img src="https://github.com/Annashuo/hello-world/blob/master/cmake.png?raw=true" alt="cmake--version"></p>
+<h4 id="可能出现的一些坑："><a href="#可能出现的一些坑：" class="headerlink" title="可能出现的一些坑："></a>可能出现的一些坑：</h4><ol>
+<li>报错/lib64/libstdc++.so.6: version `GLIBCXX_3.4.21’ not found：</li>
+</ol>
+<p>解决方法: <a href="http://blog.csdn.net/rznice/article/details/51090966" target="_blank" rel="noopener">http://blog.csdn.net/rznice/article/details/51090966</a></p>
+<ol start="2">
+<li>找不到sys/acl.h等文件</li>
+</ol>
+<p>解决方法： sudo yum list libacl* 把列出来的所有包都安装上</p>
+<ol start="3">
+<li>找不到xml/…等文件</li>
+</ol>
+<p>解决方法： sudo yum list libxml* 把列出来的所有包都安装上</p>
+<h3 id="安装llvm和clang3-7-1"><a href="#安装llvm和clang3-7-1" class="headerlink" title="安装llvm和clang3.7.1"></a>安装llvm和clang3.7.1</h3><pre><code>下载：
+llvm-3.7.1.src.tar.xz
+cfe-3.7.1.src.tar.xz
+compiler-rt-3.7.1.src.tar.xz
+clang-tools-extra-3.7.1.src.tar.xz 
+libcxx-3.7.1.src.tar.xz
+
+tar -xvf llvm-3.7.1.src.tar.xz  
+tar -xvf cfe-3.7.1.src.tar.xz  
+tar -xvf compiler-rt-3.7.1.src.tar.xz  
+tar -xvf clang-tools-extra-3.7.1.src.tar.xz  
+tar -xvf libcxx-3.7.1.src.tar.xz 
+
+mv cfe-3.7.1.src clang  
+mv clang/ llvm-3.7.1.src/tools/
+
+mv clang-tools-extra-3.7.1.src extra  
+mv extra/ llvm-3.7.1.src/tools/clang/
+
+mv compiler-rt-3.7.1.src compiler-rt  
+mv compiler-rt llvm-3.7.1.src/projects/
+
+mkdir build-3.7.1
+cd build-3.7.1
+
+cmake -DCMAKE_BUILD_TYPE=Debug /data/home/llvm/llvm-3.7.1.src
+make -j32
+cmake -DCMAKE_INSTALL_PREFIX=/data/home/llvm/llvm37 -P cmake_install.cmake
+添加环境变量：
+export PATH=/data/home/llvm/llvm37/bin:$PATH
+export LD_LIBRARY_PATH=/data/home/llvm/llvm37/lib:$LD_LIBRARY_PATH
+</code></pre><h4 id="安装完成后-1"><a href="#安装完成后-1" class="headerlink" title="安装完成后"></a>安装完成后</h4><p><img src="https://github.com/Annashuo/hello-world/blob/master/lli.png?raw=true" alt></p>
+<h3 id="安装一些依赖库（根据gcc版本可选）"><a href="#安装一些依赖库（根据gcc版本可选）" class="headerlink" title="安装一些依赖库（根据gcc版本可选）"></a>安装一些依赖库（根据gcc版本可选）</h3><pre><code>cd libcxx-3.7.1.src/lib
+./buildit
+sudo cp ./libc++.so.1.0 /usr/lib
+cd /usr/lib
+sudo ln -sf libc++.so.1.0 usr/lib/libc++.so
+sudo ln -sf libc++.so.1.0 usr/lib/libc++.so.1
+cd ~
+</code></pre><h4 id="安装完成后-2"><a href="#安装完成后-2" class="headerlink" title="安装完成后"></a>安装完成后</h4><p><img src="https://github.com/Annashuo/hello-world/blob/master/libcpp.png?raw=true" alt></p>
+<h3 id="测试clang和llvm和gdb是否可用"><a href="#测试clang和llvm和gdb是否可用" class="headerlink" title="测试clang和llvm和gdb是否可用"></a>测试clang和llvm和gdb是否可用</h3><h4 id="test-c文件"><a href="#test-c文件" class="headerlink" title="test.c文件"></a>test.c文件</h4><pre><code>#include &lt;stdio.h&gt;  
+int main(){
+    printf(&quot;hello world\n&quot;);
+return 0;
+}
+</code></pre><p>编译命令：</p>
+<ul>
+<li><p>c文件直接产生可执行文件(a.out)</p>
+<p>  <code>clang test.c</code></p>
+</li>
+<li><p>c文件产生IR文件(.ll)</p>
+<p>  <code>clang -S -emit-llvm -c test.c -o test.ll</code></p>
+</li>
+<li><p>c文件产生字节码文件(.bc)</p>
+<p>  <code>clang -emit-llvm -c test.c -o test.bc</code></p>
+</li>
+<li><p>c文件生成汇编文件(.s)</p>
+<p>  <code>clang -S test.c -o test.s</code></p>
+</li>
+<li><p>c文件生成目标文件(.o)</p>
+<p>  <code>clang -c test.c -o test.o</code></p>
+</li>
+<li><p>目标文件生成可执行文件</p>
+<p>  <code>clang test.o -o test</code></p>
+</li>
+<li><p>字节码文件生成cpp文件</p>
+<p>  <code>llc -march=cpp test.bc</code></p>
+</li>
+<li><p>字节码文件生成汇编文件(.s)</p>
+<p>  <code>llc test.bc</code></p>
+</li>
+</ul>
+<h4 id="new-feature-cpp文件"><a href="#new-feature-cpp文件" class="headerlink" title="new_feature.cpp文件"></a>new_feature.cpp文件</h4><pre><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+class myClass
+{
+public:
+    std::string s=&quot;Hello CPP\n&quot;;
+};
+int main(){
+    std::cout&lt;&lt;myClass().s;
+}
+</code></pre><ul>
+<li><p>生成可执行a.out文件</p>
+<p>  <code>clang++ --std=c++0x  new_feature.cpp</code></p>
+<h4 id="gdb的使用"><a href="#gdb的使用" class="headerlink" title="gdb的使用"></a>gdb的使用</h4><p>showdebug.c文件</p>
+</li>
+</ul>
+<pre><code>1   int compute_factorial(int n)
+2   {
+3       if (n &lt;= 1)
+4           return 1;
+5
+6       int f = n;
+7       while (--n &gt; 1)
+8           f \*= n;
+9       return f;
+10  }
+11
+12
+13  int main(int argc, char** argv)
+14  {
+15      if (argc &lt; 2)
+16          return -1;
+17      char firstletter = argv[1][0];
+18      int result = compute_factorial(firstletter - &apos;0&apos;);
+19
+20      // Returned result is clipped at 255...
+21      return result;
+22  }
+</code></pre><p>gdb调试过程：</p>
+<pre><code>$ clang -cc1 -O0 -g -emit-llvm showdebug.c
+$ gdb --quiet --args lli showdebug.ll 5
+Reading symbols from lli...done.
+(gdb) b showdebug.c:6
+No source file named showdebug.c.
+Make breakpoint pending on future shared library load? (y or [n]) y
+Breakpoint 1 (showdebug.c:6) pending.
+(gdb) r
+Starting program: lli -use-mcjit showdebug.ll 5
+[Thread debugging using libthread_db enabled]
+
+Breakpoint 1, compute_factorial (n=5) at showdebug.c:6
+6        int f = n;
+(gdb) p n
+$1 = 5
+(gdb) p f
+$2 = 0
+(gdb) n
+7        while (--n &gt; 1)
+(gdb) p f
+$3 = 5
+(gdb) b showdebug.c:9
+Breakpoint 2 at 0x7ffff7ed404c: file showdebug.c, line 9.
+(gdb) c
+Continuing.
+
+Breakpoint 2, compute_factorial (n=1) at showdebug.c:9
+9        return f;
+(gdb) p f
+$4 = 120
+(gdb) bt
+#0  compute_factorial (n=1) at showdebug.c:9
+#1  0x00007ffff7ed40a9 in main (argc=2, argv=0x16677e0) at showdebug.c:18
+#2  0x3500000001652748 in ?? ()
+#3  0x00000000016677e0 in ?? ()
+#4  0x0000000000000002 in ?? ()
+#5  0x0000000000d953b3 in llvm::MCJIT::runFunction (this=0x16151f0, F=0x1603020, ArgValues=...) at /home/ebenders_test/llvm_svn_rw/lib/ExecutionEngine/MCJIT/MCJIT.cpp:161
+#6  0x0000000000dc8872 in llvm::ExecutionEngine::runFunctionAsMain (this=0x16151f0, Fn=0x1603020, argv=..., envp=0x7fffffffe040)
+at /home/ebenders_test/llvm_svn_rw/lib/ExecutionEngine/ExecutionEngine.cpp:397
+#7  0x000000000059c583 in main (argc=4, argv=0x7fffffffe018, envp=0x7fffffffe040) at /home/ebenders_test/llvm_svn_rw/tools/lli/lli.cpp:324
+(gdb) finish
+Run till exit from #0  compute_factorial (n=1) at showdebug.c:9
+0x00007ffff7ed40a9 in main (argc=2, argv=0x16677e0) at showdebug.c:18
+18       int result = compute_factorial(firstletter - &apos;0&apos;);
+Value returned is $5 = 120
+(gdb) p result
+$6 = 23406408
+(gdb) n
+21       return result;
+(gdb) p result
+$7 = 120
+(gdb) c
+Continuing.
+
+Program exited with code 0170.
+(gdb)
+</code></pre><p>可能出现的坑：</p>
+<ol>
+<li><p>Reading symbols from lli…(no debugging symbols found)…done</p>
+<p> 解决方法：</p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">退出gdb</span><br><span class="line">lli --version</span><br></pre></td></tr></table></figure>
+<p><img src="https://github.com/Annashuo/hello-world/blob/master/lli.png?raw=true" alt></p>
+<pre><code>如果里面没有一句DEBUG build with assertions.
+
+重装llvm，注意重装时要先make clean
+</code></pre><ol start="2">
+<li><p>Missing separate debuginfos, use: debuginfo-install ncurses-libs-5.9-13.20130511.el7.x86_64</p>
+<p> 不影响gdb使用，忽略</p>
+</li>
+<li><p>[Inferior 1 (process 15958) exited with code 0170]</p>
+<p> 不影响gdb使用，忽略</p>
+</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/llvm/" rel="tag"># llvm</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/24/linux常用指令/" rel="next" title="linux常用指令">
+                <i class="fa fa-chevron-left"></i> linux常用指令
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/24/llvm和jit/" rel="prev" title="llvm和jit">
+                llvm和jit <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="fb-comments" data-href="https://annashuo.github.io/2017/08/24/llvm安装/" data-numposts="10" data-width="100%" data-colorscheme="light">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Anna">
+          <p class="site-author-name" itemprop="name">Anna</p>
+          <p class="site-description motion-element" itemprop="description">My heart is in the work...</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Annashuo/Annashuo.github.io" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/1861044584?is_all=1" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#安装autoconf和automake"><span class="nav-number">1.</span> <span class="nav-text">安装autoconf和automake</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装gcc4-8以上版本"><span class="nav-number">2.</span> <span class="nav-text">安装gcc4.8以上版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装python2-7-5"><span class="nav-number">3.</span> <span class="nav-text">安装python2.7.5</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装cmake"><span class="nav-number">4.</span> <span class="nav-text">安装cmake</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装完成后"><span class="nav-number">4.1.</span> <span class="nav-text">安装完成后</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可能出现的一些坑："><span class="nav-number">4.2.</span> <span class="nav-text">可能出现的一些坑：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装llvm和clang3-7-1"><span class="nav-number">5.</span> <span class="nav-text">安装llvm和clang3.7.1</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装完成后-1"><span class="nav-number">5.1.</span> <span class="nav-text">安装完成后</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装一些依赖库（根据gcc版本可选）"><span class="nav-number">6.</span> <span class="nav-text">安装一些依赖库（根据gcc版本可选）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装完成后-2"><span class="nav-number">6.1.</span> <span class="nav-text">安装完成后</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试clang和llvm和gdb是否可用"><span class="nav-number">7.</span> <span class="nav-text">测试clang和llvm和gdb是否可用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#test-c文件"><span class="nav-number">7.1.</span> <span class="nav-text">test.c文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#new-feature-cpp文件"><span class="nav-number">7.2.</span> <span class="nav-text">new_feature.cpp文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#gdb的使用"><span class="nav-number">7.3.</span> <span class="nav-text">gdb的使用</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Anna</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid="></script>
+      <!-- UY END --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+
+</body>
+</html>

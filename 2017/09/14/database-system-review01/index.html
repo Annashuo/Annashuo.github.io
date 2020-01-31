@@ -1,0 +1,957 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="en">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="database,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="This is the introduction of database, relational database and SQL.">
+<meta name="keywords" content="database">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Database System Review 01">
+<meta property="og:url" content="https://annashuo.github.io/2017/09/14/database-system-review01/index.html">
+<meta property="og:site_name" content="Anna&#39;s Blog">
+<meta property="og:description" content="This is the introduction of database, relational database and SQL.">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-01-30T14:14:21.101Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Database System Review 01">
+<meta name="twitter:description" content="This is the introduction of database, relational database and SQL.">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://annashuo.github.io/2017/09/14/database-system-review01/">
+
+
+
+
+
+  <title> Database System Review 01 | Anna's Blog </title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><script>
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '',
+      xfbml      : true,
+      version    : 'v2.6'
+    });
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-105321506-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?6f5ab2ef1e021070500f7228c830f3c6";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Anna's Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+    
+      <p class="site-subtitle">My heart is in the work...</p>
+    
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="https://annashuo.github.io/2017/09/14/database-system-review01/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Anna">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Anna's Blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Anna's Blog" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Database System Review 01
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-09-14T11:20:49+08:00">
+                2017-09-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/STUDY/" itemprop="url" rel="index">
+                    <span itemprop="name">STUDY</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/09/14/database-system-review01/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count fb-comments-count" data-href="https://annashuo.github.io/2017/09/14/database-system-review01/" itemprop="commentCount">0</span> comments
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>This is the introduction of database, relational database and SQL.</p>
+<a id="more"></a>
+<h3 id="Instruction"><a href="#Instruction" class="headerlink" title="Instruction"></a>Instruction</h3><h4 id="Database"><a href="#Database" class="headerlink" title="Database"></a>Database</h4><p>Organized collection of interelated data that models some aspect of the real-world.</p>
+<ul>
+<li>data integrity</li>
+<li>implementation</li>
+<li>durability</li>
+</ul>
+<h4 id="Database-Management-System"><a href="#Database-Management-System" class="headerlink" title="Database Management System"></a>Database Management System</h4><p>A DBMS is software that allows applications to store and analyse information in a database</p>
+<h5 id="DBMS-types-by-Target-Workloads"><a href="#DBMS-types-by-Target-Workloads" class="headerlink" title="DBMS types by Target Workloads:"></a>DBMS types by Target Workloads:</h5><ul>
+<li>On-line Transaction Processing(OLTP): Fast operations that only read/update a small amount of data each time</li>
+<li>On-line Analytical Processing(OLAP): Complex queries that read a lot of data to compute aggregates</li>
+<li>Hybrid Transaction + Analytical Processing: OLTP + OLAP</li>
+</ul>
+<h5 id="DBMS-types-by-Data-Model"><a href="#DBMS-types-by-Data-Model" class="headerlink" title="DBMS types by Data Model"></a>DBMS types by Data Model</h5><p><strong>Data model</strong>: collection of concepts form describing the data in a database.</p>
+<p><strong>Schema</strong>: a description of a particular collection of data, using a given data model.</p>
+<ul>
+<li>Most DBMSs data model<ul>
+<li>Relational  </li>
+</ul>
+</li>
+<li>NoSQL data model<ul>
+<li>Key/Value</li>
+<li>Graph</li>
+<li>Document</li>
+<li>Column-family</li>
+</ul>
+</li>
+<li>Machine Learning data model<ul>
+<li>Array/Matrix</li>
+</ul>
+</li>
+<li>Obsolete / Rare<ul>
+<li>Hierarchical</li>
+<li>Network</li>
+</ul>
+</li>
+</ul>
+<h3 id="Relational-Model"><a href="#Relational-Model" class="headerlink" title="Relational Model"></a>Relational Model</h3><ol>
+<li><p>Structure</p>
+<p> <strong>Relation</strong>: unordered set that contain the relationship of attributes that represent entities.</p>
+<p> <strong>Tuple</strong>: a set of attribute values(domain) in the relation</p>
+<ul>
+<li>values are (normally) atomic/scalar</li>
+<li>The special value <font color="red">NULL</font> is a member of every domain</li>
+</ul>
+</li>
+<li><p>Integrity Constraints:</p>
+<ul>
+<li>Primary Keys: Uniquely identifies a single tuple</li>
+<li>Foreign Keys: Specifies that an attribute from one relation has to map to <strong>a</strong> tuple in another relation</li>
+</ul>
+</li>
+<li><p>Manipulation</p>
+<p> Data Manipulation Language(DML)</p>
+<ul>
+<li>Procedural(<strong>Relational Algebra</strong>): The query specifies the strategy the DBMS should use to find the desired result</li>
+<li>Non-Procedural(<strong>Relational Calulus</strong>): The query specifies only what data is wanted and not how to find it.</li>
+</ul>
+</li>
+</ol>
+<h4 id="Relational-Algebra"><a href="#Relational-Algebra" class="headerlink" title="Relational Algebra"></a>Relational Algebra</h4><ol>
+<li><p>$\sigma$</p>
+<p> $\sigma _{predicate}(R)$</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT * </span><br><span class="line">FROM R</span><br><span class="line">WHERE predicate;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>$\pi$</p>
+<p> $ \pi _{A_{1},A_{2},…,A_{n}} (R) $</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SELECT A1, A2, ... An</span><br><span class="line">FROM R;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol start="3">
+<li><p>$U$</p>
+<p> $(R\, U \, S)$</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM R</span><br><span class="line">UNION</span><br><span class="line">SELECT * FROM S;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol start="4">
+<li><p>$\cap$</p>
+<p> $(R\, \cap \, S)$</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM R</span><br><span class="line">INTERSECT</span><br><span class="line">SELECT * FROM S;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol start="5">
+<li><p>$-$</p>
+<p> $(R\, - \, S)$</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM R</span><br><span class="line">EXCEPT</span><br><span class="line">SELECT * FROM S;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<ol start="6">
+<li><p>$\times$</p>
+<p> $(R\, \times \, S)$</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM R</span><br><span class="line">CROSS JOIN</span><br><span class="line">SELECT * FROM S;</span><br><span class="line"></span><br><span class="line">SELECT * FROM R, S;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>$\bowtie$</p>
+<p> $(R\, \bowtie \, S)$</p>
+ <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM R</span><br><span class="line">NATURAL JOIN</span><br><span class="line">SELECT * FROM S;</span><br></pre></td></tr></table></figure>
+<p> <em>Join type</em>:</p>
+<ul>
+<li>Cross join</li>
+<li><p>Inner join (<font color="red">!! NATURAL JOIN AND INNER JOIN have different result</font>)</p>
+<ul>
+<li><p>Natural join$(R\, \bowtie \, S)$</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM R NATURAL JOIN S;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Theta join$(R\, \bowtie_{\theta} \, S)$</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM R INNER JOIN S ON R.C1 = S.C1;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Semi join$(R\, \ltimes \, S)$</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM R WHERE EXISTS (SELECT * FROM S WHERE R.C1 = S.C1);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Anti join$(R\, \triangleright \, S)$</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM R WHERE NOT EXISTS (SELECT * FROM S WHERE R.C1 = S.C1);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>Outer join</p>
+<ul>
+<li><p>Left outer join $(R\, ⟕ \, S)$</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM R LEFT OUTER JOIN S ON R.C1 = S.C1;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Right outer join $(R\, ⟖ \, S)$</p>
+  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM R RIGHT OUTER JOIN S ON R.C1 = S.C1;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Full outer join (Union)</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>extra operators</p>
+<ul>
+<li>Rename $\rho$</li>
+<li>Assignment $R\leftarrow S$</li>
+<li>Duplicate Elimination $\delta$</li>
+<li>Agregation $\gamma$</li>
+<li>Sorting $\tau$</li>
+<li>Division $R\div S$ </li>
+</ul>
+</li>
+</ol>
+<h4 id="Relational-Language"><a href="#Relational-Language" class="headerlink" title="Relational Language"></a>Relational Language</h4><ul>
+<li>Data Manipulation Language(DML)</li>
+<li>Data Definition Language(DDL) </li>
+</ul>
+<h4 id="Aggregation"><a href="#Aggregation" class="headerlink" title="Aggregation"></a>Aggregation</h4><ul>
+<li>AVG</li>
+<li>MIN</li>
+<li>MAX</li>
+<li>SUM</li>
+<li>COUNT</li>
+</ul>
+<p>COUNT, SUM, AVG support DISTINCT.</p>
+<p>Output of other columns outside pf an aggregate is undefined.</p>
+<h4 id="Group-by"><a href="#Group-by" class="headerlink" title="Group by"></a>Group by</h4><p>Non-aggreagated values in SELECT output clause must appear in GROUP BY clause.</p>
+<h4 id="HAVING"><a href="#HAVING" class="headerlink" title="HAVING"></a>HAVING</h4><p>Filters output results for GROUP BY.</p>
+<h4 id="String-operations"><a href="#String-operations" class="headerlink" title="String operations"></a>String operations</h4><ul>
+<li>LIKE: string matching<ul>
+<li>“%”: matches any substring(including empty)</li>
+<li>“_”: match any one character</li>
+</ul>
+</li>
+<li>SUBSTRING(STRING, BEGIN, END)</li>
+<li>UPPER</li>
+<li>LOWER</li>
+<li>||</li>
+</ul>
+<h4 id="Output-control"><a href="#Output-control" class="headerlink" title="Output control"></a>Output control</h4><ul>
+<li>Order by</li>
+<li>LIMIT OFFSET</li>
+</ul>
+<h4 id="Nested-query"><a href="#Nested-query" class="headerlink" title="Nested query"></a>Nested query</h4><ul>
+<li>ALL</li>
+<li>ANY</li>
+<li>IN</li>
+<li>EXISTS</li>
+</ul>
+<h4 id="Window-function"><a href="#Window-function" class="headerlink" title="Window function"></a>Window function</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SELECT ... FUNC-NAME(...) OVER (...)</span><br><span class="line">FROM table</span><br></pre></td></tr></table></figure>
+<p>FUNC-NAME:</p>
+<ul>
+<li>ROW_NUMBER(): number of the current row</li>
+<li>RANK(): order position of the current row</li>
+</ul>
+<p>OVER: </p>
+<ul>
+<li>PARTITION BY: to specify group</li>
+<li>ORDER BY</li>
+</ul>
+<h4 id="Common-Table-Expressions"><a href="#Common-Table-Expressions" class="headerlink" title="Common Table Expressions"></a>Common Table Expressions</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">eg. print the sequence of numbers from 1 to 10</span><br><span class="line"></span><br><span class="line">with recursive cteSource(counter) as(</span><br><span class="line">	(select 1)</span><br><span class="line">	union all</span><br><span class="line">	(select counter+1 from cteSource</span><br><span class="line">	where counter &lt; 10)</span><br><span class="line">)</span><br><span class="line">select * from cteSource;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/database/" rel="tag"># database</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/25/postgreSQL-for-beginners/" rel="next" title="PostgreSQL_for_beginners">
+                <i class="fa fa-chevron-left"></i> PostgreSQL_for_beginners
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/14/database-system-review02/" rel="prev" title="Database System Review 02">
+                Database System Review 02 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+          
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="fb-comments" data-href="https://annashuo.github.io/2017/09/14/database-system-review01/" data-numposts="10" data-width="100%" data-colorscheme="light">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="Anna">
+          <p class="site-author-name" itemprop="name">Anna</p>
+          <p class="site-description motion-element" itemprop="description">My heart is in the work...</p>
+        </div>
+        <nav class="site-state motion-element">
+        
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Annashuo/Annashuo.github.io" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/1861044584?is_all=1" target="_blank" title="Weibo">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  Weibo
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Instruction"><span class="nav-number">1.</span> <span class="nav-text">Instruction</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Database"><span class="nav-number">1.1.</span> <span class="nav-text">Database</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Database-Management-System"><span class="nav-number">1.2.</span> <span class="nav-text">Database Management System</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#DBMS-types-by-Target-Workloads"><span class="nav-number">1.2.1.</span> <span class="nav-text">DBMS types by Target Workloads:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#DBMS-types-by-Data-Model"><span class="nav-number">1.2.2.</span> <span class="nav-text">DBMS types by Data Model</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Relational-Model"><span class="nav-number">2.</span> <span class="nav-text">Relational Model</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Relational-Algebra"><span class="nav-number">2.1.</span> <span class="nav-text">Relational Algebra</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Relational-Language"><span class="nav-number">2.2.</span> <span class="nav-text">Relational Language</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Aggregation"><span class="nav-number">2.3.</span> <span class="nav-text">Aggregation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Group-by"><span class="nav-number">2.4.</span> <span class="nav-text">Group by</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HAVING"><span class="nav-number">2.5.</span> <span class="nav-text">HAVING</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#String-operations"><span class="nav-number">2.6.</span> <span class="nav-text">String operations</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Output-control"><span class="nav-number">2.7.</span> <span class="nav-text">Output control</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Nested-query"><span class="nav-number">2.8.</span> <span class="nav-text">Nested query</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Window-function"><span class="nav-number">2.9.</span> <span class="nav-text">Window function</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Common-Table-Expressions"><span class="nav-number">2.10.</span> <span class="nav-text">Common Table Expressions</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Anna</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+      <!-- UY BEGIN -->
+      <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid="></script>
+      <!-- UY END --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+
+
+  
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+
+</body>
+</html>
