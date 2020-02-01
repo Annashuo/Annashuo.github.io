@@ -429,13 +429,13 @@
 <li>Materialization Model</li>
 <li>Vectorized / Batch Model</li>
 </ul>
-<h4 id="Iterator-Model-Volcano-Model-—-Top-down-plan-processing"><a href="#Iterator-Model-Volcano-Model-—-Top-down-plan-processing" class="headerlink" title="Iterator Model(Volcano Model) — Top-down plan processing"></a>Iterator Model(Volcano Model) — Top-down plan processing</h4><p>Each query plan operator implements a next function.</p>
+<h4 id="Iterator-Model-Volcano-Model-–-Top-down-plan-processing"><a href="#Iterator-Model-Volcano-Model-–-Top-down-plan-processing" class="headerlink" title="Iterator Model(Volcano Model) – Top-down plan processing"></a>Iterator Model(Volcano Model) – Top-down plan processing</h4><p>Each query plan operator implements a next function.</p>
 <ul>
 <li>On each invocation, the operator returns either a singke tuple or a null marker if there are no more tuples</li>
 <li>The operator implements a loop that calls next on its children to retrieve their tuples and then process them.</li>
 </ul>
 <p>This allows for tuple pipelining. Some operators will block until children emit all of their tuples.</p>
-<h4 id="Materialization-Model-—-Bottom-up-plan-processing"><a href="#Materialization-Model-—-Bottom-up-plan-processing" class="headerlink" title="Materialization Model — Bottom-up plan processing"></a>Materialization Model — Bottom-up plan processing</h4><p>Each operator processes its input all at once and tehn emits its output all at once.</p>
+<h4 id="Materialization-Model-–-Bottom-up-plan-processing"><a href="#Materialization-Model-–-Bottom-up-plan-processing" class="headerlink" title="Materialization Model – Bottom-up plan processing"></a>Materialization Model – Bottom-up plan processing</h4><p>Each operator processes its input all at once and tehn emits its output all at once.</p>
 <ul>
 <li>The operator “materializes” it output as a single result.</li>
 <li>The DBMS can push down hints into avoid scanning too many tuples.</li>
@@ -457,7 +457,6 @@
 <li>Greatly reduces the number of invocations per operator</li>
 <li>Allows dor operators to use vectorized(SIMD) instructions to process batches of tuples.</li>
 </ul>
-<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -488,7 +487,6 @@
 </tr>
 </tbody>
 </table>
-</div>
 <h3 id="Acess-Method"><a href="#Acess-Method" class="headerlink" title="Acess Method"></a>Acess Method</h3><p>A access method is a way that the DBMS can access the data stored in a table.(Not defined in relational algebra)</p>
 <p>Three basic approaches:</p>
 <ul>
@@ -735,7 +733,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Query-plan"><span class="nav-number">1.</span> <span class="nav-text">Query plan</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Processing-Methods"><span class="nav-number">2.</span> <span class="nav-text">Processing Methods</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Iterator-Model-Volcano-Model-—-Top-down-plan-processing"><span class="nav-number">2.1.</span> <span class="nav-text">Iterator Model(Volcano Model) — Top-down plan processing</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Materialization-Model-—-Bottom-up-plan-processing"><span class="nav-number">2.2.</span> <span class="nav-text">Materialization Model — Bottom-up plan processing</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Vectorization-Model"><span class="nav-number">2.3.</span> <span class="nav-text">Vectorization Model</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Acess-Method"><span class="nav-number">3.</span> <span class="nav-text">Acess Method</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Sequential-Scan"><span class="nav-number">3.1.</span> <span class="nav-text">Sequential Scan</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Zone-Maps"><span class="nav-number">3.1.1.</span> <span class="nav-text">Zone Maps</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Buffer-Pool-Bypass-Light-Scan"><span class="nav-number">3.1.2.</span> <span class="nav-text">Buffer Pool Bypass(Light Scan)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Heap-Clustering"><span class="nav-number">3.1.3.</span> <span class="nav-text">Heap Clustering</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Index-Scan"><span class="nav-number">3.2.</span> <span class="nav-text">Index Scan</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Multi-index-Scan-Bitmap-Scan-in-PostgreSQL"><span class="nav-number">3.3.</span> <span class="nav-text">Multi-index Scan(Bitmap Scan in PostgreSQL)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Index-Scan-Page-Sorting"><span class="nav-number">3.3.1.</span> <span class="nav-text">Index Scan Page Sorting</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Expression-Evaluation"><span class="nav-number">4.</span> <span class="nav-text">Expression Evaluation</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Query-plan"><span class="nav-number">1.</span> <span class="nav-text">Query plan</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Processing-Methods"><span class="nav-number">2.</span> <span class="nav-text">Processing Methods</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Iterator-Model-Volcano-Model-–-Top-down-plan-processing"><span class="nav-number">2.1.</span> <span class="nav-text">Iterator Model(Volcano Model) – Top-down plan processing</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Materialization-Model-–-Bottom-up-plan-processing"><span class="nav-number">2.2.</span> <span class="nav-text">Materialization Model – Bottom-up plan processing</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Vectorization-Model"><span class="nav-number">2.3.</span> <span class="nav-text">Vectorization Model</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Acess-Method"><span class="nav-number">3.</span> <span class="nav-text">Acess Method</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Sequential-Scan"><span class="nav-number">3.1.</span> <span class="nav-text">Sequential Scan</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Zone-Maps"><span class="nav-number">3.1.1.</span> <span class="nav-text">Zone Maps</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Buffer-Pool-Bypass-Light-Scan"><span class="nav-number">3.1.2.</span> <span class="nav-text">Buffer Pool Bypass(Light Scan)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Heap-Clustering"><span class="nav-number">3.1.3.</span> <span class="nav-text">Heap Clustering</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Index-Scan"><span class="nav-number">3.2.</span> <span class="nav-text">Index Scan</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Multi-index-Scan-Bitmap-Scan-in-PostgreSQL"><span class="nav-number">3.3.</span> <span class="nav-text">Multi-index Scan(Bitmap Scan in PostgreSQL)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Index-Scan-Page-Sorting"><span class="nav-number">3.3.1.</span> <span class="nav-text">Index Scan Page Sorting</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Expression-Evaluation"><span class="nav-number">4.</span> <span class="nav-text">Expression Evaluation</span></a></li></ol></div>
             
 
           </div>

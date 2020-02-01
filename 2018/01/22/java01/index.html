@@ -426,7 +426,7 @@
 <li>Primitive Type(stack): int, long, double, boolean, char, byte, short, float</li>
 <li>Object Type(heap): classes, interfaces, arrays, enums, annotations (“==”(pointer) != “.equals()”(values))</li>
 <li>Converts Primitive type to Object types: Integer, Long, Double, Boolean, Character, Byte, Short, Float</li>
-<li>Generic Type contains Object type, eg. List<integer>, HashMap<byte, double></byte,></integer></li>
+<li>Generic Type contains Object type, eg. List<integer>, HashMap&lt;Byte, Double&gt;</integer></li>
 </ul>
 </li>
 <li><p>Method in all Objects/Classes because all class extends class “Object”: </p>
@@ -451,7 +451,7 @@
 </li>
 <li><p>Primary collecton interfaces(java.util)</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Collection          Map</span><br><span class="line">/   |   \</span><br><span class="line">Set  List  Queue</span><br></pre></td></tr></table></figure>
-<p> Interface | Implementation<br> :—:|:—:<br> Set | HashSet(no order), LinkedHashSet(ordered by add), TreeSet<br> List | ArrayList<br> Queue | ArrayDeque<br> Deque | ArrayDeque<br> Map | HashMap</p>
+<p> Interface | Implementation<br> :–:|:–:<br> Set | HashSet(no order), LinkedHashSet(ordered by add), TreeSet<br> List | ArrayList<br> Queue | ArrayDeque<br> Deque | ArrayDeque<br> Map | HashMap</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Set&lt;String&gt; s = new TreeSet&lt;&gt;()</span><br><span class="line">// s can only use methods in set(limit methods usage)</span><br></pre></td></tr></table></figure>
 <ul>
 <li>LinkedHashSet can contain any Object Type.</li>

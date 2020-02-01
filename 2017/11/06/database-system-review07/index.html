@@ -450,12 +450,12 @@
 </ul>
 <h5 id="Complex-Predicates"><a href="#Complex-Predicates" class="headerlink" title="Complex Predicates"></a>Complex Predicates</h5><ul>
 <li>Equality Predicate: $A=constant \rightarrow sel(A=constant) = SC(P)\ /\ V(A,R)$</li>
-<li>Range: $sel(A&gt;=a) = (A<em>{max}-a)/(A</em>{max}-A_{min})$</li>
+<li>Range: $sel(A&gt;=a) = (A_{max}-a)/(A_{max}-A_{min})$</li>
 <li>Negation Query: $sel(not\ P) = 1\ -\ sel(P)$</li>
 <li>Conjunction: $sel(P1\ \wedge \ p2) = sel(P1)\ \cdot \ sel(P2)$</li>
 <li>Disjunction: $sel(P1\ \vee \ p2) = sel(P1)+sel(P2)-sel(P1\ \wedge \ p2)$</li>
 </ul>
-<h5 id="Result-size-estimation-form-joins"><a href="#Result-size-estimation-form-joins" class="headerlink" title="Result size estimation form joins"></a>Result size estimation form joins</h5><p>$R<em>{cols}\cap S</em>{cols}={A}$<br>$estSize \approx N<em>{R} \cdot N</em>{S}\ /\ max({V(A,S), V(A,R)})$</p>
+<h5 id="Result-size-estimation-form-joins"><a href="#Result-size-estimation-form-joins" class="headerlink" title="Result size estimation form joins"></a>Result size estimation form joins</h5><p>$R_{cols}\cap S_{cols}={A}$<br>$estSize \approx N_{R} \cdot N_{S}\ /\ max({V(A,S), V(A,R)})$</p>
 <p>…to be continue…<br>Query Optimization is really hard…</p>
 
       
