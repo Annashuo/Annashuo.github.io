@@ -262,9 +262,32 @@
       
 
       
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
     </ul>
   
 
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
   
 </nav>
 
@@ -406,13 +429,13 @@
 <li>Materialization Model</li>
 <li>Vectorized / Batch Model</li>
 </ul>
-<h4 id="Iterator-Model-Volcano-Model-–-Top-down-plan-processing"><a href="#Iterator-Model-Volcano-Model-–-Top-down-plan-processing" class="headerlink" title="Iterator Model(Volcano Model) – Top-down plan processing"></a>Iterator Model(Volcano Model) – Top-down plan processing</h4><p>Each query plan operator implements a next function.</p>
+<h4 id="Iterator-Model-Volcano-Model-—-Top-down-plan-processing"><a href="#Iterator-Model-Volcano-Model-—-Top-down-plan-processing" class="headerlink" title="Iterator Model(Volcano Model) — Top-down plan processing"></a>Iterator Model(Volcano Model) — Top-down plan processing</h4><p>Each query plan operator implements a next function.</p>
 <ul>
 <li>On each invocation, the operator returns either a singke tuple or a null marker if there are no more tuples</li>
 <li>The operator implements a loop that calls next on its children to retrieve their tuples and then process them.</li>
 </ul>
 <p>This allows for tuple pipelining. Some operators will block until children emit all of their tuples.</p>
-<h4 id="Materialization-Model-–-Bottom-up-plan-processing"><a href="#Materialization-Model-–-Bottom-up-plan-processing" class="headerlink" title="Materialization Model – Bottom-up plan processing"></a>Materialization Model – Bottom-up plan processing</h4><p>Each operator processes its input all at once and tehn emits its output all at once.</p>
+<h4 id="Materialization-Model-—-Bottom-up-plan-processing"><a href="#Materialization-Model-—-Bottom-up-plan-processing" class="headerlink" title="Materialization Model — Bottom-up plan processing"></a>Materialization Model — Bottom-up plan processing</h4><p>Each operator processes its input all at once and tehn emits its output all at once.</p>
 <ul>
 <li>The operator “materializes” it output as a single result.</li>
 <li>The DBMS can push down hints into avoid scanning too many tuples.</li>
@@ -434,6 +457,7 @@
 <li>Greatly reduces the number of invocations per operator</li>
 <li>Allows dor operators to use vectorized(SIMD) instructions to process batches of tuples.</li>
 </ul>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -464,6 +488,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <h3 id="Acess-Method"><a href="#Acess-Method" class="headerlink" title="Acess Method"></a>Acess Method</h3><p>A access method is a way that the DBMS can access the data stored in a table.(Not defined in relational algebra)</p>
 <p>Three basic approaches:</p>
 <ul>
@@ -637,7 +662,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-count">45</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -655,7 +680,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
@@ -710,7 +735,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Query-plan"><span class="nav-number">1.</span> <span class="nav-text">Query plan</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Processing-Methods"><span class="nav-number">2.</span> <span class="nav-text">Processing Methods</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Iterator-Model-Volcano-Model-–-Top-down-plan-processing"><span class="nav-number">2.1.</span> <span class="nav-text">Iterator Model(Volcano Model) – Top-down plan processing</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Materialization-Model-–-Bottom-up-plan-processing"><span class="nav-number">2.2.</span> <span class="nav-text">Materialization Model – Bottom-up plan processing</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Vectorization-Model"><span class="nav-number">2.3.</span> <span class="nav-text">Vectorization Model</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Acess-Method"><span class="nav-number">3.</span> <span class="nav-text">Acess Method</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Sequential-Scan"><span class="nav-number">3.1.</span> <span class="nav-text">Sequential Scan</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Zone-Maps"><span class="nav-number">3.1.1.</span> <span class="nav-text">Zone Maps</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Buffer-Pool-Bypass-Light-Scan"><span class="nav-number">3.1.2.</span> <span class="nav-text">Buffer Pool Bypass(Light Scan)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Heap-Clustering"><span class="nav-number">3.1.3.</span> <span class="nav-text">Heap Clustering</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Index-Scan"><span class="nav-number">3.2.</span> <span class="nav-text">Index Scan</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Multi-index-Scan-Bitmap-Scan-in-PostgreSQL"><span class="nav-number">3.3.</span> <span class="nav-text">Multi-index Scan(Bitmap Scan in PostgreSQL)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Index-Scan-Page-Sorting"><span class="nav-number">3.3.1.</span> <span class="nav-text">Index Scan Page Sorting</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Expression-Evaluation"><span class="nav-number">4.</span> <span class="nav-text">Expression Evaluation</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Query-plan"><span class="nav-number">1.</span> <span class="nav-text">Query plan</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Processing-Methods"><span class="nav-number">2.</span> <span class="nav-text">Processing Methods</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Iterator-Model-Volcano-Model-—-Top-down-plan-processing"><span class="nav-number">2.1.</span> <span class="nav-text">Iterator Model(Volcano Model) — Top-down plan processing</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Materialization-Model-—-Bottom-up-plan-processing"><span class="nav-number">2.2.</span> <span class="nav-text">Materialization Model — Bottom-up plan processing</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Vectorization-Model"><span class="nav-number">2.3.</span> <span class="nav-text">Vectorization Model</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Acess-Method"><span class="nav-number">3.</span> <span class="nav-text">Acess Method</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Sequential-Scan"><span class="nav-number">3.1.</span> <span class="nav-text">Sequential Scan</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Zone-Maps"><span class="nav-number">3.1.1.</span> <span class="nav-text">Zone Maps</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Buffer-Pool-Bypass-Light-Scan"><span class="nav-number">3.1.2.</span> <span class="nav-text">Buffer Pool Bypass(Light Scan)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Heap-Clustering"><span class="nav-number">3.1.3.</span> <span class="nav-text">Heap Clustering</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Index-Scan"><span class="nav-number">3.2.</span> <span class="nav-text">Index Scan</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Multi-index-Scan-Bitmap-Scan-in-PostgreSQL"><span class="nav-number">3.3.</span> <span class="nav-text">Multi-index Scan(Bitmap Scan in PostgreSQL)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Index-Scan-Page-Sorting"><span class="nav-number">3.3.1.</span> <span class="nav-text">Index Scan Page Sorting</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Expression-Evaluation"><span class="nav-number">4.</span> <span class="nav-text">Expression Evaluation</span></a></li></ol></div>
             
 
           </div>
@@ -853,7 +878,137 @@
   
       <!-- UY BEGIN -->
       <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid="></script>
-      <!-- UY END --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+      <!-- UY END -->
+  
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
 </script>
@@ -871,13 +1026,7 @@
 </script>
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->
-  
 
-
-
-
-  
-  
 
   
   

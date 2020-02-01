@@ -261,9 +261,32 @@
       
 
       
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
     </ul>
   
 
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
   
 </nav>
 
@@ -378,7 +401,7 @@
 <h4 id="GIT"><a href="#GIT" class="headerlink" title="GIT"></a>GIT</h4><p>GIT is a distributed version control system because when you clone, it make a copy of a repository. You get a full complete copy of that repository. Essentially a collections of all collaborate repository.</p>
 <h4 id="Branch"><a href="#Branch" class="headerlink" title="Branch"></a>Branch</h4><p>Branch is a full copy of a version of the repository so you have multiple version of your repository.</p>
 <h3 id="HTTP-Hypertext-Transfer-Protocol"><a href="#HTTP-Hypertext-Transfer-Protocol" class="headerlink" title="HTTP: Hypertext Transfer Protocol"></a>HTTP: Hypertext Transfer Protocol</h3><p>HTTP is a protocol that is used for tranfering data on the web.</p>
-<p>If the brouser doesn’t have the address of the www….com, the browser might have to start when it initiate the connection by connecting the domain name system(DNS) server and convert the <a href="http://www.com" target="_blank" rel="noopener">www.com</a> to IP address.</p>
+<p>If the brouser doesn’t have the address of the www….com, the browser might have to start when it initiate the connection by connecting the domain name system(DNS) server and convert the www.com to IP address.</p>
 <p>After the browser gets the IP address of the remote server, it may initiate a TCP/IP connection with the remote server. TCP is the transfer control protocol. It how most traffic internet work. To initiate a TCP/IP connection, the browser first send a SYN message to the web server and the server reply with a SYN-ACK package message to acknowledge the web server has receive the SYN. The browser send a ACK package to the server to acknowledge it has receive the SYN-ACK package. At this point, the browser can begin sending HTTP traffic by sending a HTTP request to the web server. The web server receive the HTTP request and send back the HTTP response.</p>
 <h4 id="Port"><a href="#Port" class="headerlink" title="Port"></a>Port</h4><p>Ports for common web services:</p>
 <ul>
@@ -407,6 +430,7 @@
 </ul>
 </li>
 </ul>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -448,6 +472,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <h4 id="POST-vs-GET"><a href="#POST-vs-GET" class="headerlink" title="POST vs. GET:"></a>POST vs. GET:</h4><ul>
 <li><p>What data is contained in a typical request line? a header line? a message body?</p>
 <p>  Get: the query string in the url, like</p>
@@ -493,7 +518,8 @@
 </li>
 </ul>
 <h4 id="The-flow-of-information-in-MVC-to-process-a-request"><a href="#The-flow-of-information-in-MVC-to-process-a-request" class="headerlink" title="The flow of information in MVC to process a request"></a>The flow of information in MVC to process a request</h4><p>The controller typically determines which action in the application is responsible for processing this particular request and it forward the request to the model to be executed by the appropriate action. The action typically interacts with the data model getting and changing data as needed. When the action is done processing the request typically it forwards the request to some particular view it chooses which view is the right view for displaying the data for this request. The information from the model will help the view generate the actual response. The view itself is just responsible for formatting the data that was presented to it and generating some sort of response to the web browser</p>
-<h3 id="Django"><a href="#Django" class="headerlink" title="Django"></a>Django</h3><h4 id="Django-components-correspond-to-MVC"><a href="#Django-components-correspond-to-MVC" class="headerlink" title="Django components correspond to MVC"></a>Django components correspond to MVC</h4><table>
+<h3 id="Django"><a href="#Django" class="headerlink" title="Django"></a>Django</h3><h4 id="Django-components-correspond-to-MVC"><a href="#Django-components-correspond-to-MVC" class="headerlink" title="Django components correspond to MVC"></a>Django components correspond to MVC</h4><div class="table-container">
+<table>
 <thead>
 <tr>
 <th style="text-align:center">MVC</th>
@@ -519,6 +545,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <h4 id="Standard-details-of-a-basic-Django-application"><a href="#Standard-details-of-a-basic-Django-application" class="headerlink" title="Standard details of a basic Django application"></a>Standard details of a basic Django application</h4><ul>
 <li>Project configuration in setting.py</li>
 <li>Request route configuration in urls.py</li>
@@ -783,7 +810,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-count">45</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -801,7 +828,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
@@ -999,7 +1026,137 @@
   
       <!-- UY BEGIN -->
       <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid="></script>
-      <!-- UY END --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+      <!-- UY END -->
+  
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
 </script>
@@ -1017,13 +1174,7 @@
 </script>
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->
-  
 
-
-
-
-  
-  
 
   
   

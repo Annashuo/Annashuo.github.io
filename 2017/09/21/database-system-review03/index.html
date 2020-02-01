@@ -97,7 +97,7 @@
 <meta property="og:image" content="https://github.com/Annashuo/hello-world/blob/master/log-structured.png?raw=true">
 <meta property="og:image" content="https://github.com/Annashuo/hello-world/blob/master/slotted-page.png?raw=true">
 <meta property="og:image" content="https://github.com/Annashuo/hello-world/blob/master/buffer-pool.png?raw=true">
-<meta property="og:updated_time" content="2020-01-30T14:14:21.101Z">
+<meta property="og:updated_time" content="2020-01-31T05:12:47.912Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Database System Review 03">
 <meta name="twitter:description" content="Introduction to database storage.">
@@ -268,9 +268,32 @@
       
 
       
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
     </ul>
   
 
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
   
 </nav>
 
@@ -404,8 +427,8 @@
       
         <p>Introduction to database storage.</p>
 <a id="more"></a>
-<h3 id="Why-not-use-OS"><a href="#Why-not-use-OS" class="headerlink" title="Why not use OS?"></a>Why not use OS?</h3><p>If you rely on the operating system, then you have less hcoise in your design space inside the database system.</p>
-<p>If using the operating system, when the process hit a page fault and it need to hold loks to some tuples or other latches to other data structures. It will be blocking for a long time and all other threads that are running other queries and other transactions could not be doing useful work but they can because all the locks.</p>
+<h3 id="Why-not-use-OS"><a href="#Why-not-use-OS" class="headerlink" title="Why not use OS?"></a>Why not use OS?</h3><p>If you rely on the operating system, then you have less choise in your design space inside the database system.</p>
+<p>If using the operating system, when the process hit a page fault and it need to hold locks to some tuples or other latches to other data structures. It will be blocking for a long time and all other threads that are running other queries and other transactions could not be doing useful work but they can because all the locks.</p>
 <h3 id="What-DBMS-can-do-for-storage"><a href="#What-DBMS-can-do-for-storage" class="headerlink" title="What DBMS can do for storage?"></a>What DBMS can do for storage?</h3><ul>
 <li>Specialized prefetching</li>
 <li>Buffer replacement policy</li>
@@ -437,7 +460,7 @@
 </ul>
 <p><img src="https://github.com/Annashuo/hello-world/blob/master/linked-list.png?raw=true" alt></p>
 <h5 id="Page-directory"><a href="#Page-directory" class="headerlink" title="Page directory"></a>Page directory</h5><p>Maintain special pages that tracks the location of the data pages in the database files. The directory also records the number of free slot per page.</p>
-<p>The DBMS has to make sure that the directory pages are in sync with the daya pages.</p>
+<p>The DBMS has to make sure that the directory pages are in sync with the data pages.</p>
 <p><img src="https://github.com/Annashuo/hello-world/blob/master/page-directory.png?raw=true" alt></p>
 <h4 id="Log-Structured-file-organization"><a href="#Log-Structured-file-organization" class="headerlink" title="Log-Structured file organization"></a>Log-Structured file organization</h4><p>The DBMS only stores log recoreds instead of tuples in pages.</p>
 <p>The system appends log records to the file of how the database was modified:</p>
@@ -685,7 +708,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-count">45</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -703,7 +726,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
@@ -901,7 +924,137 @@
   
       <!-- UY BEGIN -->
       <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid="></script>
-      <!-- UY END --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+      <!-- UY END -->
+  
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
 </script>
@@ -919,13 +1072,7 @@
 </script>
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->
-  
 
-
-
-
-  
-  
 
   
   

@@ -262,9 +262,32 @@
       
 
       
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>
+            
+            Search
+          </a>
+        </li>
+      
     </ul>
   
 
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
   
 </nav>
 
@@ -511,7 +534,22 @@
 </ul>
 <h5 id="Index-Nested-Loop-Join"><a href="#Index-Nested-Loop-Join" class="headerlink" title="Index Nested Loop Join"></a>Index Nested Loop Join</h5><p>Use an index to find <strong>inner table matches</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">foreach tuple r of R</span><br><span class="line">	foreach tuple s of S, where ri = sj</span><br><span class="line">		output, if ri and sj match</span><br></pre></td></tr></table></figure>
-<font style="color:red">Cost = M + (m<em>C)</em></font> (C is index look-up cost)<br><br>##### Nested Loop Join SUMMARY<br><br>- Pick the small table as outer table<br>- Buffer as much of outer table in memory as possible<br>- Loop over the inner table or use an index<br><br>#### Sort-Merge Join<br><br>- Sort Phase: sort <strong>both</strong> tables on the join attribute<br>- Merge Phase: scan the two sorted tables in parallel and emit matching tuples.<br><br>Useful when one or both tables are already sorted or output must be sorted on join key<br><br><font style="color:red">Cost = [(2M\logM/logB) + (2N*logN/logB)] + [M+N]</font>
+<font style="color:red">Cost = M + (m*C)</font> (C is index look-up cost)
+
+##### Nested Loop Join SUMMARY
+
+- Pick the small table as outer table
+- Buffer as much of outer table in memory as possible
+- Loop over the inner table or use an index
+
+#### Sort-Merge Join
+
+- Sort Phase: sort **both** tables on the join attribute
+- Merge Phase: scan the two sorted tables in parallel and emit matching tuples.
+
+Useful when one or both tables are already sorted or output must be sorted on join key
+
+<font style="color:red">Cost = [(2M\*logM/logB) + (2N*logN/logB)] + [M+N]</font>
 
 <h4 id="Hash-Join"><a href="#Hash-Join" class="headerlink" title="Hash Join"></a>Hash Join</h4><p>Partitioning Phase:Read and Write both tables. <font style="color:red">Cost = 2(M+N)</font></p>
 <p>Probing Phase:Read tables. <font style="color:red">Cost = (M+N)</font></p>
@@ -524,7 +562,7 @@
 <p>  Scan the inner relation and use $h_{1}$ on each tuple to jump to a location in the hash table and find a matching tuple</p>
 </li>
 </ul>
-<p>build hash table H for R<br><br>foreach tuple s of S<br><br>    output, if $H_{1}(s_{j}) \in HT(R)$ </p>
+<p>build hash table H for R&lt;/br&gt;<br>foreach tuple s of S&lt;/br&gt;<br>    output, if $H<em>{1}(s</em>{j}) \in HT(R)$ </p>
 <h5 id="Hash-table-values"><a href="#Hash-table-values" class="headerlink" title="Hash table values"></a>Hash table values</h5><ul>
 <li><p>Approach 1: Full tuple</p>
 <ul>
@@ -548,8 +586,9 @@
 <p>  Compares tuples in corresponding partitions for each table</p>
 </li>
 </ul>
-<p>If buckets don’t fit in memory, use <strong>recursive partitioning</strong>, build another hash table for buckets using hash function $h_{2}$($h_{1}\not= h_{2}$)</p>
-<h4 id="JOIN-SUMMARY"><a href="#JOIN-SUMMARY" class="headerlink" title="JOIN SUMMARY"></a>JOIN SUMMARY</h4><table>
+<p>If buckets don’t fit in memory, use <strong>recursive partitioning</strong>, build another hash table for buckets using hash function $h<em>{2}$($h</em>{1}\not= h_{2}$)</p>
+<h4 id="JOIN-SUMMARY"><a href="#JOIN-SUMMARY" class="headerlink" title="JOIN SUMMARY"></a>JOIN SUMMARY</h4><div class="table-container">
+<table>
 <thead>
 <tr>
 <th style="text-align:center">Join algorithm</th>
@@ -579,6 +618,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 
       
     </div>
@@ -694,7 +734,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">44</span>
+                <span class="site-state-item-count">45</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -712,7 +752,7 @@
           
             <div class="site-state-item site-state-tags">
               <a href="/tags">
-                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-count">14</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
@@ -910,7 +950,137 @@
   
       <!-- UY BEGIN -->
       <script type="text/javascript" src="http://v2.uyan.cc/code/uyan.js?uid="></script>
-      <!-- UY END --><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+      <!-- UY END -->
+  
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+      search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+      $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = $( "entry", xmlResponse ).map(function() {
+            return {
+              title: $( "title", this ).text(),
+              content: $("content",this).text(),
+              url: $( "url" , this).text()
+            };
+          }).get();
+          var $input = document.getElementById(search_id);
+          var $resultContent = document.getElementById(content_id);
+          $input.addEventListener('input', function(){
+            var matchcounts = 0;
+            var str='<ul class=\"search-result-list\">';
+            var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+            $resultContent.innerHTML = "";
+            if (this.value.trim().length > 1) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var content_index = [];
+                var data_title = data.title.trim().toLowerCase();
+                var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                var data_url = decodeURIComponent(data.url);
+                var index_title = -1;
+                var index_content = -1;
+                var first_occur = -1;
+                // only match artiles with not empty titles and contents
+                if(data_title != '') {
+                  keywords.forEach(function(keyword, i) {
+                    index_title = data_title.indexOf(keyword);
+                    index_content = data_content.indexOf(keyword);
+                    if( index_title >= 0 || index_content >= 0 ){
+                      isMatch = true;
+                      if (i == 0) {
+                        first_occur = index_content;
+                      }
+                    }
+
+                  });
+                }
+                // show search results
+                if (isMatch) {
+                  matchcounts += 1;
+                  str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                  var content = data.content.trim().replace(/<[^>]+>/g,"");
+                  if (first_occur >= 0) {
+                    // cut out 100 characters
+                    var start = first_occur - 20;
+                    var end = first_occur + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if(start == 0){
+                      end = 50;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    var match_content = content.substring(start, end);
+                    // highlight all keywords
+                    keywords.forEach(function(keyword){
+                      var regS = new RegExp(keyword, "gi");
+                      match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                    });
+
+                    str += "<p class=\"search-result\">" + match_content +"...</p>"
+                  }
+                  str += "</li>";
+                }
+              })};
+            str += "</ul>";
+            if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+            if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+            $resultContent.innerHTML = str;
+          });
+          proceedsearch();
+        }
+      });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
 </script>
@@ -928,13 +1098,7 @@
 </script>
 <!-- End: Injected MathJax -->
 <!-- hexo-inject:end -->
-  
 
-
-
-
-  
-  
 
   
   
