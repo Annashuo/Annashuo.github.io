@@ -481,20 +481,20 @@
 <li>used to coordinate communication between the threads of the same block</li>
 </ul>
 <h4 id="CUDA-Function-Types"><a href="#CUDA-Function-Types" class="headerlink" title="CUDA Function Types"></a>CUDA Function Types</h4><ul>
-<li>__global__<ul>
+<li>_<em>global_</em><ul>
 <li>Executed on the device</li>
 <li>Callable from the host only</li>
-<li>__global__ functions must have void return type</li>
-<li>Any call to a __global__ function must specify its execution configuration &lt;&lt;&lt; &gt;&gt;&gt;</li>
-<li>A call to a __global__ function is asynchronous</li>
+<li>_<em>global_</em> functions must have void return type</li>
+<li>Any call to a _<em>global_</em> function must specify its execution configuration &lt;&lt;&lt; &gt;&gt;&gt;</li>
+<li>A call to a _<em>global_</em> function is asynchronous</li>
 </ul>
 </li>
-<li>__device__<ul>
+<li>_<em>device_</em><ul>
 <li>Executed on the device</li>
 <li>Callable from the device only</li>
 </ul>
 </li>
-<li>__host__<ul>
+<li>_<em>host_</em><ul>
 <li>Executed on the host</li>
 <li>Callable from the host only</li>
 </ul>
@@ -710,7 +710,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">45</span>
+                <span class="site-state-item-count">46</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

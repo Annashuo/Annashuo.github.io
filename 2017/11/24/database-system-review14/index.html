@@ -84,18 +84,18 @@
 
 
 
-<meta name="description" content="## Logging and Recovery">
+<meta name="description" content="Logging and Recovery">
 <meta name="keywords" content="database">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Database System Review 14">
 <meta property="og:url" content="https://annashuo.github.io/2017/11/24/database-system-review14/index.html">
 <meta property="og:site_name" content="Anna&#39;s Blog">
-<meta property="og:description" content="## Logging and Recovery">
+<meta property="og:description" content="Logging and Recovery">
 <meta property="og:locale" content="en">
 <meta property="og:updated_time" content="2020-01-30T14:14:21.103Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Database System Review 14">
-<meta name="twitter:description" content="## Logging and Recovery">
+<meta name="twitter:description" content="Logging and Recovery">
 
 
 
@@ -419,8 +419,7 @@
       
 
       
-        <p>##<center> Logging and Recovery </center></p>
-<a id="more"></a>
+        <h2 id="Logging-and-Recovery"><a href="#Logging-and-Recovery" class="headerlink" title=" Logging and Recovery "></a><center> Logging and Recovery </center></h2><a id="more"></a>
 <h3 id="Crash-Recovery"><a href="#Crash-Recovery" class="headerlink" title="Crash Recovery"></a>Crash Recovery</h3><p>Recovery algorithms are techniques to ensure database consistency, transaction atomicity, and durability despite falitures</p>
 <p>Recovery algorithms: </p>
 <ul>
@@ -531,7 +530,24 @@
 <li>All log records up to txn’s <font style="color:red;">COMMIT</font> record are flushed to disk</li>
 <li>When the commit succeeds, write a special <font style="color:red;">TXN-END</font> record to log.</li>
 </ul>
-<h4 id="Transaction-Abort"><a href="#Transaction-Abort" class="headerlink" title="Transaction Abort"></a>Transaction Abort</h4><font style="color:red;">prevLSN</font>: the precious LSN for the txn.<br><br>- First write an <font style="color:red;">ABORT</font> record to log<br>- Play back updates in reverse order<br>- At end, write a <font style="color:red;">TXN-END</font> log record.<br><br><strong>Compensateion Log Records(CLR)</strong>: describe the actions taken to undo the actions of a previous update record.<br><br>### Fuzzy Checkpointing<br>#### Non-fuzzy Checkpoint<br>The DBMS halts everything when it takes a checkpoint to ensure a consistent snapshot.<br><br>#### Better Checkpoints<br>Pause txns while the DBMS takes the checkpoint<br><br>#### Fuzzy Checkpoint<br>- <font style="color:red;">CHECKPOINT-BEGIN</font><br>- <font style="color:red;">CHECKPOINT-END</font>
+<h4 id="Transaction-Abort"><a href="#Transaction-Abort" class="headerlink" title="Transaction Abort"></a>Transaction Abort</h4><font style="color:red;">prevLSN</font>: the precious LSN for the txn.
+
+- First write an <font style="color:red;">ABORT</font> record to log
+- Play back updates in reverse order
+- At end, write a <font style="color:red;">TXN-END</font> log record.
+
+**Compensateion Log Records(CLR)**: describe the actions taken to undo the actions of a previous update record.
+
+### Fuzzy Checkpointing
+#### Non-fuzzy Checkpoint
+The DBMS halts everything when it takes a checkpoint to ensure a consistent snapshot.
+
+#### Better Checkpoints
+Pause txns while the DBMS takes the checkpoint
+
+#### Fuzzy Checkpoint
+- <font style="color:red;">CHECKPOINT-BEGIN</font>
+- <font style="color:red;">CHECKPOINT-END</font>
 
 <h3 id="Recovery-Algorithm"><a href="#Recovery-Algorithm" class="headerlink" title="Recovery Algorithm"></a>Recovery Algorithm</h3><h4 id="ARIES-Recovery-Phase"><a href="#ARIES-Recovery-Phase" class="headerlink" title="ARIES - Recovery Phase"></a>ARIES - Recovery Phase</h4><ul>
 <li>Analysis: read the WAL to identify dirty pages in the buffer pool and active txns at the time of the crash.</li>
@@ -653,7 +669,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">45</span>
+                <span class="site-state-item-count">46</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -726,7 +742,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Crash-Recovery"><span class="nav-number">1.</span> <span class="nav-text">Crash Recovery</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Storage-Types"><span class="nav-number">2.</span> <span class="nav-text">Storage Types</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Failure-Classification"><span class="nav-number">3.</span> <span class="nav-text">Failure Classification</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Transaction-Failures"><span class="nav-number">3.1.</span> <span class="nav-text">Transaction Failures</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#System-Failures"><span class="nav-number">3.2.</span> <span class="nav-text">System Failures</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Storage-Media-Failure"><span class="nav-number">3.3.</span> <span class="nav-text">Storage Media Failure</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Buffer-Pool-Policies"><span class="nav-number">4.</span> <span class="nav-text">Buffer Pool Policies</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Steal-Policy"><span class="nav-number">4.1.</span> <span class="nav-text">Steal Policy</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Force-Policy"><span class="nav-number">4.2.</span> <span class="nav-text">Force Policy</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#No-Steal-Force"><span class="nav-number">4.3.</span> <span class="nav-text">No-Steal + Force</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Shadow-Paging"><span class="nav-number">5.</span> <span class="nav-text">Shadow Paging</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Disadvantages"><span class="nav-number">5.1.</span> <span class="nav-text">Disadvantages</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Write-Ahead-Log"><span class="nav-number">6.</span> <span class="nav-text">Write-Ahead Log</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Implementation"><span class="nav-number">6.1.</span> <span class="nav-text">Implementation</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Checkpoints"><span class="nav-number">7.</span> <span class="nav-text">Checkpoints</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Logging-Schemes"><span class="nav-number">8.</span> <span class="nav-text">Logging Schemes</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Physiological-Logging"><span class="nav-number">8.1.</span> <span class="nav-text">Physiological Logging</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ARIES-Algorithms-for-Recovery-and-Isolation-Exploiting-Semantics"><span class="nav-number">9.</span> <span class="nav-text">ARIES(Algorithms for Recovery and Isolation Exploiting Semantics)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Log-Sequence-Numbers"><span class="nav-number">10.</span> <span class="nav-text">Log Sequence Numbers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Normal-Commit-amp-Aborted-Operations"><span class="nav-number">11.</span> <span class="nav-text">Normal Commit &amp; Aborted Operations</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Transaction-Commit"><span class="nav-number">11.1.</span> <span class="nav-text">Transaction Commit</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Transaction-Abort"><span class="nav-number">11.2.</span> <span class="nav-text">Transaction Abort</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Recovery-Algorithm"><span class="nav-number">12.</span> <span class="nav-text">Recovery Algorithm</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ARIES-Recovery-Phase"><span class="nav-number">12.1.</span> <span class="nav-text">ARIES - Recovery Phase</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Logging-and-Recovery"><span class="nav-number">1.</span> <span class="nav-text"> Logging and Recovery </span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Crash-Recovery"><span class="nav-number">1.1.</span> <span class="nav-text">Crash Recovery</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Storage-Types"><span class="nav-number">1.2.</span> <span class="nav-text">Storage Types</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Failure-Classification"><span class="nav-number">1.3.</span> <span class="nav-text">Failure Classification</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Transaction-Failures"><span class="nav-number">1.3.1.</span> <span class="nav-text">Transaction Failures</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#System-Failures"><span class="nav-number">1.3.2.</span> <span class="nav-text">System Failures</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Storage-Media-Failure"><span class="nav-number">1.3.3.</span> <span class="nav-text">Storage Media Failure</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Buffer-Pool-Policies"><span class="nav-number">1.4.</span> <span class="nav-text">Buffer Pool Policies</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Steal-Policy"><span class="nav-number">1.4.1.</span> <span class="nav-text">Steal Policy</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Force-Policy"><span class="nav-number">1.4.2.</span> <span class="nav-text">Force Policy</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#No-Steal-Force"><span class="nav-number">1.4.3.</span> <span class="nav-text">No-Steal + Force</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Shadow-Paging"><span class="nav-number">1.5.</span> <span class="nav-text">Shadow Paging</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Disadvantages"><span class="nav-number">1.5.1.</span> <span class="nav-text">Disadvantages</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Write-Ahead-Log"><span class="nav-number">1.6.</span> <span class="nav-text">Write-Ahead Log</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Implementation"><span class="nav-number">1.6.1.</span> <span class="nav-text">Implementation</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Checkpoints"><span class="nav-number">1.7.</span> <span class="nav-text">Checkpoints</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Logging-Schemes"><span class="nav-number">1.8.</span> <span class="nav-text">Logging Schemes</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Physiological-Logging"><span class="nav-number">1.8.1.</span> <span class="nav-text">Physiological Logging</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ARIES-Algorithms-for-Recovery-and-Isolation-Exploiting-Semantics"><span class="nav-number">1.9.</span> <span class="nav-text">ARIES(Algorithms for Recovery and Isolation Exploiting Semantics)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Log-Sequence-Numbers"><span class="nav-number">1.10.</span> <span class="nav-text">Log Sequence Numbers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Normal-Commit-amp-Aborted-Operations"><span class="nav-number">1.11.</span> <span class="nav-text">Normal Commit &amp; Aborted Operations</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Transaction-Commit"><span class="nav-number">1.11.1.</span> <span class="nav-text">Transaction Commit</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Transaction-Abort"><span class="nav-number">1.11.2.</span> <span class="nav-text">Transaction Abort</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Recovery-Algorithm"><span class="nav-number">1.12.</span> <span class="nav-text">Recovery Algorithm</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ARIES-Recovery-Phase"><span class="nav-number">1.12.1.</span> <span class="nav-text">ARIES - Recovery Phase</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

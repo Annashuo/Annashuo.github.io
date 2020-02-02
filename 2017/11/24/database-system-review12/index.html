@@ -84,18 +84,18 @@
 
 
 
-<meta name="description" content="## Timestamp Ordering">
+<meta name="description" content="Timestamp Ordering">
 <meta name="keywords" content="database">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Database System Review 12">
 <meta property="og:url" content="https://annashuo.github.io/2017/11/24/database-system-review12/index.html">
 <meta property="og:site_name" content="Anna&#39;s Blog">
-<meta property="og:description" content="## Timestamp Ordering">
+<meta property="og:description" content="Timestamp Ordering">
 <meta property="og:locale" content="en">
 <meta property="og:updated_time" content="2020-01-30T14:14:21.103Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Database System Review 12">
-<meta name="twitter:description" content="## Timestamp Ordering">
+<meta name="twitter:description" content="Timestamp Ordering">
 
 
 
@@ -419,13 +419,12 @@
       
 
       
-        <p>##<center> Timestamp Ordering </center></p>
-<a id="more"></a>
+        <h2 id="Timestamp-Ordering"><a href="#Timestamp-Ordering" class="headerlink" title=" Timestamp Ordering "></a><center> Timestamp Ordering </center></h2><a id="more"></a>
 <h3 id="Concurrency-Control-Approaches"><a href="#Concurrency-Control-Approaches" class="headerlink" title="Concurrency Control Approaches"></a>Concurrency Control Approaches</h3><ul>
 <li>Two-Phase Locking(2PL): Determine serializability order of conflicting operations at runtime while txn execute.</li>
 <li>Timestamp Ordering(T/O): Determine serializability order of txns before they execute.</li>
 </ul>
-<h3 id="T-O-concurrency-control"><a href="#T-O-concurrency-control" class="headerlink" title="T/O concurrency control"></a>T/O concurrency control</h3><p>Use timestamps to determine the serializability order of txns. If <font style="color:red;">$TS(T_{i})&lt;TS(T_{j})$</font>, then the DBMS must ensure taht the execution schedule is equivalent to a serial schedule where <font style="color:red;">$T_{i}$</font> appears before <font style="color:red;">$T_{j}$</font>.</p>
+<h3 id="T-O-concurrency-control"><a href="#T-O-concurrency-control" class="headerlink" title="T/O concurrency control"></a>T/O concurrency control</h3><p>Use timestamps to determine the serializability order of txns. If <font style="color:red;">$TS(T<em>{i})&lt;TS(T</em>{j})$</font>, then the DBMS must ensure taht the execution schedule is equivalent to a serial schedule where <font style="color:red;">$T_{i}$</font> appears before <font style="color:red;">$T_{j}$</font>.</p>
 <p>Eache txn <font style="color:red;">$T_{i}$</font> is assigned a unique fixed timestamp that is monotonically increasing.</p>
 <h4 id="Recoverable-Schedules"><a href="#Recoverable-Schedules" class="headerlink" title="Recoverable Schedules"></a>Recoverable Schedules</h4><p>A schedule is <u><strong>recoverable</strong></u> if txns commit only after all txns whose changes they read, commit. Otherwise, the DBMS cannot guarantee that txns read data that will be restarted after recovering from a crash.</p>
 <h4 id="Basic-Timestamp-Ordering"><a href="#Basic-Timestamp-Ordering" class="headerlink" title="Basic Timestamp Ordering"></a>Basic Timestamp Ordering</h4><p>Txns read and write objects without locks. Every object X is tagged with timestamp of the last txm that successfully did read/write:</p>
@@ -594,7 +593,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">45</span>
+                <span class="site-state-item-count">46</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -667,7 +666,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Concurrency-Control-Approaches"><span class="nav-number">1.</span> <span class="nav-text">Concurrency Control Approaches</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#T-O-concurrency-control"><span class="nav-number">2.</span> <span class="nav-text">T/O concurrency control</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Recoverable-Schedules"><span class="nav-number">2.1.</span> <span class="nav-text">Recoverable Schedules</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Basic-Timestamp-Ordering"><span class="nav-number">2.2.</span> <span class="nav-text">Basic Timestamp Ordering</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Basic-T-O-READS"><span class="nav-number">2.2.1.</span> <span class="nav-text">Basic T/O - READS</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Basic-T-O-WRITES"><span class="nav-number">2.2.2.</span> <span class="nav-text">Basic T/O - WRITES</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Thomas-Write-Rule"><span class="nav-number">2.2.3.</span> <span class="nav-text">Thomas Write Rule</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Basic-T-O-PERFORMANCE-ISSUES"><span class="nav-number">2.2.4.</span> <span class="nav-text">Basic T/O - PERFORMANCE ISSUES</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Optimistic-Concurrency-Control"><span class="nav-number">2.3.</span> <span class="nav-text">Optimistic Concurrency Control</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#OCC-Phase"><span class="nav-number">2.3.1.</span> <span class="nav-text">OCC Phase</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#OCC-PERFORMANCE-ISSUES"><span class="nav-number">2.3.2.</span> <span class="nav-text">OCC -  PERFORMANCE ISSUES</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Partition-Based-T-O"><span class="nav-number">2.4.</span> <span class="nav-text">Partition-Based T/O</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Partition-Based-T-O-PERFORMANCE-ISSUES"><span class="nav-number">2.4.1.</span> <span class="nav-text">Partition-Based T/O - PERFORMANCE ISSUES</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Timestamp-Ordering"><span class="nav-number">1.</span> <span class="nav-text"> Timestamp Ordering </span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Concurrency-Control-Approaches"><span class="nav-number">1.1.</span> <span class="nav-text">Concurrency Control Approaches</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#T-O-concurrency-control"><span class="nav-number">1.2.</span> <span class="nav-text">T/O concurrency control</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Recoverable-Schedules"><span class="nav-number">1.2.1.</span> <span class="nav-text">Recoverable Schedules</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Basic-Timestamp-Ordering"><span class="nav-number">1.2.2.</span> <span class="nav-text">Basic Timestamp Ordering</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Basic-T-O-READS"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">Basic T/O - READS</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Basic-T-O-WRITES"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">Basic T/O - WRITES</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Thomas-Write-Rule"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">Thomas Write Rule</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Basic-T-O-PERFORMANCE-ISSUES"><span class="nav-number">1.2.2.4.</span> <span class="nav-text">Basic T/O - PERFORMANCE ISSUES</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Optimistic-Concurrency-Control"><span class="nav-number">1.2.3.</span> <span class="nav-text">Optimistic Concurrency Control</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#OCC-Phase"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">OCC Phase</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#OCC-PERFORMANCE-ISSUES"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">OCC -  PERFORMANCE ISSUES</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Partition-Based-T-O"><span class="nav-number">1.2.4.</span> <span class="nav-text">Partition-Based T/O</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Partition-Based-T-O-PERFORMANCE-ISSUES"><span class="nav-number">1.2.4.1.</span> <span class="nav-text">Partition-Based T/O - PERFORMANCE ISSUES</span></a></li></ol></li></ol></li></ol></li></ol></div>
             
 
           </div>

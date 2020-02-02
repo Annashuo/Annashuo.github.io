@@ -428,6 +428,7 @@
 <li><p>数据大小(字节数)</p>
 </li>
 </ul>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -479,10 +480,12 @@
 </tr>
 </tbody>
 </table>
+</div>
 <ul>
 <li>小端法和大端法</li>
 </ul>
 <p>假设十六进制数0x1234567位于地址0x100处</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -510,7 +513,9 @@
 </tr>
 </tbody>
 </table>
+</div>
 <p>假设字符串“1234”位于地址0x100处</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -533,10 +538,11 @@
 </tr>
 </tbody>
 </table>
+</div>
 <h3 id="编码方式"><a href="#编码方式" class="headerlink" title="编码方式"></a>编码方式</h3><ul>
-<li>无符号数<br>$$B2U(w)=\sum_{w-1}^{i=0}{x}_{i}{2}^{i}$$</li>
-<li>有符号数<br>$$B2T(w)=-{x}<em>{w-1}{2}^{w-1}+\sum</em>{w-2}^{i=0}{x}_{I}{2}^{i}$$</li>
-<li>补码<br>$$TMin(w)=10…0b=-{2}^{w-1}$$<br>$$TMax(w)=01…1b={2}^{w-1}-1$$</li>
+<li>无符号数<script type="math/tex; mode=display">B2U(w)=\sum_{w-1}^{i=0}{x}_{i}{2}^{i}</script></li>
+<li>有符号数<script type="math/tex; mode=display">B2T(w)=-{x}_{w-1}{2}^{w-1}+\sum_{w-2}^{i=0}{x}_{I}{2}^{i}</script></li>
+<li>补码<script type="math/tex; mode=display">TMin(w)=10...0b=-{2}^{w-1}</script><script type="math/tex; mode=display">TMax(w)=01...1b={2}^{w-1}-1</script></li>
 <li>编码方式之间的转换<ul>
 <li>数值可能改变，但是位模式不变</li>
 <li>short转换为unsigned时，先改变大小，再完成有符号数到无符号数的转换</li>
@@ -549,6 +555,7 @@
 <li>IEEE浮点表示</li>
 </ul>
 <p>一个数先写成二进制的形式，$V={(-1)}^{s}<em>M</em>{2}^{E}$</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -590,6 +597,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <ul>
 <li>二进制舍入</li>
 </ul>
@@ -709,7 +717,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">45</span>
+                <span class="site-state-item-count">46</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

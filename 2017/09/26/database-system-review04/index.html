@@ -473,7 +473,9 @@
 <p><img src="https://github.com/Annashuo/hello-world/blob/master/open-address-hash.png?raw=true" alt></p>
 <p>Always requires a hasg table with ~2x the number of slots as the number of elements in order to avoid collisions of hashed keys.</p>
 <h5 id="Cuckoo-Hashing"><a href="#Cuckoo-Hashing" class="headerlink" title="Cuckoo Hashing"></a>Cuckoo Hashing</h5><p>Use multiple hash tables with different hash functions </p>
-<font style="color:red">Deletion and lookup are always O(1) because only one location per hash table is checked<br><br>On insert, check every table and pick anyone that has a free slot. If no table has a free slot, evict the element from one of them and then re-hash it find a new location</font>
+<font style="color:red">Deletion and lookup are always O(1) because only one location per hash table is checked
+
+On insert, check every table and pick anyone that has a free slot. If no table has a free slot, evict the element from one of them and then re-hash it find a new location</font>
 
 <p>Make sure that we don’t get stuck in an infinite loop when moving keys.</p>
 <p>If there is a circle, rebuild the entire hash tables with new hash functions</p>
@@ -678,7 +680,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">45</span>
+                <span class="site-state-item-count">46</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

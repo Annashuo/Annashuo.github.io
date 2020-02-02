@@ -535,6 +535,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT column1, aggregate_function(column2)</span><br><span class="line">FROM table1</span><br><span class="line">GROUP BY column1;</span><br></pre></td></tr></table></figure>
 <h5 id="AGGREGATE-FUNCTION"><a href="#AGGREGATE-FUNCTION" class="headerlink" title="AGGREGATE FUNCTION"></a>AGGREGATE FUNCTION</h5><p>Used to perform calculations on data</p>
 <p>They return a single value calculated from values in a column</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -569,6 +570,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <h5 id="HAVING"><a href="#HAVING" class="headerlink" title="HAVING"></a>HAVING</h5><p>Used to in conjunction with GROUP BY clause</p>
 <p>Used filter group rows that do not satisfy a specified condition.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">SELECT column1, aggregate_function(column2)</span><br><span class="line">FROM table_name</span><br><span class="line">GROUP BY column1</span><br><span class="line">HAVING condition;</span><br></pre></td></tr></table></figure>
@@ -747,7 +749,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">45</span>
+                <span class="site-state-item-count">46</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

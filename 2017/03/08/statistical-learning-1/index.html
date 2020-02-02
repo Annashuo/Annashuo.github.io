@@ -443,19 +443,19 @@
 <li>dis: a very large number of observations is required.</li>
 </ul>
 <p>(2) 监督方法 supervised methods 和非监督方法 unsupervised methods</p>
-<h3 id="准确率-Accuracy"><a href="#准确率-Accuracy" class="headerlink" title="准确率 Accuracy"></a>准确率 Accuracy</h3><h4 id="Regression"><a href="#Regression" class="headerlink" title="Regression"></a>Regression</h4><p>$traning MSE=\frac{1}{n}\sum_{i=1}^{n}(y_{i}-\widehat{f}(x_{i}))^{2}$<br>$test MSE=Ave(y_{0}-\widehat{f}(x_{0}))^{2}$</p>
+<h3 id="准确率-Accuracy"><a href="#准确率-Accuracy" class="headerlink" title="准确率 Accuracy"></a>准确率 Accuracy</h3><h4 id="Regression"><a href="#Regression" class="headerlink" title="Regression"></a>Regression</h4><p>$traning MSE=\frac{1}{n}\sum<em>{i=1}^{n}(y</em>{i}-\widehat{f}(x<em>{i}))^{2}$<br>$test MSE=Ave(y</em>{0}-\widehat{f}(x_{0}))^{2}$</p>
 <p>In general, as the flexibility of the statistical learining method increases, we observe a monotone decrease in the training MSE and a U-shape in the test MSE.</p>
 <p><strong>Overfitting</strong> happens because the statistical learning procedure is working too hard to find the pattern in the training fata and may pick up some patterns that are just caused by randon chance rather than by the true property of the unknown function $f$</p>
-<p><strong>the bias-variance trade-off</strong><br>$test MSE=Ave(y_{0}-\widehat{f}(x_{0}))^{2}=Var(\widehat{f}(x_{0}))+[Bias(\widehat{f}(x_{0}))]^{2}+Var(\varepsilon)$</p>
+<p><strong>the bias-variance trade-off</strong><br>$test MSE=Ave(y<em>{0}-\widehat{f}(x</em>{0}))^{2}=Var(\widehat{f}(x<em>{0}))+[Bias(\widehat{f}(x</em>{0}))]^{2}+Var(\varepsilon)$</p>
 <p><em>Variance</em>: the amount by which $\widehat{f}$ would change if we estimated it using different training dataset. If the varaince is high, small changes in the training dataset cause large changes in $\widehat{f}$</p>
 <p><em>Bias</em>: the error that is introduced by approximationg a real life problem. If the true is very close to linear, the bias is small. Otherwise, the bias decreases by increasing flexibility.</p>
 <p><strong>flexibility increases, variance increases but bias decreases</strong></p>
 <p><img src="https://raw.githubusercontent.com/Annashuo/hello-world/master/regression_accuracy.png" alt="regression accuracy"></p>
 <p>left: common situation;  middle: the true is approximately linear;  right: the true is highly non-linear </p>
-<h4 id="Classification"><a href="#Classification" class="headerlink" title="Classification"></a>Classification</h4><p>$$\left{\begin{matrix}<br>I(y_{i}\neq \widehat{y}<em>{i})=1 \<br>I(y</em>{i}= \widehat{y}_{i})=0<br>\end{matrix}\right.$$</p>
-<p>$$training\, error\, rate=\frac{1}{n}\sum_{i=1}^{n}I(y_{i}\neq \widehat{y}_{i})$$</p>
-<p>$$test\, error\, rate=Ave(I(y_{0}\neq \widehat{y}_{0}))$$</p>
-<p>Bayes classifier: $Pr(Y=j|X=x_{0})$</p>
+<h4 id="Classification"><a href="#Classification" class="headerlink" title="Classification"></a>Classification</h4><script type="math/tex; mode=display">\left\{\begin{matrix}
+I(y_{i}\neq \widehat{y}_{i})=1 \\
+I(y_{i}= \widehat{y}_{i})=0
+\end{matrix}\right.</script><script type="math/tex; mode=display">training\, error\, rate=\frac{1}{n}\sum_{i=1}^{n}I(y_{i}\neq \widehat{y}_{i})</script><script type="math/tex; mode=display">test\, error\, rate=Ave(I(y_{0}\neq \widehat{y}_{0}))</script><p>Bayes classifier: $Pr(Y=j|X=x_{0})$</p>
 <p>$Bayes\, error\, rate=1-E(\underset{j}{max}Pr(Y=j|x))=E(\varepsilon )$</p>
 <p><strong>The Bayes error rate is the lowest possible test error rate</strong></p>
 
@@ -573,7 +573,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">45</span>
+                <span class="site-state-item-count">46</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

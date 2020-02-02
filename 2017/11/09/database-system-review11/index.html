@@ -84,18 +84,18 @@
 
 
 
-<meta name="description" content="## Index Concurrency Control">
+<meta name="description" content="Index Concurrency Control">
 <meta name="keywords" content="database">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Database System Review 11">
 <meta property="og:url" content="https://annashuo.github.io/2017/11/09/database-system-review11/index.html">
 <meta property="og:site_name" content="Anna&#39;s Blog">
-<meta property="og:description" content="## Index Concurrency Control">
+<meta property="og:description" content="Index Concurrency Control">
 <meta property="og:locale" content="en">
 <meta property="og:updated_time" content="2020-01-30T14:14:21.103Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Database System Review 11">
-<meta name="twitter:description" content="## Index Concurrency Control">
+<meta name="twitter:description" content="Index Concurrency Control">
 
 
 
@@ -419,8 +419,7 @@
       
 
       
-        <p>##<center> Index Concurrency Control</center></p>
-<a id="more"></a>
+        <h2 id="Index-Concurrency-Control"><a href="#Index-Concurrency-Control" class="headerlink" title=" Index Concurrency Control"></a><center> Index Concurrency Control</center></h2><a id="more"></a>
 <h3 id="Isolation-Level"><a href="#Isolation-Level" class="headerlink" title="Isolation Level"></a>Isolation Level</h3><p>Isolation High -&gt; Low</p>
 <ul>
 <li>serializable: no phantoms, all reads repeatable, no dirty reads; Obtain all locks first + index locks + strict 2PL</li>
@@ -428,6 +427,7 @@
 <li>read committed: phantoms and unrepeatable reads may happen; Obtain all locks first + S locks released immediately</li>
 <li>read uncommitted: all of them may happen; Obtain all locks first + allows dirty reads(no S locks)</li>
 </ul>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -464,6 +464,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <h3 id="Lock-Crabbing"><a href="#Lock-Crabbing" class="headerlink" title="Lock Crabbing"></a>Lock Crabbing</h3><p>Protocol to allow multiple threads to access/modify B+Tree at the same time.</p>
 <ul>
 <li>get lock for parent</li>
@@ -591,7 +592,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">45</span>
+                <span class="site-state-item-count">46</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -664,7 +665,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Isolation-Level"><span class="nav-number">1.</span> <span class="nav-text">Isolation Level</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lock-Crabbing"><span class="nav-number">2.</span> <span class="nav-text">Lock Crabbing</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Search"><span class="nav-number">2.1.</span> <span class="nav-text">Search</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Insert-Delete"><span class="nav-number">2.2.</span> <span class="nav-text">Insert/Delete</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bayer-Schkolnick-algorithm"><span class="nav-number">3.</span> <span class="nav-text">Bayer Schkolnick algorithm</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Search-1"><span class="nav-number">3.1.</span> <span class="nav-text">Search</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Insert-Delete-1"><span class="nav-number">3.2.</span> <span class="nav-text">Insert/Delete:</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Index-Concurrency-Control"><span class="nav-number">1.</span> <span class="nav-text"> Index Concurrency Control</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Isolation-Level"><span class="nav-number">1.1.</span> <span class="nav-text">Isolation Level</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lock-Crabbing"><span class="nav-number">1.2.</span> <span class="nav-text">Lock Crabbing</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Search"><span class="nav-number">1.2.1.</span> <span class="nav-text">Search</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Insert-Delete"><span class="nav-number">1.2.2.</span> <span class="nav-text">Insert/Delete</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bayer-Schkolnick-algorithm"><span class="nav-number">1.3.</span> <span class="nav-text">Bayer Schkolnick algorithm</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Search-1"><span class="nav-number">1.3.1.</span> <span class="nav-text">Search</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Insert-Delete-1"><span class="nav-number">1.3.2.</span> <span class="nav-text">Insert/Delete:</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

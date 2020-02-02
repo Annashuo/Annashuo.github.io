@@ -84,18 +84,18 @@
 
 
 
-<meta name="description" content="## Multi-Version Concurrency Control(MVCC)  The DBMS maintains multiple physical versions of a single logical onject in the database:  When a txn writes to an object, the DBMS creates a new version of">
+<meta name="description" content="Multi-Version Concurrency Control(MVCC) The DBMS maintains multiple physical versions of a single logical onject in the database:  When a txn writes to an object, the DBMS creates a new version of th">
 <meta name="keywords" content="database">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Database System Review 13">
 <meta property="og:url" content="https://annashuo.github.io/2017/11/24/database-system-review13/index.html">
 <meta property="og:site_name" content="Anna&#39;s Blog">
-<meta property="og:description" content="## Multi-Version Concurrency Control(MVCC)  The DBMS maintains multiple physical versions of a single logical onject in the database:  When a txn writes to an object, the DBMS creates a new version of">
+<meta property="og:description" content="Multi-Version Concurrency Control(MVCC) The DBMS maintains multiple physical versions of a single logical onject in the database:  When a txn writes to an object, the DBMS creates a new version of th">
 <meta property="og:locale" content="en">
 <meta property="og:updated_time" content="2020-01-30T14:14:21.103Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Database System Review 13">
-<meta name="twitter:description" content="## Multi-Version Concurrency Control(MVCC)  The DBMS maintains multiple physical versions of a single logical onject in the database:  When a txn writes to an object, the DBMS creates a new version of">
+<meta name="twitter:description" content="Multi-Version Concurrency Control(MVCC) The DBMS maintains multiple physical versions of a single logical onject in the database:  When a txn writes to an object, the DBMS creates a new version of th">
 
 
 
@@ -419,8 +419,7 @@
       
 
       
-        <p>##<center> Multi-Version Concurrency Control(MVCC) </center></p>
-<p>The DBMS maintains multiple <u><strong>physical</strong></u> versions of a single <u><strong>logical</strong></u> onject in the database:</p>
+        <h2 id="Multi-Version-Concurrency-Control-MVCC"><a href="#Multi-Version-Concurrency-Control-MVCC" class="headerlink" title=" Multi-Version Concurrency Control(MVCC) "></a><center> Multi-Version Concurrency Control(MVCC) </center></h2><p>The DBMS maintains multiple <u><strong>physical</strong></u> versions of a single <u><strong>logical</strong></u> onject in the database:</p>
 <ul>
 <li>When a txn writes to an object, the DBMS creates a new version of that object</li>
 <li>When a txn reads an object, it reads the newest version that existed when the txn started.</li>
@@ -590,7 +589,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">45</span>
+                <span class="site-state-item-count">46</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -663,7 +662,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Version-Storage"><span class="nav-number">1.</span> <span class="nav-text">Version Storage</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Append-Only-Storage"><span class="nav-number">1.1.</span> <span class="nav-text">Append-Only Storage</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Time-Travel-Storage"><span class="nav-number">1.2.</span> <span class="nav-text">Time-Travel Storage</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Delta-Storage"><span class="nav-number">1.3.</span> <span class="nav-text">Delta Storage</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Garbage-Collection"><span class="nav-number">2.</span> <span class="nav-text">Garbage Collection</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Tuple-level-GC"><span class="nav-number">2.1.</span> <span class="nav-text">Tuple-level GC</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Transaction-level-GC"><span class="nav-number">2.2.</span> <span class="nav-text">Transaction-level GC</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Index-Management"><span class="nav-number">3.</span> <span class="nav-text">Index Management</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Secondary-Indexes"><span class="nav-number">3.1.</span> <span class="nav-text">Secondary Indexes</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Multi-Version-Concurrency-Control-MVCC"><span class="nav-number">1.</span> <span class="nav-text"> Multi-Version Concurrency Control(MVCC) </span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Version-Storage"><span class="nav-number">1.1.</span> <span class="nav-text">Version Storage</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Append-Only-Storage"><span class="nav-number">1.1.1.</span> <span class="nav-text">Append-Only Storage</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Time-Travel-Storage"><span class="nav-number">1.1.2.</span> <span class="nav-text">Time-Travel Storage</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Delta-Storage"><span class="nav-number">1.1.3.</span> <span class="nav-text">Delta Storage</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Garbage-Collection"><span class="nav-number">1.2.</span> <span class="nav-text">Garbage Collection</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Tuple-level-GC"><span class="nav-number">1.2.1.</span> <span class="nav-text">Tuple-level GC</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Transaction-level-GC"><span class="nav-number">1.2.2.</span> <span class="nav-text">Transaction-level GC</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Index-Management"><span class="nav-number">1.3.</span> <span class="nav-text">Index Management</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Secondary-Indexes"><span class="nav-number">1.3.1.</span> <span class="nav-text">Secondary Indexes</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>

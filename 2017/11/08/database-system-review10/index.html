@@ -84,19 +84,19 @@
 
 
 
-<meta name="description" content="## Concurrency Control Theory">
+<meta name="description" content="Concurrency Control Theory">
 <meta name="keywords" content="database">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Database System Review 10">
 <meta property="og:url" content="https://annashuo.github.io/2017/11/08/database-system-review10/index.html">
 <meta property="og:site_name" content="Anna&#39;s Blog">
-<meta property="og:description" content="## Concurrency Control Theory">
+<meta property="og:description" content="Concurrency Control Theory">
 <meta property="og:locale" content="en">
 <meta property="og:image" content="https://github.com/Annashuo/hello-world/blob/master/dependency_graphs.png?raw=true">
 <meta property="og:updated_time" content="2020-01-30T14:14:21.102Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Database System Review 10">
-<meta name="twitter:description" content="## Concurrency Control Theory">
+<meta name="twitter:description" content="Concurrency Control Theory">
 <meta name="twitter:image" content="https://github.com/Annashuo/hello-world/blob/master/dependency_graphs.png?raw=true">
 
 
@@ -421,8 +421,7 @@
       
 
       
-        <p>##<center> Concurrency Control Theory</center></p>
-<a id="more"></a>
+        <h2 id="Concurrency-Control-Theory"><a href="#Concurrency-Control-Theory" class="headerlink" title=" Concurrency Control Theory"></a><center> Concurrency Control Theory</center></h2><a id="more"></a>
 <h3 id="Transactions"><a href="#Transactions" class="headerlink" title="Transactions"></a>Transactions</h3><p>A <u>transaction</u> is the execution of a sequence of one or more operations on a shared database to perform some higher-level function.</p>
 <h4 id="Strawman-System-SQLite"><a href="#Strawman-System-SQLite" class="headerlink" title="Strawman System(SQLite)"></a>Strawman System(SQLite)</h4><p>One and only one txn can be running at the same time in the DBMS. Before a txn starts, copy the entire database to a new file and make all changes to that file.</p>
 <h4 id="Formal-Definitions"><a href="#Formal-Definitions" class="headerlink" title="Formal Definitions"></a>Formal Definitions</h4><p>Database: A fixed set of named data objects(A, B, C,…)</p>
@@ -472,20 +471,20 @@
 <li><p>Dependency Graphs</p>
 <p>  <img src="https://github.com/Annashuo/hello-world/blob/master/dependency_graphs.png?raw=true" alt></p>
 <ul>
-<li>Operation $O_{i} \in T_{i}$</li>
-<li>Operation $O_{j} \in T_{j}$</li>
-<li>Operation $O_{i} $ and $ O_{j}$ conflicts</li>
-<li><p>Operation $O_{i} $ early than $ O_{j}$ </p>
+<li>Operation $O<em>{i} \in T</em>{i}$</li>
+<li>Operation $O<em>{j} \in T</em>{j}$</li>
+<li>Operation $O<em>{i} $ and $ O</em>{j}$ conflicts</li>
+<li><p>Operation $O<em>{i} $ early than $ O</em>{j}$ </p>
 <p>Schedule S is conflict serializable if dependency graph has <strong>no cycle</strong>.</p>
 </li>
 </ul>
 </li>
 </ul>
-<h5 id="View-Serializability"><a href="#View-Serializability" class="headerlink" title="View Serializability"></a>View Serializability</h5><p>Schedules $S_{1}$ and $S_{2}$ are view equivalent:</p>
+<h5 id="View-Serializability"><a href="#View-Serializability" class="headerlink" title="View Serializability"></a>View Serializability</h5><p>Schedules $S<em>{1}$ and $S</em>{2}$ are view equivalent:</p>
 <ul>
-<li>if $T_{1}$ reads initial value of A in $S_{1}$, then $T_{1}$ also reads initial value of A in $S_{2}$</li>
-<li>if $T_{1}$ reads value of A written by $T_{2}$ in $S_{1}$, then $T_{1}$ also reads value of A written by $T_{2}$ in $S_{2}$</li>
-<li>if $T_{1}$ writes final value of A in $S_{1}$, then $T_{1}$ also writes final value of A in $S_{2}$</li>
+<li>if $T<em>{1}$ reads initial value of A in $S</em>{1}$, then $T<em>{1}$ also reads initial value of A in $S</em>{2}$</li>
+<li>if $T<em>{1}$ reads value of A written by $T</em>{2}$ in $S<em>{1}$, then $T</em>{1}$ also reads value of A written by $T<em>{2}$ in $S</em>{2}$</li>
+<li>if $T<em>{1}$ writes final value of A in $S</em>{1}$, then $T<em>{1}$ also writes final value of A in $S</em>{2}$</li>
 </ul>
 <h4 id="Durability"><a href="#Durability" class="headerlink" title="Durability"></a>Durability</h4><p>All of the changes of committed txns ahsould be persistent.</p>
 <h3 id="Uses-locks-to-guarantee-serializable"><a href="#Uses-locks-to-guarantee-serializable" class="headerlink" title="Uses locks to guarantee serializable"></a>Uses <font style="color:red;">locks</font> to guarantee serializable</h3><h4 id="Lock-Types"><a href="#Lock-Types" class="headerlink" title="Lock Types"></a>Lock Types</h4><h5 id="Locks-and-Latches"><a href="#Locks-and-Latches" class="headerlink" title="Locks and Latches"></a>Locks and Latches</h5><ul>
@@ -504,6 +503,7 @@
 </ul>
 </li>
 </ul>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -550,11 +550,13 @@
 </tr>
 </tbody>
 </table>
+</div>
 <h5 id="Basic-Lock-Types"><a href="#Basic-Lock-Types" class="headerlink" title="Basic Lock Types"></a>Basic Lock Types</h5><ul>
 <li>S-LOCK: Shared locks for reads</li>
 <li>X-LOCK: Exclusive locks for writes</li>
 </ul>
 <p>Compatibility Matrix</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -576,6 +578,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <h4 id="Two-Phase-Locking"><a href="#Two-Phase-Locking" class="headerlink" title="Two-Phase Locking"></a>Two-Phase Locking</h4><p>Two-Phase Locking(2PL) is a concurrency control protocol that determines whether a txn is allowed to access an object in the database on the fly.</p>
 <ul>
 <li>Phase 1: Growing<ul>
@@ -602,7 +605,7 @@
 <li>Aborted txns can be undone by just restoring original values of modified tuples.</li>
 </ul>
 <h4 id="Deadlock-Detection-Prevention"><a href="#Deadlock-Detection-Prevention" class="headerlink" title="Deadlock Detection + Prevention"></a>Deadlock Detection + Prevention</h4><p>A <u>deadlock</u> is a cycle of transactions waiting for locks to be released by each other.</p>
-<h5 id="Deadlock-Detection"><a href="#Deadlock-Detection" class="headerlink" title="Deadlock Detection"></a>Deadlock Detection</h5><p><strong>Wait-for</strong> Graph: Nodes are txns, Edge fro $T_{i}$ to $T_{j}$ if $T_{i}$ is waiting for $T_{j}$ to release a lock. Check for cycles and make a decision to break it.</p>
+<h5 id="Deadlock-Detection"><a href="#Deadlock-Detection" class="headerlink" title="Deadlock Detection"></a>Deadlock Detection</h5><p><strong>Wait-for</strong> Graph: Nodes are txns, Edge fro $T<em>{i}$ to $T</em>{j}$ if $T<em>{i}$ is waiting for $T</em>{j}$ to release a lock. Check for cycles and make a decision to break it.</p>
 <p><strong>Deadlock Handling</strong>:</p>
 <ul>
 <li>Victim Selection(by age, by progress, by the # of items already locked, by the # of txns that we have to rollback with it), Also consider the # of times a txn has been restarted in the past.</li>
@@ -610,8 +613,8 @@
 </ul>
 <h5 id="Deadlock-Prevention"><a href="#Deadlock-Prevention" class="headerlink" title="Deadlock Prevention"></a>Deadlock Prevention</h5><p>Priority: older-&gt; higher priority.</p>
 <ul>
-<li><strong>Wait-Die</strong>(Old waits for Young): If $T_{i}$ has higher priority, $T_{i}$ waits for $T_{j}$, otherwise $T_{i}$ aborts</li>
-<li><strong>wound-wait</strong>(Young waits for Old): If $T_{i}$ has higher priority, $T_{j}$ abort, otherwise $T_{i}$ waits.</li>
+<li><strong>Wait-Die</strong>(Old waits for Young): If $T<em>{i}$ has higher priority, $T</em>{i}$ waits for $T<em>{j}$, otherwise $T</em>{i}$ aborts</li>
+<li><strong>wound-wait</strong>(Young waits for Old): If $T<em>{i}$ has higher priority, $T</em>{j}$ abort, otherwise $T_{i}$ waits.</li>
 </ul>
 <p><strong>When a txn restarts, its new priority is original timestamp.</strong></p>
 <h4 id="Hierarchical-Locking"><a href="#Hierarchical-Locking" class="headerlink" title="Hierarchical Locking"></a>Hierarchical Locking</h4><h5 id="Intention-Locks"><a href="#Intention-Locks" class="headerlink" title="Intention Locks"></a>Intention Locks</h5><p>A <u>intention lock</u> allows a higher level node to be locked in shared or exclusive mode without having to check all descendent nodes.</p>
@@ -621,6 +624,7 @@
 <li>Shared+Intention-Exclusive(SIX): The subtree rooted by that node is locked explicitly in shared mode and explicit locking is being done at lower level with exclusive-mode locks. Like S and IX at the same time.</li>
 </ul>
 <p>Compatibility Matrix:</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -675,6 +679,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 
       
     </div>
@@ -790,7 +795,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">45</span>
+                <span class="site-state-item-count">46</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -863,7 +868,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Transactions"><span class="nav-number">1.</span> <span class="nav-text">Transactions</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Strawman-System-SQLite"><span class="nav-number">1.1.</span> <span class="nav-text">Strawman System(SQLite)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Formal-Definitions"><span class="nav-number">1.2.</span> <span class="nav-text">Formal Definitions</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Atomicity"><span class="nav-number">1.3.</span> <span class="nav-text">Atomicity</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Consistency"><span class="nav-number">1.4.</span> <span class="nav-text">Consistency</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Isolation"><span class="nav-number">1.5.</span> <span class="nav-text">Isolation</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Formal-Properties-of-Schedule"><span class="nav-number">1.5.1.</span> <span class="nav-text">Formal Properties of Schedule</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Conflicting-Operations"><span class="nav-number">1.5.2.</span> <span class="nav-text">Conflicting Operations</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Conflict-Serializable-Schedules"><span class="nav-number">1.5.3.</span> <span class="nav-text">Conflict Serializable Schedules</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#View-Serializability"><span class="nav-number">1.5.4.</span> <span class="nav-text">View Serializability</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Durability"><span class="nav-number">1.6.</span> <span class="nav-text">Durability</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Uses-locks-to-guarantee-serializable"><span class="nav-number">2.</span> <span class="nav-text">Uses locks to guarantee serializable</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Lock-Types"><span class="nav-number">2.1.</span> <span class="nav-text">Lock Types</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Locks-and-Latches"><span class="nav-number">2.1.1.</span> <span class="nav-text">Locks and Latches</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Basic-Lock-Types"><span class="nav-number">2.1.2.</span> <span class="nav-text">Basic Lock Types</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Two-Phase-Locking"><span class="nav-number">2.2.</span> <span class="nav-text">Two-Phase Locking</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2PL-Cascading-Aborts"><span class="nav-number">2.2.1.</span> <span class="nav-text">2PL-Cascading Aborts</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Problems-about-2PL"><span class="nav-number">2.2.2.</span> <span class="nav-text">Problems about 2PL</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Strict-Two-Phase-Locking"><span class="nav-number">2.3.</span> <span class="nav-text">Strict Two-Phase Locking</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Deadlock-Detection-Prevention"><span class="nav-number">2.4.</span> <span class="nav-text">Deadlock Detection + Prevention</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Deadlock-Detection"><span class="nav-number">2.4.1.</span> <span class="nav-text">Deadlock Detection</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Deadlock-Prevention"><span class="nav-number">2.4.2.</span> <span class="nav-text">Deadlock Prevention</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Hierarchical-Locking"><span class="nav-number">2.5.</span> <span class="nav-text">Hierarchical Locking</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Intention-Locks"><span class="nav-number">2.5.1.</span> <span class="nav-text">Intention Locks</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Concurrency-Control-Theory"><span class="nav-number">1.</span> <span class="nav-text"> Concurrency Control Theory</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Transactions"><span class="nav-number">1.1.</span> <span class="nav-text">Transactions</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Strawman-System-SQLite"><span class="nav-number">1.1.1.</span> <span class="nav-text">Strawman System(SQLite)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Formal-Definitions"><span class="nav-number">1.1.2.</span> <span class="nav-text">Formal Definitions</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Atomicity"><span class="nav-number">1.1.3.</span> <span class="nav-text">Atomicity</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Consistency"><span class="nav-number">1.1.4.</span> <span class="nav-text">Consistency</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Isolation"><span class="nav-number">1.1.5.</span> <span class="nav-text">Isolation</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Formal-Properties-of-Schedule"><span class="nav-number">1.1.5.1.</span> <span class="nav-text">Formal Properties of Schedule</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Conflicting-Operations"><span class="nav-number">1.1.5.2.</span> <span class="nav-text">Conflicting Operations</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Conflict-Serializable-Schedules"><span class="nav-number">1.1.5.3.</span> <span class="nav-text">Conflict Serializable Schedules</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#View-Serializability"><span class="nav-number">1.1.5.4.</span> <span class="nav-text">View Serializability</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Durability"><span class="nav-number">1.1.6.</span> <span class="nav-text">Durability</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Uses-locks-to-guarantee-serializable"><span class="nav-number">1.2.</span> <span class="nav-text">Uses locks to guarantee serializable</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Lock-Types"><span class="nav-number">1.2.1.</span> <span class="nav-text">Lock Types</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Locks-and-Latches"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">Locks and Latches</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Basic-Lock-Types"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">Basic Lock Types</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Two-Phase-Locking"><span class="nav-number">1.2.2.</span> <span class="nav-text">Two-Phase Locking</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2PL-Cascading-Aborts"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">2PL-Cascading Aborts</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Problems-about-2PL"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">Problems about 2PL</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Strict-Two-Phase-Locking"><span class="nav-number">1.2.3.</span> <span class="nav-text">Strict Two-Phase Locking</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Deadlock-Detection-Prevention"><span class="nav-number">1.2.4.</span> <span class="nav-text">Deadlock Detection + Prevention</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Deadlock-Detection"><span class="nav-number">1.2.4.1.</span> <span class="nav-text">Deadlock Detection</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Deadlock-Prevention"><span class="nav-number">1.2.4.2.</span> <span class="nav-text">Deadlock Prevention</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Hierarchical-Locking"><span class="nav-number">1.2.5.</span> <span class="nav-text">Hierarchical Locking</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Intention-Locks"><span class="nav-number">1.2.5.1.</span> <span class="nav-text">Intention Locks</span></a></li></ol></li></ol></li></ol></li></ol></div>
             
 
           </div>

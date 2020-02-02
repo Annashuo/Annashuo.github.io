@@ -534,7 +534,22 @@
 </ul>
 <h5 id="Index-Nested-Loop-Join"><a href="#Index-Nested-Loop-Join" class="headerlink" title="Index Nested Loop Join"></a>Index Nested Loop Join</h5><p>Use an index to find <strong>inner table matches</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">foreach tuple r of R</span><br><span class="line">	foreach tuple s of S, where ri = sj</span><br><span class="line">		output, if ri and sj match</span><br></pre></td></tr></table></figure>
-<font style="color:red">Cost = M + (m<em>C)</em></font> (C is index look-up cost)<br><br>##### Nested Loop Join SUMMARY<br><br>- Pick the small table as outer table<br>- Buffer as much of outer table in memory as possible<br>- Loop over the inner table or use an index<br><br>#### Sort-Merge Join<br><br>- Sort Phase: sort <strong>both</strong> tables on the join attribute<br>- Merge Phase: scan the two sorted tables in parallel and emit matching tuples.<br><br>Useful when one or both tables are already sorted or output must be sorted on join key<br><br><font style="color:red">Cost = [(2M\logM/logB) + (2N*logN/logB)] + [M+N]</font>
+<font style="color:red">Cost = M + (m*C)</font> (C is index look-up cost)
+
+##### Nested Loop Join SUMMARY
+
+- Pick the small table as outer table
+- Buffer as much of outer table in memory as possible
+- Loop over the inner table or use an index
+
+#### Sort-Merge Join
+
+- Sort Phase: sort **both** tables on the join attribute
+- Merge Phase: scan the two sorted tables in parallel and emit matching tuples.
+
+Useful when one or both tables are already sorted or output must be sorted on join key
+
+<font style="color:red">Cost = [(2M\*logM/logB) + (2N*logN/logB)] + [M+N]</font>
 
 <h4 id="Hash-Join"><a href="#Hash-Join" class="headerlink" title="Hash Join"></a>Hash Join</h4><p>Partitioning Phase:Read and Write both tables. <font style="color:red">Cost = 2(M+N)</font></p>
 <p>Probing Phase:Read tables. <font style="color:red">Cost = (M+N)</font></p>
@@ -547,7 +562,7 @@
 <p>  Scan the inner relation and use $h_{1}$ on each tuple to jump to a location in the hash table and find a matching tuple</p>
 </li>
 </ul>
-<p>build hash table H for R<br><br>foreach tuple s of S<br><br>    output, if $H_{1}(s_{j}) \in HT(R)$ </p>
+<p>build hash table H for R&lt;/br&gt;<br>foreach tuple s of S&lt;/br&gt;<br>    output, if $H<em>{1}(s</em>{j}) \in HT(R)$ </p>
 <h5 id="Hash-table-values"><a href="#Hash-table-values" class="headerlink" title="Hash table values"></a>Hash table values</h5><ul>
 <li><p>Approach 1: Full tuple</p>
 <ul>
@@ -571,8 +586,9 @@
 <p>  Compares tuples in corresponding partitions for each table</p>
 </li>
 </ul>
-<p>If buckets don’t fit in memory, use <strong>recursive partitioning</strong>, build another hash table for buckets using hash function $h_{2}$($h_{1}\not= h_{2}$)</p>
-<h4 id="JOIN-SUMMARY"><a href="#JOIN-SUMMARY" class="headerlink" title="JOIN SUMMARY"></a>JOIN SUMMARY</h4><table>
+<p>If buckets don’t fit in memory, use <strong>recursive partitioning</strong>, build another hash table for buckets using hash function $h<em>{2}$($h</em>{1}\not= h_{2}$)</p>
+<h4 id="JOIN-SUMMARY"><a href="#JOIN-SUMMARY" class="headerlink" title="JOIN SUMMARY"></a>JOIN SUMMARY</h4><div class="table-container">
+<table>
 <thead>
 <tr>
 <th style="text-align:center">Join algorithm</th>
@@ -602,6 +618,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 
       
     </div>
@@ -717,7 +734,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">45</span>
+                <span class="site-state-item-count">46</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

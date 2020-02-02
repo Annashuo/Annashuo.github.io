@@ -1,6 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Distributed System - Zookeeper</title>
+    <url>/2020/02/01/distributed-system-2-zookeeper/</url>
+    <content><![CDATA[<p>Introduction of Zookeeper</p>
+<a id="more"></a>
+<h3 id="Zookeeper-Threading-Model"><a href="#Zookeeper-Threading-Model" class="headerlink" title="Zookeeper Threading Model"></a>Zookeeper Threading Model</h3><ul>
+<li>Application’s start code in the main method is executed on the main thread</li>
+<li>When Zookeeper object is created, two additional threads(IO thread and event thread) are created.</li>
+</ul>
+<h4 id="IO-thread"><a href="#IO-thread" class="headerlink" title="IO thread"></a>IO thread</h4><ul>
+<li>Handles all the network communication with Zookeeper servers</li>
+<li>Handles Zookeeper requests and responses</li>
+<li>Responds to pings</li>
+<li>Session Management</li>
+<li>Session Timeout</li>
+<li>…</li>
+</ul>
+<h4 id="Event-Thread"><a href="#Event-Thread" class="headerlink" title="Event Thread"></a>Event Thread</h4><ul>
+<li>Manages Zookeeper events<ul>
+<li>Connection </li>
+<li>Disconnection</li>
+</ul>
+</li>
+<li>Custom znode Watchers and Triggers we subscribe to</li>
+<li>Event are executed in Event Thread in order</li>
+</ul>
+<h3 id="Watchers-and-Triggers"><a href="#Watchers-and-Triggers" class="headerlink" title="Watchers and Triggers"></a>Watchers and Triggers</h3><ul>
+<li>We cna register a watcher when we call the methods (eg. <em>getChildren()</em>, <em>getData()</em>, <em>exists()</em>). These are one-time trigger</li>
+<li>The watcher allows us to get a notification when a change happens<ul>
+<li><em>getChildren(…, watcher)</em> - Get notified when the list of a znode’s children changes</li>
+<li><em>exists(znodePath, whatcher)</em> - Get notified if a znode gets deleted or created</li>
+<li><em>getData(znodePath, whatcher)</em> - Get notified if a znode’s data gets modified</li>
+</ul>
+</li>
+<li>If we want to get future notifications, we need to register the watcher again</li>
+</ul>
+<h3 id="The-Herd-Effect"><a href="#The-Herd-Effect" class="headerlink" title="The Herd Effect"></a>The Herd Effect</h3><ul>
+<li>A large number of nodes waiting for an event</li>
+<li>When the event happens all nodes get notified and they all wake up</li>
+<li>Only one node can “succeed”</li>
+<li>Indicates bad design, can negatively impact the performance and can completely freeze the cluster</li>
+</ul>
+<h4 id="Bad-Design"><a href="#Bad-Design" class="headerlink" title="Bad Design"></a>Bad Design</h4><p><img src="https://raw.githubusercontent.com/Annashuo/hello-world/master/zookeeper_bad.png" alt></p>
+<ol>
+<li>All nodes watch leader, a leader dies</li>
+<li>Zookeeper send request to all nodes: the zookeeper cluster will have to notify all znodes a <em>NodeDeleteEvent</em></li>
+<li>All nodes send request to Zookeeper: all nodes call <em>getChildren</em> method to get a new view of the Znode hierarchy from the zookeeper cluster</li>
+<li>All nodes send request to Zookeeper: After the new leader is reelected, all the nodes are going to start watching the Znode of the leader</li>
+</ol>
+<p>Since all nodes will send a lot of requests to zookeeper simultaneously, with a large number of nodes in a cluster, this can really overwhelmed Zookeeper.</p>
+<p><img src="https://raw.githubusercontent.com/Annashuo/hello-world/master/hert_effect.png" alt></p>
+<h4 id="Good-Design"><a href="#Good-Design" class="headerlink" title="Good Design"></a>Good Design</h4><p><img src="https://raw.githubusercontent.com/Annashuo/hello-world/master/zookeeper_good.png" alt></p>
+<ol>
+<li>Each node is going to watch only Znode that comes right before it in the sequence of candidate Znodes</li>
+<li>Zookeeper send request to one node: When leader dies, the only node that is going to be notified is its immediate successor</li>
+<li>A node send request to zookeeper: this node call <em>getChildren</em> to make sure that it owns the Znode with the smallest sequence number and in that case it knows that it’s the new leader</li>
+</ol>
+<h3 id="Important-Properties"><a href="#Important-Properties" class="headerlink" title="Important Properties"></a>Important Properties</h3><ul>
+<li><strong>Fault Tolerance</strong> - Your business can run 24*7 with no interruptions</li>
+<li><strong>Horizontal Scalability</strong> - We can dynamically grow our business on demand </li>
+</ul>
+<p>Having those two “badges of honor” is not a trivial achievement we will try to repeat for every distributed system.</p>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p>Github - <a href="https://github.com/Annashuo/Distributed-System" target="_blank" rel="noopener">https://github.com/Annashuo/Distributed-System</a><br>Udemy Course - <a href="https://www.udemy.com/course/distributed-systems-cloud-computing-with-java/" target="_blank" rel="noopener">https://www.udemy.com/course/distributed-systems-cloud-computing-with-java/</a></p>
+]]></content>
+      <categories>
+        <category>STUDY</category>
+      </categories>
+      <tags>
+        <tag>distributed system</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Distributed System - Introduction</title>
     <url>/2020/02/01/distributed-system-1-introduction/</url>
     <content><![CDATA[<p>Introduction to Distributed System</p>
@@ -48,7 +119,7 @@
     <content><![CDATA[<h3 id="安装node"><a href="#安装node" class="headerlink" title="安装node"></a>安装node</h3><p>mac电脑下<br><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">brew update</span><br><span class="line">node -v 确认未安装</span><br><span class="line">brew install node</span><br><span class="line">node -v 查看node版本</span><br><span class="line">npm -v 查看npm版本</span><br></pre></td></tr></table></figure></p>
 <p>问题一：出现node -v有node版本，但是npm -v没有版本</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">brew uninstall node</span><br><span class="line">brew install nvm</span><br><span class="line">brew install node</span><br><span class="line">node -v 查看node版本</span><br><span class="line">npm -v 查看npm版本</span><br></pre></td></tr></table></figure>
-<h3 id="clone-blog和next主题"><a href="#clone-blog和next主题" class="headerlink" title="clone blog和next主题"></a>clone blog和next主题</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone https://github.com/Annashuo/blog_source.git</span><br></pre></td></tr></table></figure>
+<h3 id="clone-blog和next主题"><a href="#clone-blog和next主题" class="headerlink" title="clone blog和next主题"></a>clone blog和next主题</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone https://github.com/Annashuo/blog_source.git</span><br><span class="line">cd blog_source/blog/themes/</span><br><span class="line">scp -r next_copy next</span><br></pre></td></tr></table></figure>
 <h3 id="重新渲染hexo并测试"><a href="#重新渲染hexo并测试" class="headerlink" title="重新渲染hexo并测试"></a>重新渲染hexo并测试</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">在blog文件夹中</span><br><span class="line">npm install</span><br><span class="line">hexo g</span><br><span class="line">hexo s</span><br><span class="line">然后在localhost:4000查看</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
@@ -68,7 +139,7 @@
 <li>Primitive Type(stack): int, long, double, boolean, char, byte, short, float</li>
 <li>Object Type(heap): classes, interfaces, arrays, enums, annotations (“==”(pointer) != “.equals()”(values))</li>
 <li>Converts Primitive type to Object types: Integer, Long, Double, Boolean, Character, Byte, Short, Float</li>
-<li>Generic Type contains Object type, eg. List<integer>, HashMap&lt;Byte, Double&gt;</integer></li>
+<li>Generic Type contains Object type, eg. List<integer>, HashMap<byte, double></byte,></integer></li>
 </ul>
 </li>
 <li><p>Method in all Objects/Classes because all class extends class “Object”: </p>
@@ -93,7 +164,7 @@
 </li>
 <li><p>Primary collecton interfaces(java.util)</p>
  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Collection          Map</span><br><span class="line">/   |   \</span><br><span class="line">Set  List  Queue</span><br></pre></td></tr></table></figure>
-<p> Interface | Implementation<br> :–:|:–:<br> Set | HashSet(no order), LinkedHashSet(ordered by add), TreeSet<br> List | ArrayList<br> Queue | ArrayDeque<br> Deque | ArrayDeque<br> Map | HashMap</p>
+<p> Interface | Implementation<br> :—:|:—:<br> Set | HashSet(no order), LinkedHashSet(ordered by add), TreeSet<br> List | ArrayList<br> Queue | ArrayDeque<br> Deque | ArrayDeque<br> Map | HashMap</p>
  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Set&lt;String&gt; s = new TreeSet&lt;&gt;()</span><br><span class="line">// s can only use methods in set(limit methods usage)</span><br></pre></td></tr></table></figure>
 <ul>
 <li>LinkedHashSet can contain any Object Type.</li>
@@ -120,8 +191,7 @@
   <entry>
     <title>Database System Review 14</title>
     <url>/2017/11/24/database-system-review14/</url>
-    <content><![CDATA[<p>##<center> Logging and Recovery </center></p>
-<a id="more"></a>
+    <content><![CDATA[<h2 id="Logging-and-Recovery"><a href="#Logging-and-Recovery" class="headerlink" title=" Logging and Recovery "></a><center> Logging and Recovery </center></h2><a id="more"></a>
 <h3 id="Crash-Recovery"><a href="#Crash-Recovery" class="headerlink" title="Crash Recovery"></a>Crash Recovery</h3><p>Recovery algorithms are techniques to ensure database consistency, transaction atomicity, and durability despite falitures</p>
 <p>Recovery algorithms: </p>
 <ul>
@@ -232,7 +302,24 @@
 <li>All log records up to txn’s <font style="color:red;">COMMIT</font> record are flushed to disk</li>
 <li>When the commit succeeds, write a special <font style="color:red;">TXN-END</font> record to log.</li>
 </ul>
-<h4 id="Transaction-Abort"><a href="#Transaction-Abort" class="headerlink" title="Transaction Abort"></a>Transaction Abort</h4><font style="color:red;">prevLSN</font>: the precious LSN for the txn.<br><br>- First write an <font style="color:red;">ABORT</font> record to log<br>- Play back updates in reverse order<br>- At end, write a <font style="color:red;">TXN-END</font> log record.<br><br><strong>Compensateion Log Records(CLR)</strong>: describe the actions taken to undo the actions of a previous update record.<br><br>### Fuzzy Checkpointing<br>#### Non-fuzzy Checkpoint<br>The DBMS halts everything when it takes a checkpoint to ensure a consistent snapshot.<br><br>#### Better Checkpoints<br>Pause txns while the DBMS takes the checkpoint<br><br>#### Fuzzy Checkpoint<br>- <font style="color:red;">CHECKPOINT-BEGIN</font><br>- <font style="color:red;">CHECKPOINT-END</font>
+<h4 id="Transaction-Abort"><a href="#Transaction-Abort" class="headerlink" title="Transaction Abort"></a>Transaction Abort</h4><font style="color:red;">prevLSN</font>: the precious LSN for the txn.
+
+- First write an <font style="color:red;">ABORT</font> record to log
+- Play back updates in reverse order
+- At end, write a <font style="color:red;">TXN-END</font> log record.
+
+**Compensateion Log Records(CLR)**: describe the actions taken to undo the actions of a previous update record.
+
+### Fuzzy Checkpointing
+#### Non-fuzzy Checkpoint
+The DBMS halts everything when it takes a checkpoint to ensure a consistent snapshot.
+
+#### Better Checkpoints
+Pause txns while the DBMS takes the checkpoint
+
+#### Fuzzy Checkpoint
+- <font style="color:red;">CHECKPOINT-BEGIN</font>
+- <font style="color:red;">CHECKPOINT-END</font>
 
 <h3 id="Recovery-Algorithm"><a href="#Recovery-Algorithm" class="headerlink" title="Recovery Algorithm"></a>Recovery Algorithm</h3><h4 id="ARIES-Recovery-Phase"><a href="#ARIES-Recovery-Phase" class="headerlink" title="ARIES - Recovery Phase"></a>ARIES - Recovery Phase</h4><ul>
 <li>Analysis: read the WAL to identify dirty pages in the buffer pool and active txns at the time of the crash.</li>
@@ -250,8 +337,7 @@
   <entry>
     <title>Database System Review 13</title>
     <url>/2017/11/24/database-system-review13/</url>
-    <content><![CDATA[<p>##<center> Multi-Version Concurrency Control(MVCC) </center></p>
-<p>The DBMS maintains multiple <u><strong>physical</strong></u> versions of a single <u><strong>logical</strong></u> onject in the database:</p>
+    <content><![CDATA[<h2 id="Multi-Version-Concurrency-Control-MVCC"><a href="#Multi-Version-Concurrency-Control-MVCC" class="headerlink" title=" Multi-Version Concurrency Control(MVCC) "></a><center> Multi-Version Concurrency Control(MVCC) </center></h2><p>The DBMS maintains multiple <u><strong>physical</strong></u> versions of a single <u><strong>logical</strong></u> onject in the database:</p>
 <ul>
 <li>When a txn writes to an object, the DBMS creates a new version of that object</li>
 <li>When a txn reads an object, it reads the newest version that existed when the txn started.</li>
@@ -317,13 +403,12 @@
   <entry>
     <title>Database System Review 12</title>
     <url>/2017/11/24/database-system-review12/</url>
-    <content><![CDATA[<p>##<center> Timestamp Ordering </center></p>
-<a id="more"></a>
+    <content><![CDATA[<h2 id="Timestamp-Ordering"><a href="#Timestamp-Ordering" class="headerlink" title=" Timestamp Ordering "></a><center> Timestamp Ordering </center></h2><a id="more"></a>
 <h3 id="Concurrency-Control-Approaches"><a href="#Concurrency-Control-Approaches" class="headerlink" title="Concurrency Control Approaches"></a>Concurrency Control Approaches</h3><ul>
 <li>Two-Phase Locking(2PL): Determine serializability order of conflicting operations at runtime while txn execute.</li>
 <li>Timestamp Ordering(T/O): Determine serializability order of txns before they execute.</li>
 </ul>
-<h3 id="T-O-concurrency-control"><a href="#T-O-concurrency-control" class="headerlink" title="T/O concurrency control"></a>T/O concurrency control</h3><p>Use timestamps to determine the serializability order of txns. If <font style="color:red;">$TS(T_{i})&lt;TS(T_{j})$</font>, then the DBMS must ensure taht the execution schedule is equivalent to a serial schedule where <font style="color:red;">$T_{i}$</font> appears before <font style="color:red;">$T_{j}$</font>.</p>
+<h3 id="T-O-concurrency-control"><a href="#T-O-concurrency-control" class="headerlink" title="T/O concurrency control"></a>T/O concurrency control</h3><p>Use timestamps to determine the serializability order of txns. If <font style="color:red;">$TS(T<em>{i})&lt;TS(T</em>{j})$</font>, then the DBMS must ensure taht the execution schedule is equivalent to a serial schedule where <font style="color:red;">$T_{i}$</font> appears before <font style="color:red;">$T_{j}$</font>.</p>
 <p>Eache txn <font style="color:red;">$T_{i}$</font> is assigned a unique fixed timestamp that is monotonically increasing.</p>
 <h4 id="Recoverable-Schedules"><a href="#Recoverable-Schedules" class="headerlink" title="Recoverable Schedules"></a>Recoverable Schedules</h4><p>A schedule is <u><strong>recoverable</strong></u> if txns commit only after all txns whose changes they read, commit. Otherwise, the DBMS cannot guarantee that txns read data that will be restarted after recovering from a crash.</p>
 <h4 id="Basic-Timestamp-Ordering"><a href="#Basic-Timestamp-Ordering" class="headerlink" title="Basic Timestamp Ordering"></a>Basic Timestamp Ordering</h4><p>Txns read and write objects without locks. Every object X is tagged with timestamp of the last txm that successfully did read/write:</p>
@@ -388,8 +473,7 @@
   <entry>
     <title>Database System Review 11</title>
     <url>/2017/11/09/database-system-review11/</url>
-    <content><![CDATA[<p>##<center> Index Concurrency Control</center></p>
-<a id="more"></a>
+    <content><![CDATA[<h2 id="Index-Concurrency-Control"><a href="#Index-Concurrency-Control" class="headerlink" title=" Index Concurrency Control"></a><center> Index Concurrency Control</center></h2><a id="more"></a>
 <h3 id="Isolation-Level"><a href="#Isolation-Level" class="headerlink" title="Isolation Level"></a>Isolation Level</h3><p>Isolation High -&gt; Low</p>
 <ul>
 <li>serializable: no phantoms, all reads repeatable, no dirty reads; Obtain all locks first + index locks + strict 2PL</li>
@@ -397,6 +481,7 @@
 <li>read committed: phantoms and unrepeatable reads may happen; Obtain all locks first + S locks released immediately</li>
 <li>read uncommitted: all of them may happen; Obtain all locks first + allows dirty reads(no S locks)</li>
 </ul>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -433,6 +518,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <h3 id="Lock-Crabbing"><a href="#Lock-Crabbing" class="headerlink" title="Lock Crabbing"></a>Lock Crabbing</h3><p>Protocol to allow multiple threads to access/modify B+Tree at the same time.</p>
 <ul>
 <li>get lock for parent</li>
@@ -456,8 +542,7 @@
   <entry>
     <title>Database System Review 10</title>
     <url>/2017/11/08/database-system-review10/</url>
-    <content><![CDATA[<p>##<center> Concurrency Control Theory</center></p>
-<a id="more"></a>
+    <content><![CDATA[<h2 id="Concurrency-Control-Theory"><a href="#Concurrency-Control-Theory" class="headerlink" title=" Concurrency Control Theory"></a><center> Concurrency Control Theory</center></h2><a id="more"></a>
 <h3 id="Transactions"><a href="#Transactions" class="headerlink" title="Transactions"></a>Transactions</h3><p>A <u>transaction</u> is the execution of a sequence of one or more operations on a shared database to perform some higher-level function.</p>
 <h4 id="Strawman-System-SQLite"><a href="#Strawman-System-SQLite" class="headerlink" title="Strawman System(SQLite)"></a>Strawman System(SQLite)</h4><p>One and only one txn can be running at the same time in the DBMS. Before a txn starts, copy the entire database to a new file and make all changes to that file.</p>
 <h4 id="Formal-Definitions"><a href="#Formal-Definitions" class="headerlink" title="Formal Definitions"></a>Formal Definitions</h4><p>Database: A fixed set of named data objects(A, B, C,…)</p>
@@ -507,20 +592,20 @@
 <li><p>Dependency Graphs</p>
 <p>  <img src="https://github.com/Annashuo/hello-world/blob/master/dependency_graphs.png?raw=true" alt></p>
 <ul>
-<li>Operation $O_{i} \in T_{i}$</li>
-<li>Operation $O_{j} \in T_{j}$</li>
-<li>Operation $O_{i} $ and $ O_{j}$ conflicts</li>
-<li><p>Operation $O_{i} $ early than $ O_{j}$ </p>
+<li>Operation $O<em>{i} \in T</em>{i}$</li>
+<li>Operation $O<em>{j} \in T</em>{j}$</li>
+<li>Operation $O<em>{i} $ and $ O</em>{j}$ conflicts</li>
+<li><p>Operation $O<em>{i} $ early than $ O</em>{j}$ </p>
 <p>Schedule S is conflict serializable if dependency graph has <strong>no cycle</strong>.</p>
 </li>
 </ul>
 </li>
 </ul>
-<h5 id="View-Serializability"><a href="#View-Serializability" class="headerlink" title="View Serializability"></a>View Serializability</h5><p>Schedules $S_{1}$ and $S_{2}$ are view equivalent:</p>
+<h5 id="View-Serializability"><a href="#View-Serializability" class="headerlink" title="View Serializability"></a>View Serializability</h5><p>Schedules $S<em>{1}$ and $S</em>{2}$ are view equivalent:</p>
 <ul>
-<li>if $T_{1}$ reads initial value of A in $S_{1}$, then $T_{1}$ also reads initial value of A in $S_{2}$</li>
-<li>if $T_{1}$ reads value of A written by $T_{2}$ in $S_{1}$, then $T_{1}$ also reads value of A written by $T_{2}$ in $S_{2}$</li>
-<li>if $T_{1}$ writes final value of A in $S_{1}$, then $T_{1}$ also writes final value of A in $S_{2}$</li>
+<li>if $T<em>{1}$ reads initial value of A in $S</em>{1}$, then $T<em>{1}$ also reads initial value of A in $S</em>{2}$</li>
+<li>if $T<em>{1}$ reads value of A written by $T</em>{2}$ in $S<em>{1}$, then $T</em>{1}$ also reads value of A written by $T<em>{2}$ in $S</em>{2}$</li>
+<li>if $T<em>{1}$ writes final value of A in $S</em>{1}$, then $T<em>{1}$ also writes final value of A in $S</em>{2}$</li>
 </ul>
 <h4 id="Durability"><a href="#Durability" class="headerlink" title="Durability"></a>Durability</h4><p>All of the changes of committed txns ahsould be persistent.</p>
 <h3 id="Uses-locks-to-guarantee-serializable"><a href="#Uses-locks-to-guarantee-serializable" class="headerlink" title="Uses locks to guarantee serializable"></a>Uses <font style="color:red;">locks</font> to guarantee serializable</h3><h4 id="Lock-Types"><a href="#Lock-Types" class="headerlink" title="Lock Types"></a>Lock Types</h4><h5 id="Locks-and-Latches"><a href="#Locks-and-Latches" class="headerlink" title="Locks and Latches"></a>Locks and Latches</h5><ul>
@@ -539,6 +624,7 @@
 </ul>
 </li>
 </ul>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -585,11 +671,13 @@
 </tr>
 </tbody>
 </table>
+</div>
 <h5 id="Basic-Lock-Types"><a href="#Basic-Lock-Types" class="headerlink" title="Basic Lock Types"></a>Basic Lock Types</h5><ul>
 <li>S-LOCK: Shared locks for reads</li>
 <li>X-LOCK: Exclusive locks for writes</li>
 </ul>
 <p>Compatibility Matrix</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -611,6 +699,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <h4 id="Two-Phase-Locking"><a href="#Two-Phase-Locking" class="headerlink" title="Two-Phase Locking"></a>Two-Phase Locking</h4><p>Two-Phase Locking(2PL) is a concurrency control protocol that determines whether a txn is allowed to access an object in the database on the fly.</p>
 <ul>
 <li>Phase 1: Growing<ul>
@@ -637,7 +726,7 @@
 <li>Aborted txns can be undone by just restoring original values of modified tuples.</li>
 </ul>
 <h4 id="Deadlock-Detection-Prevention"><a href="#Deadlock-Detection-Prevention" class="headerlink" title="Deadlock Detection + Prevention"></a>Deadlock Detection + Prevention</h4><p>A <u>deadlock</u> is a cycle of transactions waiting for locks to be released by each other.</p>
-<h5 id="Deadlock-Detection"><a href="#Deadlock-Detection" class="headerlink" title="Deadlock Detection"></a>Deadlock Detection</h5><p><strong>Wait-for</strong> Graph: Nodes are txns, Edge fro $T_{i}$ to $T_{j}$ if $T_{i}$ is waiting for $T_{j}$ to release a lock. Check for cycles and make a decision to break it.</p>
+<h5 id="Deadlock-Detection"><a href="#Deadlock-Detection" class="headerlink" title="Deadlock Detection"></a>Deadlock Detection</h5><p><strong>Wait-for</strong> Graph: Nodes are txns, Edge fro $T<em>{i}$ to $T</em>{j}$ if $T<em>{i}$ is waiting for $T</em>{j}$ to release a lock. Check for cycles and make a decision to break it.</p>
 <p><strong>Deadlock Handling</strong>:</p>
 <ul>
 <li>Victim Selection(by age, by progress, by the # of items already locked, by the # of txns that we have to rollback with it), Also consider the # of times a txn has been restarted in the past.</li>
@@ -645,8 +734,8 @@
 </ul>
 <h5 id="Deadlock-Prevention"><a href="#Deadlock-Prevention" class="headerlink" title="Deadlock Prevention"></a>Deadlock Prevention</h5><p>Priority: older-&gt; higher priority.</p>
 <ul>
-<li><strong>Wait-Die</strong>(Old waits for Young): If $T_{i}$ has higher priority, $T_{i}$ waits for $T_{j}$, otherwise $T_{i}$ aborts</li>
-<li><strong>wound-wait</strong>(Young waits for Old): If $T_{i}$ has higher priority, $T_{j}$ abort, otherwise $T_{i}$ waits.</li>
+<li><strong>Wait-Die</strong>(Old waits for Young): If $T<em>{i}$ has higher priority, $T</em>{i}$ waits for $T<em>{j}$, otherwise $T</em>{i}$ aborts</li>
+<li><strong>wound-wait</strong>(Young waits for Old): If $T<em>{i}$ has higher priority, $T</em>{j}$ abort, otherwise $T_{i}$ waits.</li>
 </ul>
 <p><strong>When a txn restarts, its new priority is original timestamp.</strong></p>
 <h4 id="Hierarchical-Locking"><a href="#Hierarchical-Locking" class="headerlink" title="Hierarchical Locking"></a>Hierarchical Locking</h4><h5 id="Intention-Locks"><a href="#Intention-Locks" class="headerlink" title="Intention Locks"></a>Intention Locks</h5><p>A <u>intention lock</u> allows a higher level node to be locked in shared or exclusive mode without having to check all descendent nodes.</p>
@@ -656,6 +745,7 @@
 <li>Shared+Intention-Exclusive(SIX): The subtree rooted by that node is locked explicitly in shared mode and explicit locking is being done at lower level with exclusive-mode locks. Like S and IX at the same time.</li>
 </ul>
 <p>Compatibility Matrix:</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -710,6 +800,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 ]]></content>
       <categories>
         <category>STUDY</category>
@@ -721,8 +812,7 @@
   <entry>
     <title>Database System Review 09</title>
     <url>/2017/11/07/database-system-review09/</url>
-    <content><![CDATA[<p>##<center> Embedded Database Logic</center></p>
-<h3 id="User-defined-Functions-UDF"><a href="#User-defined-Functions-UDF" class="headerlink" title="User-defined Functions(UDF)"></a>User-defined Functions(UDF)</h3><ul>
+    <content><![CDATA[<h2 id="Embedded-Database-Logic"><a href="#Embedded-Database-Logic" class="headerlink" title=" Embedded Database Logic"></a><center> Embedded Database Logic</center></h2><h3 id="User-defined-Functions-UDF"><a href="#User-defined-Functions-UDF" class="headerlink" title="User-defined Functions(UDF)"></a>User-defined Functions(UDF)</h3><ul>
 <li>Return Types:<ul>
 <li>Scalar Functions: return a single data value.</li>
 <li>Table Functions: return a single result table.</li>
@@ -912,12 +1002,12 @@
 </ul>
 <h5 id="Complex-Predicates"><a href="#Complex-Predicates" class="headerlink" title="Complex Predicates"></a>Complex Predicates</h5><ul>
 <li>Equality Predicate: $A=constant \rightarrow sel(A=constant) = SC(P)\ /\ V(A,R)$</li>
-<li>Range: $sel(A&gt;=a) = (A_{max}-a)/(A_{max}-A_{min})$</li>
+<li>Range: $sel(A&gt;=a) = (A<em>{max}-a)/(A</em>{max}-A_{min})$</li>
 <li>Negation Query: $sel(not\ P) = 1\ -\ sel(P)$</li>
 <li>Conjunction: $sel(P1\ \wedge \ p2) = sel(P1)\ \cdot \ sel(P2)$</li>
 <li>Disjunction: $sel(P1\ \vee \ p2) = sel(P1)+sel(P2)-sel(P1\ \wedge \ p2)$</li>
 </ul>
-<h5 id="Result-size-estimation-form-joins"><a href="#Result-size-estimation-form-joins" class="headerlink" title="Result size estimation form joins"></a>Result size estimation form joins</h5><p>$R_{cols}\cap S_{cols}={A}$<br>$estSize \approx N_{R} \cdot N_{S}\ /\ max({V(A,S), V(A,R)})$</p>
+<h5 id="Result-size-estimation-form-joins"><a href="#Result-size-estimation-form-joins" class="headerlink" title="Result size estimation form joins"></a>Result size estimation form joins</h5><p>$R<em>{cols}\cap S</em>{cols}={A}$<br>$estSize \approx N<em>{R} \cdot N</em>{S}\ /\ max({V(A,S), V(A,R)})$</p>
 <p>…to be continue…<br>Query Optimization is really hard…</p>
 ]]></content>
       <categories>
@@ -1045,7 +1135,22 @@
 </ul>
 <h5 id="Index-Nested-Loop-Join"><a href="#Index-Nested-Loop-Join" class="headerlink" title="Index Nested Loop Join"></a>Index Nested Loop Join</h5><p>Use an index to find <strong>inner table matches</strong></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">foreach tuple r of R</span><br><span class="line">	foreach tuple s of S, where ri = sj</span><br><span class="line">		output, if ri and sj match</span><br></pre></td></tr></table></figure>
-<font style="color:red">Cost = M + (m<em>C)</em></font> (C is index look-up cost)<br><br>##### Nested Loop Join SUMMARY<br><br>- Pick the small table as outer table<br>- Buffer as much of outer table in memory as possible<br>- Loop over the inner table or use an index<br><br>#### Sort-Merge Join<br><br>- Sort Phase: sort <strong>both</strong> tables on the join attribute<br>- Merge Phase: scan the two sorted tables in parallel and emit matching tuples.<br><br>Useful when one or both tables are already sorted or output must be sorted on join key<br><br><font style="color:red">Cost = [(2M\logM/logB) + (2N*logN/logB)] + [M+N]</font>
+<font style="color:red">Cost = M + (m*C)</font> (C is index look-up cost)
+
+##### Nested Loop Join SUMMARY
+
+- Pick the small table as outer table
+- Buffer as much of outer table in memory as possible
+- Loop over the inner table or use an index
+
+#### Sort-Merge Join
+
+- Sort Phase: sort **both** tables on the join attribute
+- Merge Phase: scan the two sorted tables in parallel and emit matching tuples.
+
+Useful when one or both tables are already sorted or output must be sorted on join key
+
+<font style="color:red">Cost = [(2M\*logM/logB) + (2N*logN/logB)] + [M+N]</font>
 
 <h4 id="Hash-Join"><a href="#Hash-Join" class="headerlink" title="Hash Join"></a>Hash Join</h4><p>Partitioning Phase:Read and Write both tables. <font style="color:red">Cost = 2(M+N)</font></p>
 <p>Probing Phase:Read tables. <font style="color:red">Cost = (M+N)</font></p>
@@ -1058,7 +1163,7 @@
 <p>  Scan the inner relation and use $h_{1}$ on each tuple to jump to a location in the hash table and find a matching tuple</p>
 </li>
 </ul>
-<p>build hash table H for R<br><br>foreach tuple s of S<br><br>    output, if $H_{1}(s_{j}) \in HT(R)$ </p>
+<p>build hash table H for R&lt;/br&gt;<br>foreach tuple s of S&lt;/br&gt;<br>    output, if $H<em>{1}(s</em>{j}) \in HT(R)$ </p>
 <h5 id="Hash-table-values"><a href="#Hash-table-values" class="headerlink" title="Hash table values"></a>Hash table values</h5><ul>
 <li><p>Approach 1: Full tuple</p>
 <ul>
@@ -1082,8 +1187,9 @@
 <p>  Compares tuples in corresponding partitions for each table</p>
 </li>
 </ul>
-<p>If buckets don’t fit in memory, use <strong>recursive partitioning</strong>, build another hash table for buckets using hash function $h_{2}$($h_{1}\not= h_{2}$)</p>
-<h4 id="JOIN-SUMMARY"><a href="#JOIN-SUMMARY" class="headerlink" title="JOIN SUMMARY"></a>JOIN SUMMARY</h4><table>
+<p>If buckets don’t fit in memory, use <strong>recursive partitioning</strong>, build another hash table for buckets using hash function $h<em>{2}$($h</em>{1}\not= h_{2}$)</p>
+<h4 id="JOIN-SUMMARY"><a href="#JOIN-SUMMARY" class="headerlink" title="JOIN SUMMARY"></a>JOIN SUMMARY</h4><div class="table-container">
+<table>
 <thead>
 <tr>
 <th style="text-align:center">Join algorithm</th>
@@ -1113,6 +1219,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 ]]></content>
       <categories>
         <category>STUDY</category>
@@ -1134,13 +1241,13 @@
 <li>Materialization Model</li>
 <li>Vectorized / Batch Model</li>
 </ul>
-<h4 id="Iterator-Model-Volcano-Model-–-Top-down-plan-processing"><a href="#Iterator-Model-Volcano-Model-–-Top-down-plan-processing" class="headerlink" title="Iterator Model(Volcano Model) – Top-down plan processing"></a>Iterator Model(Volcano Model) – Top-down plan processing</h4><p>Each query plan operator implements a next function.</p>
+<h4 id="Iterator-Model-Volcano-Model-—-Top-down-plan-processing"><a href="#Iterator-Model-Volcano-Model-—-Top-down-plan-processing" class="headerlink" title="Iterator Model(Volcano Model) — Top-down plan processing"></a>Iterator Model(Volcano Model) — Top-down plan processing</h4><p>Each query plan operator implements a next function.</p>
 <ul>
 <li>On each invocation, the operator returns either a singke tuple or a null marker if there are no more tuples</li>
 <li>The operator implements a loop that calls next on its children to retrieve their tuples and then process them.</li>
 </ul>
 <p>This allows for tuple pipelining. Some operators will block until children emit all of their tuples.</p>
-<h4 id="Materialization-Model-–-Bottom-up-plan-processing"><a href="#Materialization-Model-–-Bottom-up-plan-processing" class="headerlink" title="Materialization Model – Bottom-up plan processing"></a>Materialization Model – Bottom-up plan processing</h4><p>Each operator processes its input all at once and tehn emits its output all at once.</p>
+<h4 id="Materialization-Model-—-Bottom-up-plan-processing"><a href="#Materialization-Model-—-Bottom-up-plan-processing" class="headerlink" title="Materialization Model — Bottom-up plan processing"></a>Materialization Model — Bottom-up plan processing</h4><p>Each operator processes its input all at once and tehn emits its output all at once.</p>
 <ul>
 <li>The operator “materializes” it output as a single result.</li>
 <li>The DBMS can push down hints into avoid scanning too many tuples.</li>
@@ -1162,6 +1269,7 @@
 <li>Greatly reduces the number of invocations per operator</li>
 <li>Allows dor operators to use vectorized(SIMD) instructions to process batches of tuples.</li>
 </ul>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -1192,6 +1300,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <h3 id="Acess-Method"><a href="#Acess-Method" class="headerlink" title="Acess Method"></a>Acess Method</h3><p>A access method is a way that the DBMS can access the data stored in a table.(Not defined in relational algebra)</p>
 <p>Three basic approaches:</p>
 <ul>
@@ -1311,7 +1420,9 @@
 <p><img src="https://github.com/Annashuo/hello-world/blob/master/open-address-hash.png?raw=true" alt></p>
 <p>Always requires a hasg table with ~2x the number of slots as the number of elements in order to avoid collisions of hashed keys.</p>
 <h5 id="Cuckoo-Hashing"><a href="#Cuckoo-Hashing" class="headerlink" title="Cuckoo Hashing"></a>Cuckoo Hashing</h5><p>Use multiple hash tables with different hash functions </p>
-<font style="color:red">Deletion and lookup are always O(1) because only one location per hash table is checked<br><br>On insert, check every table and pick anyone that has a free slot. If no table has a free slot, evict the element from one of them and then re-hash it find a new location</font>
+<font style="color:red">Deletion and lookup are always O(1) because only one location per hash table is checked
+
+On insert, check every table and pick anyone that has a free slot. If no table has a free slot, evict the element from one of them and then re-hash it find a new location</font>
 
 <p>Make sure that we don’t get stuck in an infinite loop when moving keys.</p>
 <p>If there is a circle, rebuild the entire hash tables with new hash functions</p>
@@ -1596,7 +1707,7 @@
 <h4 id="GIT"><a href="#GIT" class="headerlink" title="GIT"></a>GIT</h4><p>GIT is a distributed version control system because when you clone, it make a copy of a repository. You get a full complete copy of that repository. Essentially a collections of all collaborate repository.</p>
 <h4 id="Branch"><a href="#Branch" class="headerlink" title="Branch"></a>Branch</h4><p>Branch is a full copy of a version of the repository so you have multiple version of your repository.</p>
 <h3 id="HTTP-Hypertext-Transfer-Protocol"><a href="#HTTP-Hypertext-Transfer-Protocol" class="headerlink" title="HTTP: Hypertext Transfer Protocol"></a>HTTP: Hypertext Transfer Protocol</h3><p>HTTP is a protocol that is used for tranfering data on the web.</p>
-<p>If the brouser doesn’t have the address of the www….com, the browser might have to start when it initiate the connection by connecting the domain name system(DNS) server and convert the <a href="http://www.com" target="_blank" rel="noopener">www.com</a> to IP address.</p>
+<p>If the brouser doesn’t have the address of the www….com, the browser might have to start when it initiate the connection by connecting the domain name system(DNS) server and convert the www.com to IP address.</p>
 <p>After the browser gets the IP address of the remote server, it may initiate a TCP/IP connection with the remote server. TCP is the transfer control protocol. It how most traffic internet work. To initiate a TCP/IP connection, the browser first send a SYN message to the web server and the server reply with a SYN-ACK package message to acknowledge the web server has receive the SYN. The browser send a ACK package to the server to acknowledge it has receive the SYN-ACK package. At this point, the browser can begin sending HTTP traffic by sending a HTTP request to the web server. The web server receive the HTTP request and send back the HTTP response.</p>
 <h4 id="Port"><a href="#Port" class="headerlink" title="Port"></a>Port</h4><p>Ports for common web services:</p>
 <ul>
@@ -1625,6 +1736,7 @@
 </ul>
 </li>
 </ul>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -1666,6 +1778,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <h4 id="POST-vs-GET"><a href="#POST-vs-GET" class="headerlink" title="POST vs. GET:"></a>POST vs. GET:</h4><ul>
 <li><p>What data is contained in a typical request line? a header line? a message body?</p>
 <p>  Get: the query string in the url, like</p>
@@ -1711,7 +1824,8 @@
 </li>
 </ul>
 <h4 id="The-flow-of-information-in-MVC-to-process-a-request"><a href="#The-flow-of-information-in-MVC-to-process-a-request" class="headerlink" title="The flow of information in MVC to process a request"></a>The flow of information in MVC to process a request</h4><p>The controller typically determines which action in the application is responsible for processing this particular request and it forward the request to the model to be executed by the appropriate action. The action typically interacts with the data model getting and changing data as needed. When the action is done processing the request typically it forwards the request to some particular view it chooses which view is the right view for displaying the data for this request. The information from the model will help the view generate the actual response. The view itself is just responsible for formatting the data that was presented to it and generating some sort of response to the web browser</p>
-<h3 id="Django"><a href="#Django" class="headerlink" title="Django"></a>Django</h3><h4 id="Django-components-correspond-to-MVC"><a href="#Django-components-correspond-to-MVC" class="headerlink" title="Django components correspond to MVC"></a>Django components correspond to MVC</h4><table>
+<h3 id="Django"><a href="#Django" class="headerlink" title="Django"></a>Django</h3><h4 id="Django-components-correspond-to-MVC"><a href="#Django-components-correspond-to-MVC" class="headerlink" title="Django components correspond to MVC"></a>Django components correspond to MVC</h4><div class="table-container">
+<table>
 <thead>
 <tr>
 <th style="text-align:center">MVC</th>
@@ -1737,6 +1851,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <h4 id="Standard-details-of-a-basic-Django-application"><a href="#Standard-details-of-a-basic-Django-application" class="headerlink" title="Standard details of a basic Django application"></a>Standard details of a basic Django application</h4><ul>
 <li>Project configuration in setting.py</li>
 <li>Request route configuration in urls.py</li>
@@ -1900,11 +2015,9 @@
     <content><![CDATA[<p>This contains functional dependencies and normal form.</p>
 <a id="more"></a>
 <h3 id="Functional-Dependencies-FD"><a href="#Functional-Dependencies-FD" class="headerlink" title="Functional Dependencies (FD)"></a>Functional Dependencies (FD)</h3><h4 id="Definition"><a href="#Definition" class="headerlink" title="Definition"></a>Definition</h4><p>A Functional Dependency (FD) is a form of a constraint, part of a relation’s schema to define a valid instance.</p>
-<p>$$X \rightarrow Y$$<br>The value of X functionally defines the value of Y. For example, if two tuples$(t_{1},t_{2})$ agree on the X attribute, then they must agree on the Y attribute too.</p>
-<p>$$(X \rightarrow Y) \, + \, (X \rightarrow Z) \, \Rightarrow \, (X \rightarrow YZ)$$<br>$$(XY \rightarrow Z) \, \not\Rightarrow \, (X \rightarrow Z) \, + \, (Y \rightarrow Z)$$</p>
-<h4 id="Definning-FDs-in-SQL"><a href="#Definning-FDs-in-SQL" class="headerlink" title="Definning FDs in SQL"></a>Definning FDs in SQL</h4><p>eg.</p>
-<p>$$FD_{1}: sid \rightarrow name$$<br>$$FD_{2}: sid \rightarrow address$$</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CREATE ASSERTION student-name-addr </span><br><span class="line">  CHECK (NOT EXISTS</span><br><span class="line">    (SELECT * FROM students AS s1, </span><br><span class="line">                   students AS s2</span><br><span class="line">      WHERE s1.sid = s2.sid</span><br><span class="line">        AND((s1.name &lt;&gt; s2.name</span><br><span class="line">        	OR (s1.address &lt;&gt; s2.address)));</span><br></pre></td></tr></table></figure>
+<script type="math/tex; mode=display">X \rightarrow Y</script><p>The value of X functionally defines the value of Y. For example, if two tuples$(t<em>{1},t</em>{2})$ agree on the X attribute, then they must agree on the Y attribute too.</p>
+<script type="math/tex; mode=display">(X \rightarrow Y) \, + \, (X \rightarrow Z) \, \Rightarrow \, (X \rightarrow YZ)</script><script type="math/tex; mode=display">(XY \rightarrow Z) \, \not\Rightarrow \, (X \rightarrow Z) \, + \, (Y \rightarrow Z)</script><h4 id="Definning-FDs-in-SQL"><a href="#Definning-FDs-in-SQL" class="headerlink" title="Definning FDs in SQL"></a>Definning FDs in SQL</h4><p>eg.</p>
+<script type="math/tex; mode=display">FD_{1}: sid \rightarrow name</script><script type="math/tex; mode=display">FD_{2}: sid \rightarrow address</script><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">CREATE ASSERTION student-name-addr </span><br><span class="line">  CHECK (NOT EXISTS</span><br><span class="line">    (SELECT * FROM students AS s1, </span><br><span class="line">                   students AS s2</span><br><span class="line">      WHERE s1.sid = s2.sid</span><br><span class="line">        AND((s1.name &lt;&gt; s2.name</span><br><span class="line">        	OR (s1.address &lt;&gt; s2.address)));</span><br></pre></td></tr></table></figure>
 <h4 id="Armstrong’s-Axioms"><a href="#Armstrong’s-Axioms" class="headerlink" title="Armstrong’s Axioms"></a>Armstrong’s Axioms</h4><ul>
 <li>Reflexivity: $X \supseteq Y \Rightarrow X \rightarrow Y$</li>
 <li>Augmentation: $X \rightarrow Y \Rightarrow XZ \rightarrow YZ$</li>
@@ -1937,16 +2050,16 @@
 <li>Dependency Preservation: 最好同一个FD里的attribute在拆分后的同一个表内</li>
 <li>Redundancy Avoidance</li>
 </ul>
-<h4 id="Lossless-Joins"><a href="#Lossless-Joins" class="headerlink" title="Lossless Joins"></a>Lossless Joins</h4><p>For the decomposition $R={R_{1}\cup R_{n}}$, check whether $(R_{1} \cap R_{2})\rightarrow R_{1}$ <strong>or</strong> $(R_{1} \cap R_{2})\rightarrow R_{2}$</p>
-<h4 id="Dependency-Preservation"><a href="#Dependency-Preservation" class="headerlink" title="Dependency Preservation"></a>Dependency Preservation</h4><p>To test whether the decomposition $R={R_{1},..R_{n}}$ preserves the FD set F:</p>
+<h4 id="Lossless-Joins"><a href="#Lossless-Joins" class="headerlink" title="Lossless Joins"></a>Lossless Joins</h4><p>For the decomposition $R={R<em>{1}\cup R</em>{n}}$, check whether $(R<em>{1} \cap R</em>{2})\rightarrow R<em>{1}$ <strong>or</strong> $(R</em>{1} \cap R<em>{2})\rightarrow R</em>{2}$</p>
+<h4 id="Dependency-Preservation"><a href="#Dependency-Preservation" class="headerlink" title="Dependency Preservation"></a>Dependency Preservation</h4><p>To test whether the decomposition $R={R<em>{1},..R</em>{n}}$ preserves the FD set F:</p>
 <ol>
 <li>Compute F+</li>
-<li>Divide F+ into sets of only covered by ${R_{1},..,R_{n}}$</li>
+<li>Divide F+ into sets of only covered by ${R<em>{1},..,R</em>{n}}$</li>
 <li>Compute G as union of those sets</li>
 <li>Compute G+</li>
-<li>If F+=G+, then ${R_{1},..,R_{n}}$ is dependency preserving</li>
+<li>If F+=G+, then ${R<em>{1},..,R</em>{n}}$ is dependency preserving</li>
 </ol>
-<h4 id="Redundancy-Avoidance"><a href="#Redundancy-Avoidance" class="headerlink" title="Redundancy Avoidance"></a>Redundancy Avoidance</h4><p>For an $X \rightarrow Y$ covered by$R_{n}$, X should be a super key of $R_{n}$</p>
+<h4 id="Redundancy-Avoidance"><a href="#Redundancy-Avoidance" class="headerlink" title="Redundancy Avoidance"></a>Redundancy Avoidance</h4><p>For an $X \rightarrow Y$ covered by$R<em>{n}$, X should be a super key of $R</em>{n}$</p>
 <h3 id="Normal-Forms"><a href="#Normal-Forms" class="headerlink" title="Normal Forms"></a>Normal Forms</h3><p>A Normal Form is a characterization of a decomposition in terms of the properties that satisfies when putting the relations back together.</p>
 <h4 id="First-Normal-Form-1NF"><a href="#First-Normal-Form-1NF" class="headerlink" title="First Normal Form(1NF)"></a>First Normal Form(1NF)</h4><ol>
 <li>All value must be atomic</li>
@@ -1972,12 +2085,12 @@
 <li>Compute F+</li>
 <li>$Result \leftarrow {R}$</li>
 <li>While $R_{i} \in Result$ not in BCNF, do:<ul>
-<li>Choose$(X \rightarrow Y)\in F+$ such that $(X \rightarrow Y)$ is covered by $R_{i}$ and $X \not\rightarrow R_{i}$ </li>
-<li>Decompose $R_{i}$ on $(X \rightarrow Y)$ into $R_{i,1} \leftarrow X \cup Y$ and $R_{i,2} \leftarrow R_{i}-Y$</li>
+<li>Choose$(X \rightarrow Y)\in F+$ such that $(X \rightarrow Y)$ is covered by $R<em>{i}$ and $X \not\rightarrow R</em>{i}$ </li>
+<li>Decompose $R<em>{i}$ on $(X \rightarrow Y)$ into $R</em>{i,1} \leftarrow X \cup Y$ and $R<em>{i,2} \leftarrow R</em>{i}-Y$</li>
 </ul>
 </li>
 </ul>
-<h5 id="Problem-with-BCNF"><a href="#Problem-with-BCNF" class="headerlink" title="Problem with BCNF"></a>Problem with BCNF</h5><p>After decomposed R into BCNF relations ${R_{1},…,R_{n}}$ with their own ${FD_{1},….FD_{n}}$, we can reconstruct R from ${R_{1},…,R_{n}}$ but cannot reconstruct FD from ${FD_{1},….FD_{n}}$.</p>
+<h5 id="Problem-with-BCNF"><a href="#Problem-with-BCNF" class="headerlink" title="Problem with BCNF"></a>Problem with BCNF</h5><p>After decomposed R into BCNF relations ${R<em>{1},…,R</em>{n}}$ with their own ${FD<em>{1},….FD</em>{n}}$, we can reconstruct R from ${R<em>{1},…,R</em>{n}}$ but cannot reconstruct FD from ${FD<em>{1},….FD</em>{n}}$.</p>
 <h4 id="Third-Normal-Form-3NF"><a href="#Third-Normal-Form-3NF" class="headerlink" title="Third Normal Form(3NF)"></a>Third Normal Form(3NF)</h4><ul>
 <li>+no lossless joins</li>
 <li>no redundancies</li>
@@ -1992,7 +2105,7 @@
 <h5 id="3NF-decomposition-algorithem-Given-a-relation-R-and-a-FD-set-F"><a href="#3NF-decomposition-algorithem-Given-a-relation-R-and-a-FD-set-F" class="headerlink" title="3NF decomposition algorithem(Given a relation R and a FD set F):"></a>3NF decomposition algorithem(Given a relation R and a FD set F):</h5><ul>
 <li>Compute $F_{c}$</li>
 <li>$Result \leftarrow \phi$</li>
-<li>For $(X \rightarrow Y)\in F_{c}$, add a relation $R_{i}(X,Y)$ to Result</li>
+<li>For $(X \rightarrow Y)\in F<em>{c}$, add a relation $R</em>{i}(X,Y)$ to Result</li>
 <li>If result is not lossless, add a relation with an appropriate key</li>
 </ul>
 <h5 id="3NF-and-BCNF"><a href="#3NF-and-BCNF" class="headerlink" title="3NF and BCNF"></a>3NF and BCNF</h5><ul>
@@ -2078,29 +2191,29 @@
  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SELECT * </span><br><span class="line">FROM R</span><br><span class="line">WHERE predicate;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>$\pi$</p>
-<p> $ \pi _{A_{1},A_{2},…,A_{n}} (R) $</p>
+<p> $ \pi <em>{A</em>{1},A<em>{2},…,A</em>{n}} (R) $</p>
  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SELECT A1, A2, ... An</span><br><span class="line">FROM R;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<ol start="3">
+<ol>
 <li><p>$U$</p>
 <p> $(R\, U \, S)$</p>
  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SELECT * FROM R</span><br><span class="line">UNION</span><br><span class="line">SELECT * FROM S;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<ol start="4">
+<ol>
 <li><p>$\cap$</p>
 <p> $(R\, \cap \, S)$</p>
  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SELECT * FROM R</span><br><span class="line">INTERSECT</span><br><span class="line">SELECT * FROM S;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<ol start="5">
+<ol>
 <li><p>$-$</p>
 <p> $(R\, - \, S)$</p>
  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SELECT * FROM R</span><br><span class="line">EXCEPT</span><br><span class="line">SELECT * FROM S;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<ol start="6">
+<ol>
 <li><p>$\times$</p>
 <p> $(R\, \times \, S)$</p>
  <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SELECT * FROM R</span><br><span class="line">CROSS JOIN</span><br><span class="line">SELECT * FROM S;</span><br><span class="line"></span><br><span class="line">SELECT * FROM R, S;</span><br></pre></td></tr></table></figure>
@@ -2321,6 +2434,7 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SELECT column1, aggregate_function(column2)</span><br><span class="line">FROM table1</span><br><span class="line">GROUP BY column1;</span><br></pre></td></tr></table></figure>
 <h5 id="AGGREGATE-FUNCTION"><a href="#AGGREGATE-FUNCTION" class="headerlink" title="AGGREGATE FUNCTION"></a>AGGREGATE FUNCTION</h5><p>Used to perform calculations on data</p>
 <p>They return a single value calculated from values in a column</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -2355,6 +2469,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 <h5 id="HAVING"><a href="#HAVING" class="headerlink" title="HAVING"></a>HAVING</h5><p>Used to in conjunction with GROUP BY clause</p>
 <p>Used filter group rows that do not satisfy a specified condition.</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SELECT column1, aggregate_function(column2)</span><br><span class="line">FROM table_name</span><br><span class="line">GROUP BY column1</span><br><span class="line">HAVING condition;</span><br></pre></td></tr></table></figure>
@@ -2518,11 +2633,11 @@ make install
 <li>报错/lib64/libstdc++.so.6: version `GLIBCXX_3.4.21’ not found：</li>
 </ol>
 <p>解决方法: <a href="http://blog.csdn.net/rznice/article/details/51090966" target="_blank" rel="noopener">http://blog.csdn.net/rznice/article/details/51090966</a></p>
-<ol start="2">
+<ol>
 <li>找不到sys/acl.h等文件</li>
 </ol>
 <p>解决方法： sudo yum list libacl* 把列出来的所有包都安装上</p>
-<ol start="3">
+<ol>
 <li>找不到xml/…等文件</li>
 </ol>
 <p>解决方法： sudo yum list libxml* 把列出来的所有包都安装上</p>
@@ -2631,7 +2746,7 @@ int main(){
 15      if (argc &lt; 2)
 16          return -1;
 17      char firstletter = argv[1][0];
-18      int result = compute_factorial(firstletter - &apos;0&apos;);
+18      int result = compute_factorial(firstletter - &#39;0&#39;);
 19
 20      // Returned result is clipped at 255...
 21      return result;
@@ -2680,7 +2795,7 @@ at /home/ebenders_test/llvm_svn_rw/lib/ExecutionEngine/ExecutionEngine.cpp:397
 (gdb) finish
 Run till exit from #0  compute_factorial (n=1) at showdebug.c:9
 0x00007ffff7ed40a9 in main (argc=2, argv=0x16677e0) at showdebug.c:18
-18       int result = compute_factorial(firstletter - &apos;0&apos;);
+18       int result = compute_factorial(firstletter - &#39;0&#39;);
 Value returned is $5 = 120
 (gdb) p result
 $6 = 23406408
@@ -2704,7 +2819,7 @@ Program exited with code 0170.
 <pre><code>如果里面没有一句DEBUG build with assertions.
 
 重装llvm，注意重装时要先make clean
-</code></pre><ol start="2">
+</code></pre><ol>
 <li><p>Missing separate debuginfos, use: debuginfo-install ncurses-libs-5.9-13.20130511.el7.x86_64</p>
 <p> 不影响gdb使用，忽略</p>
 </li>
@@ -3084,20 +3199,20 @@ Program exited with code 0170.
 <li>used to coordinate communication between the threads of the same block</li>
 </ul>
 <h4 id="CUDA-Function-Types"><a href="#CUDA-Function-Types" class="headerlink" title="CUDA Function Types"></a>CUDA Function Types</h4><ul>
-<li>__global__<ul>
+<li>_<em>global_</em><ul>
 <li>Executed on the device</li>
 <li>Callable from the host only</li>
-<li>__global__ functions must have void return type</li>
-<li>Any call to a __global__ function must specify its execution configuration &lt;&lt;&lt; &gt;&gt;&gt;</li>
-<li>A call to a __global__ function is asynchronous</li>
+<li>_<em>global_</em> functions must have void return type</li>
+<li>Any call to a _<em>global_</em> function must specify its execution configuration &lt;&lt;&lt; &gt;&gt;&gt;</li>
+<li>A call to a _<em>global_</em> function is asynchronous</li>
 </ul>
 </li>
-<li>__device__<ul>
+<li>_<em>device_</em><ul>
 <li>Executed on the device</li>
 <li>Callable from the device only</li>
 </ul>
 </li>
-<li>__host__<ul>
+<li>_<em>host_</em><ul>
 <li>Executed on the host</li>
 <li>Callable from the host only</li>
 </ul>
@@ -3493,22 +3608,26 @@ Program exited with code 0170.
     <content><![CDATA[<p>Chapter 4 REVIEW</p>
 <a id="more"></a>
 <h3 id="Logistic-Regression"><a href="#Logistic-Regression" class="headerlink" title="Logistic Regression"></a>Logistic Regression</h3><p>logistic function:</p>
-<p> $$p(x)=\frac{e^{\beta _{0}+\beta _{1}x}}{1+e^{\beta _{0}+\beta _{1}x}}$$</p>
-<p>odds:(odd&gt;0)</p>
-<p>$$\frac{p(x)}{1-p(x)}=e^{\beta _{0}+\beta _{1}x}$$</p>
-<p>logit:</p>
-<p>$$log(\frac{p(x)}{1-p(x)})=\beta _{0}+\beta _{1}x$$</p>
-<p>likelihood function:</p>
-<p>$$<br>\begin{equation}<br>\begin{aligned}<br>l(\beta _{0},\beta <em>{1})&amp;=\prod</em>{i=1}^{n}p(Y=y _{i}|X=x <em>{i})\<br>&amp;=\prod</em>{i=1}^{n}p(x_{i})^{y _{i}}(1-p(x <em>{i}))^{1-y</em>{i}}\<br>&amp;=\prod_{i;y _{i}=1}p(x <em>{i})\prod</em>{i;y _{i}=0}(1-p(x _{i}))<br>\end{aligned}<br>\end{equation}<br>$$</p>
-<p>$$<br>\begin{equation}<br>\begin{aligned}<br>log(l(\beta _{0},\beta <em>{1}))&amp;=\sum</em>{i=1}^{n}log(1-p(x_{i}))+\sum_{i=1}^{n}y_{i}log\frac{p(x)}{1-p(x)}\<br>&amp;=-\sum_{i=1}^{n}log(1+e^{\beta _{0}+\beta <em>{1}x})+\sum</em>{i=1}^{n}y_{i}(\beta _{0}+\beta _{1}x)<br>\end{aligned}<br>\end{equation}<br>$$</p>
-<h3 id="Multiple-Logistic-Regression"><a href="#Multiple-Logistic-Regression" class="headerlink" title="Multiple Logistic Regression"></a>Multiple Logistic Regression</h3><p>logit:</p>
-<p>$$log(\frac{p(x)}{1-p(x)})=\beta _{0}+\beta <em>{1}x</em>{1}+…+\beta <em>{p}x</em>{p}$$</p>
-<p>$$p(x)=\frac{e^{\beta _{0}+\beta <em>{1}x</em>{1}+…+\beta <em>{p}x</em>{p}}}{1+e^{\beta _{0}+\beta <em>{1}x</em>{1}+…+\beta <em>{p}x</em>{p}}}$$</p>
-<h3 id="Bayes’-Theorem"><a href="#Bayes’-Theorem" class="headerlink" title="Bayes’ Theorem"></a>Bayes’ Theorem</h3><p>density function:</p>
-<p>$$f_{k}(x)=P_{r}(X=x|Y=k)$$</p>
-<p>posterior probability:</p>
-<p>$$p_{k}(x)=P_{r}(Y=k|X=x)=\frac{\pi <em>{k}f</em>{k}(x)}{\sum_{l=1}^{k}\pi <em>{l}f</em>{l}(x)}=\frac{P_{r}(Y=k)P_{r}(X=x|Y=k)}{\sum_{l=1}^{k}(Y=l)P_{r}(X=x|Y=l)}$$</p>
-]]></content>
+<script type="math/tex; mode=display">p(x)=\frac{e^{\beta _{0}+\beta _{1}x}}{1+e^{\beta _{0}+\beta _{1}x}}</script><p>odds:(odd&gt;0)</p>
+<script type="math/tex; mode=display">\frac{p(x)}{1-p(x)}=e^{\beta _{0}+\beta _{1}x}</script><p>logit:</p>
+<script type="math/tex; mode=display">log(\frac{p(x)}{1-p(x)})=\beta _{0}+\beta _{1}x</script><p>likelihood function:</p>
+<script type="math/tex; mode=display">
+\begin{equation}
+\begin{aligned}
+l(\beta _{0},\beta _{1})&=\prod_{i=1}^{n}p(Y=y _{i}|X=x _{i})\\
+&=\prod_{i=1}^{n}p(x_{i})^{y _{i}}(1-p(x _{i}))^{1-y_{i}}\\
+&=\prod_{i;y _{i}=1}p(x _{i})\prod_{i;y _{i}=0}(1-p(x _{i}))
+\end{aligned}
+\end{equation}</script><script type="math/tex; mode=display">
+\begin{equation}
+\begin{aligned}
+log(l(\beta _{0},\beta _{1}))&=\sum_{i=1}^{n}log(1-p(x_{i}))+\sum_{i=1}^{n}y_{i}log\frac{p(x)}{1-p(x)}\\
+&=-\sum_{i=1}^{n}log(1+e^{\beta _{0}+\beta _{1}x})+\sum_{i=1}^{n}y_{i}(\beta _{0}+\beta _{1}x)
+\end{aligned}
+\end{equation}</script><h3 id="Multiple-Logistic-Regression"><a href="#Multiple-Logistic-Regression" class="headerlink" title="Multiple Logistic Regression"></a>Multiple Logistic Regression</h3><p>logit:</p>
+<script type="math/tex; mode=display">log(\frac{p(x)}{1-p(x)})=\beta _{0}+\beta _{1}x_{1}+...+\beta _{p}x_{p}</script><script type="math/tex; mode=display">p(x)=\frac{e^{\beta _{0}+\beta _{1}x_{1}+...+\beta _{p}x_{p}}}{1+e^{\beta _{0}+\beta _{1}x_{1}+...+\beta _{p}x_{p}}}</script><h3 id="Bayes’-Theorem"><a href="#Bayes’-Theorem" class="headerlink" title="Bayes’ Theorem"></a>Bayes’ Theorem</h3><p>density function:</p>
+<script type="math/tex; mode=display">f_{k}(x)=P_{r}(X=x|Y=k)</script><p>posterior probability:</p>
+<script type="math/tex; mode=display">p_{k}(x)=P_{r}(Y=k|X=x)=\frac{\pi _{k}f_{k}(x)}{\sum_{l=1}^{k}\pi _{l}f_{l}(x)}=\frac{P_{r}(Y=k)P_{r}(X=x|Y=k)}{\sum_{l=1}^{k}(Y=l)P_{r}(X=x|Y=l)}</script>]]></content>
       <categories>
         <category>statistical learning</category>
       </categories>
@@ -3521,32 +3640,23 @@ Program exited with code 0170.
     <url>/2017/03/09/statistical-learning-2/</url>
     <content><![CDATA[<p>Chapter 3 REVIEW</p>
 <a id="more"></a>
-<h3 id="简单线性回归"><a href="#简单线性回归" class="headerlink" title="简单线性回归"></a>简单线性回归</h3><p>$$Y=\beta _{0}+\beta _{1}X+\varepsilon $$</p>
-<p>$$\widehat{y}=\widehat{\beta} _{0}+\widehat{\beta} _{1}x$$</p>
-<p>$\varepsilon $的原因：</p>
+<h3 id="简单线性回归"><a href="#简单线性回归" class="headerlink" title="简单线性回归"></a>简单线性回归</h3><script type="math/tex; mode=display">Y=\beta _{0}+\beta _{1}X+\varepsilon</script><script type="math/tex; mode=display">\widehat{y}=\widehat{\beta} _{0}+\widehat{\beta} _{1}x</script><p>$\varepsilon $的原因：</p>
 <ul>
 <li>真实的x和y的关系可能不是线性的</li>
 <li>存在测量误差</li>
 <li>$\varepsilon $服从$N(0,\vartheta ^{2}),\, \, \, \vartheta ^{2}=\sum\varepsilon ^{2}$</li>
 <li>对$\varepsilon$的估计称为残差标准误$RSE=\sqrt{RSS/(n-2)}$</li>
 </ul>
-<h4 id="残差平方和-residual-sum-of-square"><a href="#残差平方和-residual-sum-of-square" class="headerlink" title="残差平方和 residual sum of square"></a>残差平方和 residual sum of square</h4><p>$$RSS=e_{1}^{2}+e_{2}^{2}+…e_{n}^{2},\, \, \, e_{i}=y_{i}-\widehat{y}<em>{i}=y</em>{i}-\widehat{\beta }<em>{0}-\widehat{\beta }</em>{1}x$$</p>
-<p>$$\therefore RSS=\sum (y_{i}-\widehat{y}<em>{i})^{2}=\sum (y</em>{i}-\widehat{\beta }<em>{0}-\widehat{\beta }</em>{1}x)^{2}$$</p>
-<h4 id="最小二乘法求解得"><a href="#最小二乘法求解得" class="headerlink" title="最小二乘法求解得"></a>最小二乘法求解得</h4><p>$$\widehat{\beta }<em>{1}=\frac{\sum (x</em>{i}-\overline{x})(y_{i}-\overline{y})}{\sum (x_{i}-\overline{x})^{2}}=\frac{l_{xy}}{l_{xx}}$$</p>
-<p>$$\widehat{\beta }<em>{0}=\overline{y}-\widehat{\beta }</em>{1}\overline{x}$$</p>
-<p>定义样本均值$\widehat{\mu }$，随机变量Y总体均值$\mu$。衡量$\widehat{\mu }$对$\mu$的估计有多准确，用$\widehat{\mu }$的标准误差$SE(\widehat{\mu })$</p>
+<h4 id="残差平方和-residual-sum-of-square"><a href="#残差平方和-residual-sum-of-square" class="headerlink" title="残差平方和 residual sum of square"></a>残差平方和 residual sum of square</h4><script type="math/tex; mode=display">RSS=e_{1}^{2}+e_{2}^{2}+...e_{n}^{2},\, \, \, e_{i}=y_{i}-\widehat{y}_{i}=y_{i}-\widehat{\beta }_{0}-\widehat{\beta }_{1}x</script><script type="math/tex; mode=display">\therefore RSS=\sum (y_{i}-\widehat{y}_{i})^{2}=\sum (y_{i}-\widehat{\beta }_{0}-\widehat{\beta }_{1}x)^{2}</script><h4 id="最小二乘法求解得"><a href="#最小二乘法求解得" class="headerlink" title="最小二乘法求解得"></a>最小二乘法求解得</h4><script type="math/tex; mode=display">\widehat{\beta }_{1}=\frac{\sum (x_{i}-\overline{x})(y_{i}-\overline{y})}{\sum (x_{i}-\overline{x})^{2}}=\frac{l_{xy}}{l_{xx}}</script><script type="math/tex; mode=display">\widehat{\beta }_{0}=\overline{y}-\widehat{\beta }_{1}\overline{x}</script><p>定义样本均值$\widehat{\mu }$，随机变量Y总体均值$\mu$。衡量$\widehat{\mu }$对$\mu$的估计有多准确，用$\widehat{\mu }$的标准误差$SE(\widehat{\mu })$</p>
 <p>$\widehat{\mu }$的方差$Var(\widehat{\mu })=SE(\widehat{\mu })^{2}=\frac{\vartheta ^{2}}{n}$</p>
-<p>同理，衡量$\widehat{\beta}<em>{0}$和$\widehat{\beta}</em>{1}$分别对$\beta_{0}$和$\beta_{1}$估计的准确性，用$SE(\widehat{\beta}<em>{0})$和$SE(\widehat{\beta}</em>{1})$</p>
-<p>$$SE(\widehat{\beta }<em>{0})^{2}=\vartheta ^{2}[\frac{1}{n}+\frac{\overline{x}^{2}}{\sum (x</em>{i}-\overline{x})^{2}}]$$</p>
-<p>$$SE(\widehat{\beta }<em>{1})^{2}=\frac{\vartheta ^{2}}{\sum (x</em>{i}-\overline{x})^{2}}$$</p>
-<h4 id="95-的置信区间："><a href="#95-的置信区间：" class="headerlink" title="95%的置信区间："></a>95%的置信区间：</h4><p>该范围有95%的概率会包含未知参数的真实值。</p>
-<p>$\beta_{1}$的95%置信区间为 $\widehat{\beta}<em>{1}\pm 2\cdot SE(\widehat{\beta}</em>{1})$</p>
-<p>$\beta_{0}$的95%置信区间为 $\widehat{\beta}<em>{0}\pm 2\cdot SE(\widehat{\beta}</em>{0})$</p>
-<h4 id="t-statistc-和p-value确定X和Y之间是否有关系"><a href="#t-statistc-和p-value确定X和Y之间是否有关系" class="headerlink" title="t-statistc 和p-value确定X和Y之间是否有关系"></a>t-statistc 和p-value确定X和Y之间是否有关系</h4><p>零假设$H_{0}$: X和Y之间无关。$H_{0}: \beta _{1}=0$</p>
-<p>备择假设$H_{a}$: X和Y之间存在一定关系  $H_{a}: \beta _{1}\neq 0$</p>
+<p>同理，衡量$\widehat{\beta}<em>{0}$和$\widehat{\beta}</em>{1}$分别对$\beta<em>{0}$和$\beta</em>{1}$估计的准确性，用$SE(\widehat{\beta}<em>{0})$和$SE(\widehat{\beta}</em>{1})$</p>
+<script type="math/tex; mode=display">SE(\widehat{\beta }_{0})^{2}=\vartheta ^{2}[\frac{1}{n}+\frac{\overline{x}^{2}}{\sum (x_{i}-\overline{x})^{2}}]</script><script type="math/tex; mode=display">SE(\widehat{\beta }_{1})^{2}=\frac{\vartheta ^{2}}{\sum (x_{i}-\overline{x})^{2}}</script><h4 id="95-的置信区间："><a href="#95-的置信区间：" class="headerlink" title="95%的置信区间："></a>95%的置信区间：</h4><p>该范围有95%的概率会包含未知参数的真实值。</p>
+<p>$\beta<em>{1}$的95%置信区间为 $\widehat{\beta}</em>{1}\pm 2\cdot SE(\widehat{\beta}_{1})$</p>
+<p>$\beta<em>{0}$的95%置信区间为 $\widehat{\beta}</em>{0}\pm 2\cdot SE(\widehat{\beta}_{0})$</p>
+<h4 id="t-statistc-和p-value确定X和Y之间是否有关系"><a href="#t-statistc-和p-value确定X和Y之间是否有关系" class="headerlink" title="t-statistc 和p-value确定X和Y之间是否有关系"></a>t-statistc 和p-value确定X和Y之间是否有关系</h4><p>零假设$H<em>{0}$: X和Y之间无关。$H</em>{0}: \beta _{1}=0$</p>
+<p>备择假设$H<em>{a}$: X和Y之间存在一定关系  $H</em>{a}: \beta _{1}\neq 0$</p>
 <p>t-statistic: </p>
-<p>$$t=\frac{\widehat{\beta }<em>{1}}{SE(\widehat{\beta }</em>{1})}$$</p>
-<p>假设$H_{0}$成立，则t-statistic服从自由度n-2的t分布</p>
+<script type="math/tex; mode=display">t=\frac{\widehat{\beta }_{1}}{SE(\widehat{\beta }_{1})}</script><p>假设$H_{0}$成立，则t-statistic服从自由度n-2的t分布</p>
 <p>定义p-value为任意观测值大于等于$\left | t \right |$的概率</p>
 <p>如果p-value足够小，则拒绝$H_{0}$</p>
 <h4 id="模型准确性度量"><a href="#模型准确性度量" class="headerlink" title="模型准确性度量"></a>模型准确性度量</h4><p>一旦拒绝了$H_{0}$，就可以讨论模型的准确性，即确定拟合质量，用两个标准</p>
@@ -3554,36 +3664,27 @@ Program exited with code 0170.
 <li><strong>绝对测度：残差标准误RSE</strong></li>
 </ul>
 <p>RSE是$\varepsilon $的估计，RSE是模型对数据失拟的绝对测度。</p>
-<p>$$RSE=\sqrt{RSS/(n-2)}=\sqrt{\sum (y_{i}-\widehat{y}_{i})^{2}/(n-2)}$$</p>
-<ul>
+<script type="math/tex; mode=display">RSE=\sqrt{RSS/(n-2)}=\sqrt{\sum (y_{i}-\widehat{y}_{i})^{2}/(n-2)}</script><ul>
 <li><strong>相对测度：$R^{2}$统计量</strong></li>
 </ul>
 <p>$R^{2}$是一个比例，取值在0到1之间</p>
-<p>$$R^{2}=\frac{TSS-RSS}{TSS}=1-\frac{RSS}{TSS}=\frac{ESS}{TSS}$$</p>
-<p>总平方和 $TSS=\sum (y_{i}-\overline{y})^{2}$：执行回归分析前响应变量中的固有变异性</p>
-<p>残差平方和 $RSS=\sum (y_{i}-\widehat{y}_{i})^{2}$：回归之后仍无法解释的变异性</p>
+<script type="math/tex; mode=display">R^{2}=\frac{TSS-RSS}{TSS}=1-\frac{RSS}{TSS}=\frac{ESS}{TSS}</script><p>总平方和 $TSS=\sum (y_{i}-\overline{y})^{2}$：执行回归分析前响应变量中的固有变异性</p>
+<p>残差平方和 $RSS=\sum (y<em>{i}-\widehat{y}</em>{i})^{2}$：回归之后仍无法解释的变异性</p>
 <p>回归平方和 $ESS=\sum (\widehat{y}_{i}-\overline{y})^{2}$：响应变量进行回归之后被消除的变异性</p>
-<p>$$TSS=RSS+ESS$$</p>
-<p>相关性：</p>
-<p>$$Cor(X,Y)=\frac{\sum (x_{i}-\overline{x})(y_{i}-\overline{y})}{\sqrt{\sum (x_{i}-\overline{x})^{2}}\sqrt{\sum (y_{i}-\overline{y})^{2}}}=\frac{l_{xy}}{\sqrt{l_{xx}}\sqrt{l_{yy}}}$$</p>
-<p>在简单线性回归中，$R^{2}=Cor(X,Y)^{2}$</p>
-<h3 id="多元线性回归"><a href="#多元线性回归" class="headerlink" title="多元线性回归"></a>多元线性回归</h3><p>$$Y=\beta _{0}+\beta _{1}X+\beta <em>{2}X</em>{2}+…+\beta <em>{p}X</em>{p}+\varepsilon $$</p>
-<p>$$\widehat{y}=\widehat{\beta} _{0}+\widehat{\beta} <em>{1}x+\widehat{\beta }</em>{2}x_{2}+…+\widehat{\beta }<em>{p}x</em>{p}$$</p>
-<h4 id="残差平方和-residual-sum-of-square-1"><a href="#残差平方和-residual-sum-of-square-1" class="headerlink" title="残差平方和 residual sum of square"></a>残差平方和 residual sum of square</h4><p>$$RSS=\sum (y_{i}-\widehat{y}<em>{i})^{2}=\sum (y</em>{i}-\widehat{\beta }<em>{0}-\widehat{\beta }</em>{1}x-…-\widehat{\beta }<em>{p}x</em>{p})^{2}$$</p>
-<h4 id="F统计量"><a href="#F统计量" class="headerlink" title="F统计量"></a>F统计量</h4><p>零假设$H_{0}$: X和Y之间无关。$H_{0}: \beta _{1}=\beta _{2}=…=\beta _{p}=0$</p>
-<p>备择假设$H_{a}$: X和Y之间存在一定关系  $H_{a}: $至少有一个$\beta _{j}$不为0</p>
+<script type="math/tex; mode=display">TSS=RSS+ESS</script><p>相关性：</p>
+<script type="math/tex; mode=display">Cor(X,Y)=\frac{\sum (x_{i}-\overline{x})(y_{i}-\overline{y})}{\sqrt{\sum (x_{i}-\overline{x})^{2}}\sqrt{\sum (y_{i}-\overline{y})^{2}}}=\frac{l_{xy}}{\sqrt{l_{xx}}\sqrt{l_{yy}}}</script><p>在简单线性回归中，$R^{2}=Cor(X,Y)^{2}$</p>
+<h3 id="多元线性回归"><a href="#多元线性回归" class="headerlink" title="多元线性回归"></a>多元线性回归</h3><script type="math/tex; mode=display">Y=\beta _{0}+\beta _{1}X+\beta _{2}X_{2}+...+\beta _{p}X_{p}+\varepsilon</script><script type="math/tex; mode=display">\widehat{y}=\widehat{\beta} _{0}+\widehat{\beta} _{1}x+\widehat{\beta }_{2}x_{2}+...+\widehat{\beta }_{p}x_{p}</script><h4 id="残差平方和-residual-sum-of-square-1"><a href="#残差平方和-residual-sum-of-square-1" class="headerlink" title="残差平方和 residual sum of square"></a>残差平方和 residual sum of square</h4><script type="math/tex; mode=display">RSS=\sum (y_{i}-\widehat{y}_{i})^{2}=\sum (y_{i}-\widehat{\beta }_{0}-\widehat{\beta }_{1}x-...-\widehat{\beta }_{p}x_{p})^{2}</script><h4 id="F统计量"><a href="#F统计量" class="headerlink" title="F统计量"></a>F统计量</h4><p>零假设$H<em>{0}$: X和Y之间无关。$H</em>{0}: \beta <em>{1}=\beta </em>{2}=…=\beta _{p}=0$</p>
+<p>备择假设$H<em>{a}$: X和Y之间存在一定关系  $H</em>{a}: $至少有一个$\beta _{j}$不为0</p>
 <p>F统计量：</p>
-<p>$$F=\frac{(RSS_{0}-RSS)/q}{RSS/(n-p-1)}$$</p>
-<p>当$H_{0}$成立时，F-&gt;1，F服从F分布，$E[(TSS-RSS)/p]=\vartheta ^{2}$；当$H_{a}$成立时，F&gt;1</p>
-<p>n比较大时，小F值即可拒绝$H_{0}$；n比较小时，需要大的F值才能拒绝$H_{0}$</p>
+<script type="math/tex; mode=display">F=\frac{(RSS_{0}-RSS)/q}{RSS/(n-p-1)}</script><p>当$H<em>{0}$成立时，F-&gt;1，F服从F分布，$E[(TSS-RSS)/p]=\vartheta ^{2}$；当$H</em>{a}$成立时，F&gt;1</p>
+<p>n比较大时，小F值即可拒绝$H<em>{0}$；n比较小时，需要大的F值才能拒绝$H</em>{0}$</p>
 <h4 id="确定重要变量"><a href="#确定重要变量" class="headerlink" title="确定重要变量"></a>确定重要变量</h4><ul>
 <li>向前选择 forward selection</li>
 <li>向后选择 backward selection， p&gt;n时不可用</li>
 <li>混合选择 mixed selection</li>
 </ul>
 <h4 id="模型拟合质量"><a href="#模型拟合质量" class="headerlink" title="模型拟合质量"></a>模型拟合质量</h4><p>残差标准误</p>
-<p>$$RSE=\sqrt{RSS/(n-p-1)}$$</p>
-<h4 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h4><ul>
+<script type="math/tex; mode=display">RSE=\sqrt{RSS/(n-p-1)}</script><h4 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h4><ul>
 <li>定性变量</li>
 </ul>
 <p>转化为哑变量(dump variable)</p>
@@ -3602,13 +3703,12 @@ Program exited with code 0170.
 <li>outliers：用$studentized\, residual=\frac{e_{i}}{RSE}&gt;3$则为outliers</li>
 <li><p>高杆杠点</p>
 <p>leverage statistic: </p>
-<p>$$h_{i}=\frac{1}{n}+\frac{(x_{i}-\overline{x})^{2}}{\sum (x_{i}-\overline{x})^{2}},\, \, \, \frac{1}{n}&lt;h_{i}&lt;1\, \, 且\, \, \frac{1}{n}\sum h_{i}=\frac{p+1}{h}$$</p>
-</li>
+<script type="math/tex; mode=display">h_{i}=\frac{1}{n}+\frac{(x_{i}-\overline{x})^{2}}{\sum (x_{i}-\overline{x})^{2}},\, \, \, \frac{1}{n}<h_{i}<1\, \, 且\, \, \frac{1}{n}\sum h_{i}=\frac{p+1}{h}</script></li>
 <li><p>collinearity：用RSS等高线图看</p>
 <p>collinearity提高，$SE(\widehat{\beta}<em>{i})$提高，t-statistic降低，$H</em>{0}$无法拒绝</p>
 <p>检验方法一：相关系数矩阵，但存在multicollinearity问题</p>
-<p>检验方法二：<br>$$VIF(\widehat{\beta }<em>{i})=\frac{1}{1-R</em>{j}^{2}}$$</p>
-</li>
+<p>检验方法二：</p>
+<script type="math/tex; mode=display">VIF(\widehat{\beta }_{i})=\frac{1}{1-R_{j}^{2}}</script></li>
 </ul>
 </li>
 </ul>
@@ -3618,12 +3718,20 @@ Program exited with code 0170.
 <li>如果真实关系是非线性的，flexibility提高，KNN测试集MSE变化小，线性回归的test MSE提高。但在非线性情况下，KNN结果可能更差，尤其是维度大的时候。</li>
 <li>纬度灾难(curse of dimensionality)</li>
 </ol>
-<h3 id="补充证明"><a href="#补充证明" class="headerlink" title="补充证明"></a>补充证明</h3><p>$$y=X\beta +\varepsilon $$</p>
-<p>if $\varepsilon $ is constant variance $\vartheta ^{2}$，$\beta =(X^{T}X)^{-1}X^{T}y$</p>
+<h3 id="补充证明"><a href="#补充证明" class="headerlink" title="补充证明"></a>补充证明</h3><script type="math/tex; mode=display">y=X\beta +\varepsilon</script><p>if $\varepsilon $ is constant variance $\vartheta ^{2}$，$\beta =(X^{T}X)^{-1}X^{T}y$</p>
 <p>if $\varepsilon $ is non-constant variance</p>
-<p>$$\varepsilon \sim \begin{pmatrix}<br>\vartheta _{1}^{2} &amp; 0 &amp; … &amp; 0\<br>0 &amp;  \vartheta _{2}^{2}&amp;  …&amp; 0\<br> …&amp;  …&amp;  …&amp; …\<br>0 &amp; 0 &amp; … &amp; \vartheta _{n}^{2}<br>\end{pmatrix}$$</p>
-<p>weight matrix:<br>$$W= \begin{pmatrix}<br>\frac{1}{\vartheta _{1}^{2}} &amp; 0 &amp; … &amp; 0\<br>0 &amp;  \frac{1}{\vartheta _{2}^{2}}&amp;  …&amp; 0\<br> …&amp;  …&amp;  …&amp; …\<br>0 &amp; 0 &amp; … &amp; \frac{1}{\vartheta _{n}^{2}}<br>\end{pmatrix}$$<br>$$\beta =(X^{T}WX)^{-1}X^{T}Wy$$</p>
-]]></content>
+<script type="math/tex; mode=display">\varepsilon \sim \begin{pmatrix}
+\vartheta _{1}^{2} & 0 & ... & 0\\ 
+0 &  \vartheta _{2}^{2}&  ...& 0\\ 
+ ...&  ...&  ...& ...\\ 
+0 & 0 & ... & \vartheta _{n}^{2}
+\end{pmatrix}</script><p>weight matrix:</p>
+<script type="math/tex; mode=display">W= \begin{pmatrix}
+\frac{1}{\vartheta _{1}^{2}} & 0 & ... & 0\\ 
+0 &  \frac{1}{\vartheta _{2}^{2}}&  ...& 0\\ 
+ ...&  ...&  ...& ...\\ 
+0 & 0 & ... & \frac{1}{\vartheta _{n}^{2}}
+\end{pmatrix}</script><script type="math/tex; mode=display">\beta =(X^{T}WX)^{-1}X^{T}Wy</script>]]></content>
       <categories>
         <category>statistical learning</category>
       </categories>
@@ -3656,19 +3764,19 @@ Program exited with code 0170.
 <li>dis: a very large number of observations is required.</li>
 </ul>
 <p>(2) 监督方法 supervised methods 和非监督方法 unsupervised methods</p>
-<h3 id="准确率-Accuracy"><a href="#准确率-Accuracy" class="headerlink" title="准确率 Accuracy"></a>准确率 Accuracy</h3><h4 id="Regression"><a href="#Regression" class="headerlink" title="Regression"></a>Regression</h4><p>$traning MSE=\frac{1}{n}\sum_{i=1}^{n}(y_{i}-\widehat{f}(x_{i}))^{2}$<br>$test MSE=Ave(y_{0}-\widehat{f}(x_{0}))^{2}$</p>
+<h3 id="准确率-Accuracy"><a href="#准确率-Accuracy" class="headerlink" title="准确率 Accuracy"></a>准确率 Accuracy</h3><h4 id="Regression"><a href="#Regression" class="headerlink" title="Regression"></a>Regression</h4><p>$traning MSE=\frac{1}{n}\sum<em>{i=1}^{n}(y</em>{i}-\widehat{f}(x<em>{i}))^{2}$<br>$test MSE=Ave(y</em>{0}-\widehat{f}(x_{0}))^{2}$</p>
 <p>In general, as the flexibility of the statistical learining method increases, we observe a monotone decrease in the training MSE and a U-shape in the test MSE.</p>
 <p><strong>Overfitting</strong> happens because the statistical learning procedure is working too hard to find the pattern in the training fata and may pick up some patterns that are just caused by randon chance rather than by the true property of the unknown function $f$</p>
-<p><strong>the bias-variance trade-off</strong><br>$test MSE=Ave(y_{0}-\widehat{f}(x_{0}))^{2}=Var(\widehat{f}(x_{0}))+[Bias(\widehat{f}(x_{0}))]^{2}+Var(\varepsilon)$</p>
+<p><strong>the bias-variance trade-off</strong><br>$test MSE=Ave(y<em>{0}-\widehat{f}(x</em>{0}))^{2}=Var(\widehat{f}(x<em>{0}))+[Bias(\widehat{f}(x</em>{0}))]^{2}+Var(\varepsilon)$</p>
 <p><em>Variance</em>: the amount by which $\widehat{f}$ would change if we estimated it using different training dataset. If the varaince is high, small changes in the training dataset cause large changes in $\widehat{f}$</p>
 <p><em>Bias</em>: the error that is introduced by approximationg a real life problem. If the true is very close to linear, the bias is small. Otherwise, the bias decreases by increasing flexibility.</p>
 <p><strong>flexibility increases, variance increases but bias decreases</strong></p>
 <p><img src="https://raw.githubusercontent.com/Annashuo/hello-world/master/regression_accuracy.png" alt="regression accuracy"></p>
 <p>left: common situation;  middle: the true is approximately linear;  right: the true is highly non-linear </p>
-<h4 id="Classification"><a href="#Classification" class="headerlink" title="Classification"></a>Classification</h4><p>$$\left{\begin{matrix}<br>I(y_{i}\neq \widehat{y}<em>{i})=1 \<br>I(y</em>{i}= \widehat{y}_{i})=0<br>\end{matrix}\right.$$</p>
-<p>$$training\, error\, rate=\frac{1}{n}\sum_{i=1}^{n}I(y_{i}\neq \widehat{y}_{i})$$</p>
-<p>$$test\, error\, rate=Ave(I(y_{0}\neq \widehat{y}_{0}))$$</p>
-<p>Bayes classifier: $Pr(Y=j|X=x_{0})$</p>
+<h4 id="Classification"><a href="#Classification" class="headerlink" title="Classification"></a>Classification</h4><script type="math/tex; mode=display">\left\{\begin{matrix}
+I(y_{i}\neq \widehat{y}_{i})=1 \\
+I(y_{i}= \widehat{y}_{i})=0
+\end{matrix}\right.</script><script type="math/tex; mode=display">training\, error\, rate=\frac{1}{n}\sum_{i=1}^{n}I(y_{i}\neq \widehat{y}_{i})</script><script type="math/tex; mode=display">test\, error\, rate=Ave(I(y_{0}\neq \widehat{y}_{0}))</script><p>Bayes classifier: $Pr(Y=j|X=x_{0})$</p>
 <p>$Bayes\, error\, rate=1-E(\underset{j}{max}Pr(Y=j|x))=E(\varepsilon )$</p>
 <p><strong>The Bayes error rate is the lowest possible test error rate</strong></p>
 ]]></content>
@@ -3684,7 +3792,8 @@ Program exited with code 0170.
     <url>/2017/03/06/csapp-chapter3/</url>
     <content><![CDATA[<p>Chapter 3 REVIEW</p>
 <a id="more"></a>
-<h3 id="data-formats"><a href="#data-formats" class="headerlink" title="data formats"></a>data formats</h3><table>
+<h3 id="data-formats"><a href="#data-formats" class="headerlink" title="data formats"></a>data formats</h3><div class="table-container">
+<table>
 <thead>
 <tr>
 <th style="text-align:center"></th>
@@ -3715,7 +3824,9 @@ Program exited with code 0170.
 </tr>
 </tbody>
 </table>
-<h3 id="integer-registers"><a href="#integer-registers" class="headerlink" title="integer registers"></a>integer registers</h3><table>
+</div>
+<h3 id="integer-registers"><a href="#integer-registers" class="headerlink" title="integer registers"></a>integer registers</h3><div class="table-container">
+<table>
 <thead>
 <tr>
 <th style="text-align:center">%rax</th>
@@ -3833,7 +3944,9 @@ Program exited with code 0170.
 </tr>
 </tbody>
 </table>
-<h3 id="operand-specifiers"><a href="#operand-specifiers" class="headerlink" title="operand specifiers"></a>operand specifiers</h3><table>
+</div>
+<h3 id="operand-specifiers"><a href="#operand-specifiers" class="headerlink" title="operand specifiers"></a>operand specifiers</h3><div class="table-container">
+<table>
 <thead>
 <tr>
 <th style="text-align:center">instructions</th>
@@ -3930,12 +4043,12 @@ Program exited with code 0170.
 </tr>
 <tr>
 <td style="text-align:center">sar k,d</td>
-<td style="text-align:center">d<-d>&gt;(a)k</-d></td>
+<td style="text-align:center">d&lt;-d&gt;&gt;(a)k</td>
 <td style="text-align:center">arithmetic right shift</td>
 </tr>
 <tr>
 <td style="text-align:center">shr k,d</td>
-<td style="text-align:center">d<-d>&gt;(l)k</-d></td>
+<td style="text-align:center">d&lt;-d&gt;&gt;(l)k</td>
 <td style="text-align:center">logical right shift</td>
 </tr>
 <tr>
@@ -3950,6 +4063,8 @@ Program exited with code 0170.
 </tr>
 </tbody>
 </table>
+</div>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -4040,6 +4155,7 @@ Program exited with code 0170.
 </tr>
 </tbody>
 </table>
+</div>
 <h3 id="data-alignment"><a href="#data-alignment" class="headerlink" title="data alignment"></a>data alignment</h3><p>k bytes 的数据类型的地址必须为k的倍数</p>
 <h3 id="buffer-overflow"><a href="#buffer-overflow" class="headerlink" title="buffer overflow"></a>buffer overflow</h3><ul>
 <li>gets(),strcpy(),strcat(),sprintf()均有可能导致buffer overflow</li>
@@ -4070,6 +4186,7 @@ Program exited with code 0170.
 <li><p>数据大小(字节数)</p>
 </li>
 </ul>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -4121,10 +4238,12 @@ Program exited with code 0170.
 </tr>
 </tbody>
 </table>
+</div>
 <ul>
 <li>小端法和大端法</li>
 </ul>
 <p>假设十六进制数0x1234567位于地址0x100处</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -4152,7 +4271,9 @@ Program exited with code 0170.
 </tr>
 </tbody>
 </table>
+</div>
 <p>假设字符串“1234”位于地址0x100处</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -4175,10 +4296,11 @@ Program exited with code 0170.
 </tr>
 </tbody>
 </table>
+</div>
 <h3 id="编码方式"><a href="#编码方式" class="headerlink" title="编码方式"></a>编码方式</h3><ul>
-<li>无符号数<br>$$B2U(w)=\sum_{w-1}^{i=0}{x}_{i}{2}^{i}$$</li>
-<li>有符号数<br>$$B2T(w)=-{x}<em>{w-1}{2}^{w-1}+\sum</em>{w-2}^{i=0}{x}_{I}{2}^{i}$$</li>
-<li>补码<br>$$TMin(w)=10…0b=-{2}^{w-1}$$<br>$$TMax(w)=01…1b={2}^{w-1}-1$$</li>
+<li>无符号数<script type="math/tex; mode=display">B2U(w)=\sum_{w-1}^{i=0}{x}_{i}{2}^{i}</script></li>
+<li>有符号数<script type="math/tex; mode=display">B2T(w)=-{x}_{w-1}{2}^{w-1}+\sum_{w-2}^{i=0}{x}_{I}{2}^{i}</script></li>
+<li>补码<script type="math/tex; mode=display">TMin(w)=10...0b=-{2}^{w-1}</script><script type="math/tex; mode=display">TMax(w)=01...1b={2}^{w-1}-1</script></li>
 <li>编码方式之间的转换<ul>
 <li>数值可能改变，但是位模式不变</li>
 <li>short转换为unsigned时，先改变大小，再完成有符号数到无符号数的转换</li>
@@ -4191,6 +4313,7 @@ Program exited with code 0170.
 <li>IEEE浮点表示</li>
 </ul>
 <p>一个数先写成二进制的形式，$V={(-1)}^{s}<em>M</em>{2}^{E}$</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -4232,6 +4355,7 @@ Program exited with code 0170.
 </tr>
 </tbody>
 </table>
+</div>
 <ul>
 <li>二进制舍入</li>
 </ul>
@@ -4319,8 +4443,9 @@ Program exited with code 0170.
 <h5 id="降序"><a href="#降序" class="headerlink" title="降序"></a>降序</h5><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">insert_sort_descend</span><span class="params">(<span class="keyword">int</span> *A，<span class="keyword">int</span> length)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> i,j;</span><br><span class="line">    <span class="keyword">for</span>(j=<span class="number">1</span>;j&lt;length;j++)&#123;</span><br><span class="line">        <span class="keyword">int</span> key=A[j];</span><br><span class="line">        i=j<span class="number">-1</span>;</span><br><span class="line">        <span class="keyword">while</span>(i&gt;=<span class="number">0</span>&amp;&amp;A[i]&lt;key)&#123;</span><br><span class="line">            A[i+<span class="number">1</span>]=A[i];</span><br><span class="line">            i=i<span class="number">-1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        A[i+<span class="number">1</span>]=key;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h4><p>merge函数是将两个已经排序的序列$A[p…q]$和$A[(q+1)…r]$归并为一个，merge_sort函数运用divide-conquer-combine的思想，递归的分割序列，再用merge函数合并序列。</p>
 <p>时间复杂度 </p>
-<p>$$T(n)=\left{\begin{matrix}<br>\vartheta (1) \quad \quad \quad \quad \quad if\ n=1 &amp; \2T(n/2)+\vartheta(n) \quad if\ n&gt;1 &amp;<br>\end{matrix}\right.=\vartheta(nlgn)$$</p>
-<p>(the master method case 2)</p>
+<script type="math/tex; mode=display">T(n)=\left\{\begin{matrix}
+\vartheta (1) \quad \quad \quad \quad \quad if\ n=1 & \\2T(n/2)+\vartheta(n) \quad if\ n>1 &
+\end{matrix}\right.=\vartheta(nlgn)</script><p>(the master method case 2)</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">void merge(int *A, int p, int q, int r)&#123;</span><br><span class="line">    int i,j,k;</span><br><span class="line">    int n1=q-p+1;</span><br><span class="line">    int n2=r-q;</span><br><span class="line">    int L[n1];</span><br><span class="line">    int R[n2];</span><br><span class="line">    for(i=1;i&lt;=n1;i++)</span><br><span class="line">        L[i-1]=A[p+i-1];</span><br><span class="line">    for(j=1;j&lt;=n2;j++)</span><br><span class="line">        R[j-1]=A[q+j];</span><br><span class="line">    i=0;</span><br><span class="line">    j=0;</span><br><span class="line">    for(k=p;k&lt;=r;k++)&#123;</span><br><span class="line">        if((L[i]&lt;=R[j]&amp;&amp;i&lt;n1)||(j&gt;=n2))&#123;</span><br><span class="line">            A[k]=L[i];</span><br><span class="line">            i=i+1;</span><br><span class="line">        &#125;</span><br><span class="line">        else&#123;</span><br><span class="line">            A[k]=R[j];</span><br><span class="line">            j=j+1;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">void merge_sort(int * A, int p, int r)&#123;</span><br><span class="line">    if(p&lt;r)&#123;</span><br><span class="line">        int q=(p+r)/2;</span><br><span class="line">        merge_sort(A, p, q);</span><br><span class="line">        merge_sort(A, q+1, r);</span><br><span class="line">        merge(A, p, q, r);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h4 id="二分排序"><a href="#二分排序" class="headerlink" title="二分排序"></a>二分排序</h4><p>用二分查找代替遍历已排序的序列</p>
 <p>时间复杂度 $T(n)=\vartheta(nlgn)$，其中二分查找的时间复杂度为$T(n)=\vartheta(lgn)$</p>
