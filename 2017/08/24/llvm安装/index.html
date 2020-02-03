@@ -443,11 +443,11 @@ make install
 <li>报错/lib64/libstdc++.so.6: version `GLIBCXX_3.4.21’ not found：</li>
 </ol>
 <p>解决方法: <a href="http://blog.csdn.net/rznice/article/details/51090966" target="_blank" rel="noopener">http://blog.csdn.net/rznice/article/details/51090966</a></p>
-<ol>
+<ol start="2">
 <li>找不到sys/acl.h等文件</li>
 </ol>
 <p>解决方法： sudo yum list libacl* 把列出来的所有包都安装上</p>
-<ol>
+<ol start="3">
 <li>找不到xml/…等文件</li>
 </ol>
 <p>解决方法： sudo yum list libxml* 把列出来的所有包都安装上</p>
@@ -556,7 +556,7 @@ int main(){
 15      if (argc &lt; 2)
 16          return -1;
 17      char firstletter = argv[1][0];
-18      int result = compute_factorial(firstletter - &#39;0&#39;);
+18      int result = compute_factorial(firstletter - &apos;0&apos;);
 19
 20      // Returned result is clipped at 255...
 21      return result;
@@ -605,7 +605,7 @@ at /home/ebenders_test/llvm_svn_rw/lib/ExecutionEngine/ExecutionEngine.cpp:397
 (gdb) finish
 Run till exit from #0  compute_factorial (n=1) at showdebug.c:9
 0x00007ffff7ed40a9 in main (argc=2, argv=0x16677e0) at showdebug.c:18
-18       int result = compute_factorial(firstletter - &#39;0&#39;);
+18       int result = compute_factorial(firstletter - &apos;0&apos;);
 Value returned is $5 = 120
 (gdb) p result
 $6 = 23406408
@@ -629,7 +629,7 @@ Program exited with code 0170.
 <pre><code>如果里面没有一句DEBUG build with assertions.
 
 重装llvm，注意重装时要先make clean
-</code></pre><ol>
+</code></pre><ol start="2">
 <li><p>Missing separate debuginfos, use: debuginfo-install ncurses-libs-5.9-13.20130511.el7.x86_64</p>
 <p> 不影响gdb使用，忽略</p>
 </li>

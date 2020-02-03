@@ -486,29 +486,29 @@
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT * </span><br><span class="line">FROM R</span><br><span class="line">WHERE predicate;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>$\pi$</p>
-<p> $ \pi <em>{A</em>{1},A<em>{2},…,A</em>{n}} (R) $</p>
+<p> $ \pi _{A_{1},A_{2},…,A_{n}} (R) $</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SELECT A1, A2, ... An</span><br><span class="line">FROM R;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<ol>
+<ol start="3">
 <li><p>$U$</p>
 <p> $(R\, U \, S)$</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM R</span><br><span class="line">UNION</span><br><span class="line">SELECT * FROM S;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<ol>
+<ol start="4">
 <li><p>$\cap$</p>
 <p> $(R\, \cap \, S)$</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM R</span><br><span class="line">INTERSECT</span><br><span class="line">SELECT * FROM S;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<ol>
+<ol start="5">
 <li><p>$-$</p>
 <p> $(R\, - \, S)$</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM R</span><br><span class="line">EXCEPT</span><br><span class="line">SELECT * FROM S;</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<ol>
+<ol start="6">
 <li><p>$\times$</p>
 <p> $(R\, \times \, S)$</p>
  <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM R</span><br><span class="line">CROSS JOIN</span><br><span class="line">SELECT * FROM S;</span><br><span class="line"></span><br><span class="line">SELECT * FROM R, S;</span><br></pre></td></tr></table></figure>

@@ -95,7 +95,7 @@
 <meta property="og:image" content="https://raw.githubusercontent.com/Annashuo/hello-world/master/zookeeper_bad.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/Annashuo/hello-world/master/hert_effect.png">
 <meta property="og:image" content="https://raw.githubusercontent.com/Annashuo/hello-world/master/zookeeper_good.png">
-<meta property="og:updated_time" content="2020-02-02T07:46:55.203Z">
+<meta property="og:updated_time" content="2020-02-03T12:03:11.302Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Distributed System - Zookeeper">
 <meta name="twitter:description" content="Introduction of Zookeeper">
@@ -482,6 +482,33 @@
 <li><strong>Horizontal Scalability</strong> - We can dynamically grow our business on demand </li>
 </ul>
 <p>Having those two “badges of honor” is not a trivial achievement we will try to repeat for every distributed system.</p>
+<h3 id="Registration-and-Discovery"><a href="#Registration-and-Discovery" class="headerlink" title="Registration and Discovery"></a>Registration and Discovery</h3><h4 id="Static-Configuration"><a href="#Static-Configuration" class="headerlink" title="Static Configuration"></a>Static Configuration</h4><ul>
+<li>Put all nodes addresses on a single configuration file and distribute the file among all the nodes before launch the application.</li>
+<li>If one of the node becomes unavailable or change its address, the other nodes would still try to use the old address and will never be able to discover the new address.</li>
+<li>If we add a new node to expand our cluster, we’ll have to regenerate this file and distribute the new file to all the nodes.</li>
+</ul>
+<h4 id="Dynamic-Configuration"><a href="#Dynamic-Configuration" class="headerlink" title="Dynamic Configuration"></a>Dynamic Configuration</h4><ul>
+<li>Everytime a new node is added - one central configuration is updated</li>
+<li>An automated configuration management tool such as <em>Chef</em> or <em>Puppet</em> can pick up the configuration and distribute it among the nodes in the cluster.</li>
+<li>More dynamic but still involves a human to update the configuration.</li>
+</ul>
+<h4 id="Fully-automatically-discovery-Zookeeper"><a href="#Fully-automatically-discovery-Zookeeper" class="headerlink" title="Fully automatically discovery - Zookeeper"></a>Fully automatically discovery - Zookeeper</h4><ul>
+<li><strong>Service Registry</strong>: Every node that joins the cluster will add an emphemeral sequential node under the service registty node(<em>/service_registry</em>). Each node would put its own address inside its Znode</li>
+<li><strong>Service Discovery</strong>: Each node that wants to communicate or even be aware of any other node in the cluster, it simply register a watcher on the service registry node(<em>/service_registry</em>) using the <em>getChildren</em> method. Then when it wants to read or use a particular nodes address, the node will simply call the <em>getData</em> method. If there is any change in the cluster, the node will be notified with the <em>NodeChildrenChanged</em> event.</li>
+</ul>
+<h5 id="Peer-to-Peer-Communication"><a href="#Peer-to-Peer-Communication" class="headerlink" title="Peer to Peer Communication"></a>Peer to Peer Communication</h5><p>Every node in the cluster register a watcher to the service registry node. If a node is down or a new node is added to the cluster, every node will get notification.</p>
+<h4 id="Leader-Worker-Architecture"><a href="#Leader-Worker-Architecture" class="headerlink" title="Leader / Worker Architecture"></a>Leader / Worker Architecture</h4><ul>
+<li>The workers don’t need to know about each other at all but register themselves in the registry</li>
+<li>Only the leader will register for notifications</li>
+<li>Leader will know about the state of the cluster at all times and ditribute the work accordingly</li>
+<li>If a leader die, the new leader will remove itself from the service registry and continue distributing the work.</li>
+</ul>
+<h4 id="Function-of-Service-Registry"><a href="#Function-of-Service-Registry" class="headerlink" title="Function of Service Registry"></a>Function of Service Registry</h4><ul>
+<li>Register to the cluster by publishing their address</li>
+<li>Register for updates to get any node’s address</li>
+<li>cluster can scale without any modifications</li>
+<li>establish the communication within the cluster</li>
+</ul>
 <h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p>Github - <a href="https://github.com/Annashuo/Distributed-System" target="_blank" rel="noopener">https://github.com/Annashuo/Distributed-System</a><br>Udemy Course - <a href="https://www.udemy.com/course/distributed-systems-cloud-computing-with-java/" target="_blank" rel="noopener">https://www.udemy.com/course/distributed-systems-cloud-computing-with-java/</a></p>
 
       
@@ -667,7 +694,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Zookeeper-Threading-Model"><span class="nav-number">1.</span> <span class="nav-text">Zookeeper Threading Model</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IO-thread"><span class="nav-number">1.1.</span> <span class="nav-text">IO thread</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Event-Thread"><span class="nav-number">1.2.</span> <span class="nav-text">Event Thread</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Watchers-and-Triggers"><span class="nav-number">2.</span> <span class="nav-text">Watchers and Triggers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#The-Herd-Effect"><span class="nav-number">3.</span> <span class="nav-text">The Herd Effect</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Bad-Design"><span class="nav-number">3.1.</span> <span class="nav-text">Bad Design</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Good-Design"><span class="nav-number">3.2.</span> <span class="nav-text">Good Design</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Important-Properties"><span class="nav-number">4.</span> <span class="nav-text">Important Properties</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Zookeeper-Threading-Model"><span class="nav-number">1.</span> <span class="nav-text">Zookeeper Threading Model</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IO-thread"><span class="nav-number">1.1.</span> <span class="nav-text">IO thread</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Event-Thread"><span class="nav-number">1.2.</span> <span class="nav-text">Event Thread</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Watchers-and-Triggers"><span class="nav-number">2.</span> <span class="nav-text">Watchers and Triggers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#The-Herd-Effect"><span class="nav-number">3.</span> <span class="nav-text">The Herd Effect</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Bad-Design"><span class="nav-number">3.1.</span> <span class="nav-text">Bad Design</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Good-Design"><span class="nav-number">3.2.</span> <span class="nav-text">Good Design</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Important-Properties"><span class="nav-number">4.</span> <span class="nav-text">Important Properties</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Registration-and-Discovery"><span class="nav-number">5.</span> <span class="nav-text">Registration and Discovery</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Static-Configuration"><span class="nav-number">5.1.</span> <span class="nav-text">Static Configuration</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Dynamic-Configuration"><span class="nav-number">5.2.</span> <span class="nav-text">Dynamic Configuration</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Fully-automatically-discovery-Zookeeper"><span class="nav-number">5.3.</span> <span class="nav-text">Fully automatically discovery - Zookeeper</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Peer-to-Peer-Communication"><span class="nav-number">5.3.1.</span> <span class="nav-text">Peer to Peer Communication</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Leader-Worker-Architecture"><span class="nav-number">5.4.</span> <span class="nav-text">Leader / Worker Architecture</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Function-of-Service-Registry"><span class="nav-number">5.5.</span> <span class="nav-text">Function of Service Registry</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Reference"><span class="nav-number">6.</span> <span class="nav-text">Reference</span></a></li></ol></div>
             
 
           </div>

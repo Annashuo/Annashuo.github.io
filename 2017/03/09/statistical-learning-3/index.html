@@ -422,26 +422,22 @@
         <p>Chapter 4 REVIEW</p>
 <a id="more"></a>
 <h3 id="Logistic-Regression"><a href="#Logistic-Regression" class="headerlink" title="Logistic Regression"></a>Logistic Regression</h3><p>logistic function:</p>
-<script type="math/tex; mode=display">p(x)=\frac{e^{\beta _{0}+\beta _{1}x}}{1+e^{\beta _{0}+\beta _{1}x}}</script><p>odds:(odd&gt;0)</p>
-<script type="math/tex; mode=display">\frac{p(x)}{1-p(x)}=e^{\beta _{0}+\beta _{1}x}</script><p>logit:</p>
-<script type="math/tex; mode=display">log(\frac{p(x)}{1-p(x)})=\beta _{0}+\beta _{1}x</script><p>likelihood function:</p>
-<script type="math/tex; mode=display">
-\begin{equation}
-\begin{aligned}
-l(\beta _{0},\beta _{1})&=\prod_{i=1}^{n}p(Y=y _{i}|X=x _{i})\\
-&=\prod_{i=1}^{n}p(x_{i})^{y _{i}}(1-p(x _{i}))^{1-y_{i}}\\
-&=\prod_{i;y _{i}=1}p(x _{i})\prod_{i;y _{i}=0}(1-p(x _{i}))
-\end{aligned}
-\end{equation}</script><script type="math/tex; mode=display">
-\begin{equation}
-\begin{aligned}
-log(l(\beta _{0},\beta _{1}))&=\sum_{i=1}^{n}log(1-p(x_{i}))+\sum_{i=1}^{n}y_{i}log\frac{p(x)}{1-p(x)}\\
-&=-\sum_{i=1}^{n}log(1+e^{\beta _{0}+\beta _{1}x})+\sum_{i=1}^{n}y_{i}(\beta _{0}+\beta _{1}x)
-\end{aligned}
-\end{equation}</script><h3 id="Multiple-Logistic-Regression"><a href="#Multiple-Logistic-Regression" class="headerlink" title="Multiple Logistic Regression"></a>Multiple Logistic Regression</h3><p>logit:</p>
-<script type="math/tex; mode=display">log(\frac{p(x)}{1-p(x)})=\beta _{0}+\beta _{1}x_{1}+...+\beta _{p}x_{p}</script><script type="math/tex; mode=display">p(x)=\frac{e^{\beta _{0}+\beta _{1}x_{1}+...+\beta _{p}x_{p}}}{1+e^{\beta _{0}+\beta _{1}x_{1}+...+\beta _{p}x_{p}}}</script><h3 id="Bayes’-Theorem"><a href="#Bayes’-Theorem" class="headerlink" title="Bayes’ Theorem"></a>Bayes’ Theorem</h3><p>density function:</p>
-<script type="math/tex; mode=display">f_{k}(x)=P_{r}(X=x|Y=k)</script><p>posterior probability:</p>
-<script type="math/tex; mode=display">p_{k}(x)=P_{r}(Y=k|X=x)=\frac{\pi _{k}f_{k}(x)}{\sum_{l=1}^{k}\pi _{l}f_{l}(x)}=\frac{P_{r}(Y=k)P_{r}(X=x|Y=k)}{\sum_{l=1}^{k}(Y=l)P_{r}(X=x|Y=l)}</script>
+<p> $$p(x)=\frac{e^{\beta _{0}+\beta _{1}x}}{1+e^{\beta _{0}+\beta _{1}x}}$$</p>
+<p>odds:(odd&gt;0)</p>
+<p>$$\frac{p(x)}{1-p(x)}=e^{\beta _{0}+\beta _{1}x}$$</p>
+<p>logit:</p>
+<p>$$log(\frac{p(x)}{1-p(x)})=\beta _{0}+\beta _{1}x$$</p>
+<p>likelihood function:</p>
+<p>$$<br>\begin{equation}<br>\begin{aligned}<br>l(\beta _{0},\beta <em>{1})&amp;=\prod</em>{i=1}^{n}p(Y=y _{i}|X=x <em>{i})\<br>&amp;=\prod</em>{i=1}^{n}p(x_{i})^{y _{i}}(1-p(x <em>{i}))^{1-y</em>{i}}\<br>&amp;=\prod_{i;y _{i}=1}p(x <em>{i})\prod</em>{i;y _{i}=0}(1-p(x _{i}))<br>\end{aligned}<br>\end{equation}<br>$$</p>
+<p>$$<br>\begin{equation}<br>\begin{aligned}<br>log(l(\beta _{0},\beta <em>{1}))&amp;=\sum</em>{i=1}^{n}log(1-p(x_{i}))+\sum_{i=1}^{n}y_{i}log\frac{p(x)}{1-p(x)}\<br>&amp;=-\sum_{i=1}^{n}log(1+e^{\beta _{0}+\beta <em>{1}x})+\sum</em>{i=1}^{n}y_{i}(\beta _{0}+\beta _{1}x)<br>\end{aligned}<br>\end{equation}<br>$$</p>
+<h3 id="Multiple-Logistic-Regression"><a href="#Multiple-Logistic-Regression" class="headerlink" title="Multiple Logistic Regression"></a>Multiple Logistic Regression</h3><p>logit:</p>
+<p>$$log(\frac{p(x)}{1-p(x)})=\beta _{0}+\beta <em>{1}x</em>{1}+…+\beta <em>{p}x</em>{p}$$</p>
+<p>$$p(x)=\frac{e^{\beta _{0}+\beta <em>{1}x</em>{1}+…+\beta <em>{p}x</em>{p}}}{1+e^{\beta _{0}+\beta <em>{1}x</em>{1}+…+\beta <em>{p}x</em>{p}}}$$</p>
+<h3 id="Bayes’-Theorem"><a href="#Bayes’-Theorem" class="headerlink" title="Bayes’ Theorem"></a>Bayes’ Theorem</h3><p>density function:</p>
+<p>$$f_{k}(x)=P_{r}(X=x|Y=k)$$</p>
+<p>posterior probability:</p>
+<p>$$p_{k}(x)=P_{r}(Y=k|X=x)=\frac{\pi <em>{k}f</em>{k}(x)}{\sum_{l=1}^{k}\pi <em>{l}f</em>{l}(x)}=\frac{P_{r}(Y=k)P_{r}(X=x|Y=k)}{\sum_{l=1}^{k}(Y=l)P_{r}(X=x|Y=l)}$$</p>
+
       
     </div>
 
