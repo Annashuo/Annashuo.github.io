@@ -312,7 +312,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="https://annashuo.github.io/2020/02/01/distributed-system-2-zookeeper/">
+  <link itemprop="mainEntityOfPage" href="https://annashuo.github.io/2020/02/04/distributed-system-3-network/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="Anna">
@@ -337,8 +337,8 @@
             
               
                 
-                <a class="post-title-link" href="/2020/02/01/distributed-system-2-zookeeper/" itemprop="url">
-                  Distributed System - Zookeeper
+                <a class="post-title-link" href="/2020/02/04/distributed-system-3-network/" itemprop="url">
+                  Distributed System - Network Communication
                 </a>
               
             
@@ -354,8 +354,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-02-01T12:00:15+08:00">
-                2020-02-01
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-02-04T11:57:57+08:00">
+                2020-02-04
               </time>
             
 
@@ -395,8 +395,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2020/02/01/distributed-system-2-zookeeper/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count fb-comments-count" data-href="https://annashuo.github.io/2020/02/01/distributed-system-2-zookeeper/" itemprop="commentCount">0</span> comments
+                <a href="/2020/02/04/distributed-system-3-network/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count fb-comments-count" data-href="https://annashuo.github.io/2020/02/04/distributed-system-3-network/" itemprop="commentCount">0</span> comments
                 </a>
               </span>
             
@@ -423,14 +423,262 @@
 
       
         
-          <p>Introduction of Zookeeper</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2020/02/01/distributed-system-2-zookeeper/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
+          
+            <a id="more"></a>
+<h3 id="TCP-IP-Network-Model"><a href="#TCP-IP-Network-Model" class="headerlink" title="TCP / IP Network Model"></a>TCP / IP Network Model</h3><p><img src="https://raw.githubusercontent.com/Annashuo/hello-world/master/4_network_layer.png" alt></p>
+<h4 id="Layer-1-Data-Link"><a href="#Layer-1-Data-Link" class="headerlink" title="Layer 1 Data Link"></a>Layer 1 Data Link</h4><ul>
+<li>Physical delivery of data over a single link</li>
+<li>In charge of <ul>
+<li>Encapsulation of the data</li>
+<li>Flow control</li>
+<li>Error detection</li>
+<li>Error correction</li>
+<li>etc…</li>
+</ul>
+</li>
+<li>Ethernet Protocol - wraps data packets into frames and uses the devices’ MAC addresses to deliver those packets from one device to another device</li>
+<li>Data link is like the post office</li>
+</ul>
+<h4 id="Layer-2-Internet"><a href="#Layer-2-Internet" class="headerlink" title="Layer 2 Internet"></a>Layer 2 Internet</h4><ul>
+<li>In charge of delivery across multiple networks and rout the packets from the source computer to the destination computer.</li>
+<li>Internet Protocol(IP) - each device in the network is a sign, an IP address, and this address allows the packets to travel across the networks from the source host to the destination host</li>
+<li>It doesn’t know which application process the packet is intended to nor does it know which process sent it and where the response should go to.</li>
+<li>IP address is like the building address</li>
+</ul>
+<h4 id="Layer-3-Transport"><a href="#Layer-3-Transport" class="headerlink" title="Layer 3 Transport"></a>Layer 3 Transport</h4><ul>
+<li>Take care of delivering the messages end to end from the process on one machine to another process on the other machine.</li>
+<li>The listening port is chosen ahead of time by the destination application but the source port is generated on the fly by the sender.</li>
+<li>Using the port, the operating system knows which process the packet belongs to</li>
+<li>The port is like the appartment address</li>
+</ul>
+<h5 id="User-Datagram-Protocol-UDP"><a href="#User-Datagram-Protocol-UDP" class="headerlink" title="User Datagram Protocol (UDP)"></a>User Datagram Protocol (UDP)</h5><ul>
+<li>Connectionless</li>
+<li>Best effort - Unreliable</li>
+<li>Allow Broadcasting - decoupling between the sender and receivers</li>
+<li>Messages can be <ul>
+<li>Lost</li>
+<li>Duplicated </li>
+<li>Reordered</li>
+</ul>
+</li>
+<li>Based on a unit called <em>Datagram</em> which is limited in size</li>
+<li>Is preferred when the speed and simplicity is more important than reliability</li>
+<li>Example 1 - sending debug information</li>
+<li>Example 2 - Real time data stream service such as video or audio</li>
+<li>Example 3 - Online Gaming</li>
+</ul>
+<h5 id="Transmission-Control-Protocol-TCP"><a href="#Transmission-Control-Protocol-TCP" class="headerlink" title="Transmission Control Protocol (TCP)"></a>Transmission Control Protocol (TCP)</h5><ul>
+<li>Reliable - Guarantees data delivery as sent, without any losses</li>
+<li>Connection between 2 points<ul>
+<li>Needs to be created before data is sent</li>
+<li>Shut down in the end</li>
+</ul>
+</li>
+<li>Works as a streaming interface</li>
+<li>Each TCP connection is uniquely identified by the four tupo of source IP, port and destination IP and port.</li>
+</ul>
+<h4 id="Layer-4-Application"><a href="#Layer-4-Application" class="headerlink" title="Layer 4 - Application"></a>Layer 4 - Application</h4><table>
+<thead>
+<tr>
+<th style="text-align:center"><strong>Protocol</strong></th>
+<th style="text-align:center"><strong>Purpose</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">FTP(File Transfer Protocol)</td>
+<td style="text-align:center">Transfering files through the web</td>
+</tr>
+<tr>
+<td style="text-align:center">SMTP(Simple Mail Transfer Protocal)</td>
+<td style="text-align:center">Sending and receiving emails</td>
+</tr>
+<tr>
+<td style="text-align:center">DNS(Domain Name System)</td>
+<td style="text-align:center">Translating host names into IP address</td>
+</tr>
+<tr>
+<td style="text-align:center">HTTP(Hypertext Transfer Protocol)</td>
+<td style="text-align:center">Transmitting Hypermedia documents, video, sound, images</td>
+</tr>
+</tbody>
+</table>
+<h3 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a>HTTP</h3><h4 id="Request-Structure"><a href="#Request-Structure" class="headerlink" title="Request Structure"></a>Request Structure</h4><p><img src="https://raw.githubusercontent.com/Annashuo/hello-world/master/HTTP_Request.png" alt></p>
+<h5 id="Method-Get-Head-Post-Put-Delete-Trace-Connect-Options…"><a href="#Method-Get-Head-Post-Put-Delete-Trace-Connect-Options…" class="headerlink" title="Method - Get, Head, Post, Put, Delete, Trace, Connect, Options…"></a>Method - Get, Head, Post, Put, Delete, Trace, Connect, Options…</h5><ul>
+<li><p>Get</p>
+<ul>
+<li>Safe - Only retrieval action with no side effect</li>
+<li>Idempotent - Performing N times is equivalent to performing once</li>
+<li><strong>Does not contain a message body</strong></li>
+</ul>
+</li>
+<li><p>Post</p>
+<ul>
+<li>Contains a message body</li>
+<li>The operation may heve side effect and we expect the server to perform a complex operation and give us a result</li>
+</ul>
+</li>
+</ul>
+<h5 id="Path"><a href="#Path" class="headerlink" title="Path"></a>Path</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http://IP:port/path?query_string</span><br><span class="line">http://123.85.46.96:8080/users?userid=123&amp;month=03</span><br></pre></td></tr></table></figure>
+<h5 id="Protocol-Version"><a href="#Protocol-Version" class="headerlink" title="Protocol Version"></a>Protocol Version</h5><ul>
+<li>HTTP/1.1<ul>
+<li>create a new connection for every request</li>
+<li>The number of outgoing connections a client can maintain is limited by number of ports and the operating system</li>
+<li>If one connection breaks, the other stay unaffected</li>
+</ul>
+</li>
+<li>HTTP/2<ul>
+<li>Interleave multiple requests and responses on the same connection. This interleaving is completely transparent to us and is done by logically breaking the connection into multiple internal streams.</li>
+</ul>
+</li>
+</ul>
+<h5 id="HTTP-Headers-key-value-pairs-of-strings"><a href="#HTTP-Headers-key-value-pairs-of-strings" class="headerlink" title="HTTP Headers - key/value pairs of strings"></a>HTTP Headers - key/value pairs of strings</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Header-Name:Value1;Value2;Value3</span><br><span class="line">For example, </span><br><span class="line">Content-Length:33</span><br><span class="line">Content-Type:xxx</span><br><span class="line">Content-Encoding:xxx</span><br></pre></td></tr></table></figure>
+<ul>
+<li>In HTTP/1.1 - plain text key value pair that can be easily inspected by tools like <em>Wireshark</em></li>
+<li>In HTTP/2 - the headers are compressed, save on payload size and harder to inspect or debug</li>
+</ul>
+<h5 id="Message-Body"><a href="#Message-Body" class="headerlink" title="Message Body"></a>Message Body</h5><ul>
+<li>Contain anything</li>
+<li>The server and client have to agree on how to parse the data</li>
+</ul>
+<h4 id="Response-Structure"><a href="#Response-Structure" class="headerlink" title="Response Structure"></a>Response Structure</h4><p><img src="https://raw.githubusercontent.com/Annashuo/hello-world/master/HTTP_Response.png" alt></p>
+<h5 id="HTTP-Status-Codes"><a href="#HTTP-Status-Codes" class="headerlink" title="HTTP Status Codes"></a>HTTP Status Codes</h5><table>
+<thead>
+<tr>
+<th style="text-align:center"></th>
+<th style="text-align:center">Status Code</th>
+<th>Group</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:center">1xx</td>
+<td>Informational Response</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:center">2xx</td>
+<td>Success</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:center">3xx</td>
+<td>Redirection</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:center">4xx</td>
+<td>Client Errors</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:center">5xx</td>
+<td>Server Errors</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="Curl-Command-line-Http-Client"><a href="#Curl-Command-line-Http-Client" class="headerlink" title="Curl - Command line Http Client"></a>Curl - Command line Http Client</h3><ul>
+<li>–request HTTP_METHOD</li>
+<li>–header HEADER_LINE</li>
+<li>–verbose(-v)</li>
+<li>–data SOME_DATA</li>
+<li>HTTP server address</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">curl --request GET -v localhost:8081/status</span><br><span class="line">curl --request POST -v --data &apos;80,100&apos; localhost:8081/task</span><br><span class="line">curl --request POST -v --header &quot;X-Test: true&quot; --data &apos;80,100&apos; localhost:8081/task</span><br><span class="line">curl --request POST -v --header &quot;X-Debug: true&quot; --data &apos;80,100&apos; localhost:8081/task</span><br></pre></td></tr></table></figure>
+<h3 id="Message-Delivery-Semantics-in-Distributed-System"><a href="#Message-Delivery-Semantics-in-Distributed-System" class="headerlink" title="Message Delivery Semantics in Distributed System"></a>Message Delivery Semantics in Distributed System</h3><h4 id="At-Most-Once-Semantics"><a href="#At-Most-Once-Semantics" class="headerlink" title="At Most Once Semantics"></a>At Most Once Semantics</h4><ul>
+<li>The client send a request to the server only once</li>
+<li>If the server never receives a response or the server crashes right before it sends back the response, the client will never redeliver the request to the server</li>
+</ul>
+<h5 id="Use-Cases"><a href="#Use-Cases" class="headerlink" title="Use Cases"></a>Use Cases</h5><ul>
+<li>Messages to Logging or Monitoring service</li>
+<li>Sending promotional emails/notifications to users</li>
+</ul>
+<h4 id="At-least-Once-Semantics"><a href="#At-least-Once-Semantics" class="headerlink" title="At least Once Semantics"></a>At least Once Semantics</h4><ul>
+<li>If the client does not receive a reponse, it will resend the request</li>
+<li>If the server did perform the request action, but failed to respond, the operation will be executed multiple times</li>
+<li>The delivery semactics works only for <u><strong>idempotent operations</strong></u></li>
+</ul>
+<h5 id="Idempotent-operation"><a href="#Idempotent-operation" class="headerlink" title="Idempotent operation"></a>Idempotent operation</h5><p>An operation that can be performed multiple times, and will have the same result/effect as if it was performed only once.</p>
+<h3 id="Serialization-amp-Deserialization"><a href="#Serialization-amp-Deserialization" class="headerlink" title="Serialization &amp; Deserialization"></a>Serialization &amp; Deserialization</h3><ul>
+<li><strong>Serialization</strong> - Translation of a data structure or object into a format that can be sent(or stored somewhere) and reconstructed later</li>
+<li><strong>Deserialization</strong> - Reconstruction of the data back to a data structure or an object</li>
+</ul>
+<h4 id="Serialization-Format"><a href="#Serialization-Format" class="headerlink" title="Serialization Format"></a>Serialization Format</h4><h5 id="Json-JavaScript-Object-Notation"><a href="#Json-JavaScript-Object-Notation" class="headerlink" title="Json - JavaScript Object Notation"></a>Json - JavaScript Object Notation</h5><ul>
+<li>Advantages<ul>
+<li>Simple and hyman readable</li>
+<li>Programming language independent</li>
+<li>Easy integration with JavaScript/Front-End</li>
+</ul>
+</li>
+<li>Disadvantages<ul>
+<li>Java does not know how to map a Java class to/from Json object, requires explicit serializtion and deserialization using external libraries. Those libraries need explicit configurations andn annotation to tell them how to serialize and name the fields.</li>
+<li>Json does not have a schema(source of truth)</li>
+<li>Plain text parsing and transmission is suboptimal</li>
+</ul>
+</li>
+</ul>
+<h5 id="Java-Object-Serialization"><a href="#Java-Object-Serialization" class="headerlink" title="Java Object Serialization"></a>Java Object Serialization</h5><ul>
+<li>Advantages<ul>
+<li>Guarantees about corrent state reconstruction without any type ambiguity</li>
+<li>Very clear source of truth(schema) for the object</li>
+<li>Native support in all the JVM languages<ul>
+<li>No need for external libraies</li>
+<li>Simple development process</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Disadvantages<ul>
+<li>Not human readable, harder to test</li>
+<li>Tight coupling to JVM languages</li>
+</ul>
+</li>
+</ul>
+<h6 id="The-Serializable-Interface"><a href="#The-Serializable-Interface" class="headerlink" title="The Serializable Interface"></a>The Serializable Interface</h6><ul>
+<li><em>Serializable</em> Interface is an empty “marking” interface</li>
+<li>Objects of classes implementing <em>Serializable</em>, can be serialized into a byte stream and recontructed into original object’s state</li>
+<li>All the members of the class are going to be automatically serialized except for <ul>
+<li>Static members</li>
+<li>Transient members</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">public class Data implements Serializable &#123;</span><br><span class="line">	// non serializable</span><br><span class="line">	static String var1;</span><br><span class="line">	transient int var2;	</span><br><span class="line">	</span><br><span class="line">	// serializable</span><br><span class="line">	String city;</span><br><span class="line">	List&lt;Date&gt; dateRange;		// Date Object must be serializable, or throw InvalidClassException</span><br><span class="line">	Set&lt;String&gt; categories;</span><br><span class="line">	int[] ageRange;</span><br><span class="line">	boolean debug;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h6 id="Java-Object-Serialization-1"><a href="#Java-Object-Serialization-1" class="headerlink" title="Java Object Serialization"></a>Java Object Serialization</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public byte[] serialize(Data data) &#123;</span><br><span class="line">	ByteArrayOutputStream byteStream = new ByteArrayOutputStream();</span><br><span class="line">	ObjectOutput objectOutput = new ObjectOutputStream(byteStream);</span><br><span class="line">	objectOutput.writeObject(data);</span><br><span class="line">	objectOutput.flush();</span><br><span class="line">	return byteStream.toByteArray();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h6 id="Java-Object-Deserialization"><a href="#Java-Object-Deserialization" class="headerlink" title="Java Object Deserialization"></a>Java Object Deserialization</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public Data deserialize(byte[] data) &#123;</span><br><span class="line">	ByteArrayInputStream byteStream = new ByteArrayInputStream(data);</span><br><span class="line">	ObjectInput objectOutput = new ObjectInputStream(byteStream);</span><br><span class="line">	return (Data)byteStream.readObject();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="Google’s-Protocol-Buffers"><a href="#Google’s-Protocol-Buffers" class="headerlink" title="Google’s Protocol Buffers"></a>Google’s Protocol Buffers</h5><ul>
+<li>Advantages<ul>
+<li>No type ambiguity</li>
+<li>Clear and well defined schema</li>
+<li>Language independent thanks to the 2 step process<ul>
+<li>Proto file definition</li>
+<li>Language specific stub generation using proto compiler</li>
+</ul>
+</li>
+<li>Efficient serialization &amp; deserialization</li>
+<li>Security</li>
+</ul>
+</li>
+<li>Disadvantages<ul>
+<li>Not human readable</li>
+<li>Hard to debug</li>
+<li>More complex development process</li>
+</ul>
+</li>
+</ul>
+<h5 id="Key-Considerations"><a href="#Key-Considerations" class="headerlink" title="Key Considerations"></a>Key Considerations</h5><ul>
+<li><u>human readable</u>, <u>language independent</u> with <u>native support in the browser</u> - <font color="red">JSON</font></li>
+<li><u>simple</u>, <u>fast to develop</u> with <u>native JVM support</u> - <font color="red">Standard Java Object Serialization</font></li>
+<li><u>performance</u>, <u>bandwidth</u> and <u>security</u> are more important - <font color="red">Protocol Buffers</font></li>
+</ul>
+
+          
         
       
     </div>
@@ -583,6 +831,161 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2020/02/01/distributed-system-1-introduction/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="https://annashuo.github.io/2020/02/01/distributed-system-2-zookeeper/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Anna">
+    <meta itemprop="description" content>
+    <meta itemprop="image" content="/images/avatar.gif">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="Anna's Blog">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="Anna's Blog" src>
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2020/02/01/distributed-system-2-zookeeper/" itemprop="url">
+                  Distributed System - Zookeeper
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-02-01T12:00:15+08:00">
+                2020-02-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/STUDY/" itemprop="url" rel="index">
+                    <span itemprop="name">STUDY</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2020/02/01/distributed-system-2-zookeeper/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count fb-comments-count" data-href="https://annashuo.github.io/2020/02/01/distributed-system-2-zookeeper/" itemprop="commentCount">0</span> comments
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>Introduction of Zookeeper</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2020/02/01/distributed-system-2-zookeeper/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
@@ -1708,213 +2111,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="https://annashuo.github.io/2017/11/07/database-system-review09/">
-
-  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="Anna">
-    <meta itemprop="description" content>
-    <meta itemprop="image" content="/images/avatar.gif">
-  </span>
-
-  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-    <meta itemprop="name" content="Anna's Blog">
-    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
-      <img style="display:none;" itemprop="url image" alt="Anna's Blog" src>
-    </span>
-  </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/11/07/database-system-review09/" itemprop="url">
-                  Database System Review 09
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-07T15:39:00+08:00">
-                2017-11-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category">
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/STUDY/" itemprop="url" rel="index">
-                    <span itemprop="name">STUDY</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/11/07/database-system-review09/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count fb-comments-count" data-href="https://annashuo.github.io/2017/11/07/database-system-review09/" itemprop="commentCount">0</span> comments
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>##<center> Embedded Database Logic</center></p>
-<h3 id="User-defined-Functions-UDF"><a href="#User-defined-Functions-UDF" class="headerlink" title="User-defined Functions(UDF)"></a>User-defined Functions(UDF)</h3><ul>
-<li>Return Types:<ul>
-<li>Scalar Functions: return a single data value.</li>
-<li>Table Functions: return a single result table.</li>
-</ul>
-</li>
-<li><p>Computation Definition:</p>
-<ul>
-<li><p>SQL functions</p>
-<p>eg.</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CREATE FUNCTION get_foo(int)</span><br><span class="line">					RETURNS foo AS $$</span><br><span class="line">	SELECT * FROM foo WHERE foo.id = $1;</span><br><span class="line">$$ LANGUAGE SQL;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>External programming language</p>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="Storage-Procesures"><a href="#Storage-Procesures" class="headerlink" title="Storage Procesures"></a>Storage Procesures</h3><p>A <u>storage procedure</u> is a self-contained function that performs more complex logic inside of the DBMS.</p>
-<ul>
-<li>Can have many input/output parameters</li>
-<li>Can modify the database table/structures</li>
-<li>Not normally used with a SQL query</li>
-</ul>
-<h4 id="Storage-proceduce-vs-UDF"><a href="#Storage-proceduce-vs-UDF" class="headerlink" title="Storage proceduce vs. UDF"></a>Storage proceduce vs. UDF</h4><ul>
-<li>A UDF is meant to perform a subset ofread-only computation with a query.</li>
-<li>A storage proceduce is meant to perform a complete computation that is independent of a query. </li>
-</ul>
-<h3 id="Triggers"><a href="#Triggers" class="headerlink" title="Triggers"></a>Triggers</h3><p>A <u>trigger</u> instruct the DBMS to invoke a UDF when some event occurs in the database.</p>
-<p>It contains:</p>
-<ul>
-<li><p>What type of event will cause it to fire</p>
-<p>  INSERT, UPDATE, DELETE, TRUNCATE, CREATE, ALTER, DROP</p>
-</li>
-<li><p>The scope of the event</p>
-<p>  TABLE, DATABASE, VIEW, SYSTEM</p>
-</li>
-<li><p>When it fires relative to that event</p>
-<ul>
-<li>Before the statement executes</li>
-<li>After the statement executes</li>
-<li>Before each row that the statement affects</li>
-<li>After each row that the statement affects</li>
-<li>Instead of the statement</li>
-</ul>
-</li>
-</ul>
-<h3 id="Change-Notifications"><a href="#Change-Notifications" class="headerlink" title="Change Notifications"></a>Change Notifications</h3><p>A <u>change notification</u> is like a trigger except that the DBMS send a message to an external entity that something notable has happened in the database.</p>
-<h3 id="User-defined-Types"><a href="#User-defined-Types" class="headerlink" title="User-defined Types"></a>User-defined Types</h3><p>A <u>user-defined type</u> is a special data type that ts defined by the application developer that the DBMS can stored natively.</p>
-<h3 id="Views"><a href="#Views" class="headerlink" title="Views"></a>Views</h3><p>Creates a “virtual” table containing the output from a SELECT query.</p>
-<p>Mechanism for hiding data from view of certain users.</p>
-<p>Can be used to simplify a complex query that is executed often but won’t make it faster though.</p>
-<h4 id="VIEW-vs-SELECT-INTO"><a href="#VIEW-vs-SELECT-INTO" class="headerlink" title="VIEW vs. SELECT INTO"></a>VIEW vs. SELECT INTO</h4><ul>
-<li>VIEW: dynamic results are only materialized when needed.</li>
-<li>SELECT…INTO: creates static table that does not get updated when original table gets updated.</li>
-</ul>
-<h4 id="Materialized-View"><a href="#Materialized-View" class="headerlink" title="Materialized View"></a>Materialized View</h4><p>Creates a view containing the output from a SELECT query that is automatically updated when the underlying tables change.</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -1960,7 +2156,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">46</span>
+                <span class="site-state-item-count">47</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
